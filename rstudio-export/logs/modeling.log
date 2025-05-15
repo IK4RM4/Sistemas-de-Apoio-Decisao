@@ -1,0 +1,7 @@
+Iniciando modelação: 2025-05-15 20:51:31.829025
+Divisão treino/teste: 8040 obs. para treino, 720 obs. para teste
+Ajustando modelo: weather_lm
+  RMSE: 458.98, R²: 0.1736
+Ajustando modelo: time_lm
+  RMSE: 4648.5, R²: 0.6012
+Ajustando modelo: full_lm
