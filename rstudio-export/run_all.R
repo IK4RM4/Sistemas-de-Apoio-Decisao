@@ -15,25 +15,22 @@ dir.create("logs", showWarnings = FALSE)
 
 # 1. Recolha de dados
 cat("1. Iniciando recolha de dados...\n")
-source("01a_fetch_data.R")
-source("01b_fetch_data.R")
+source("01_fetch_data.R")
 cat("✓ Recolha de dados concluída\n")
 
 # 2. Limpeza de dados
 cat("2. Iniciando limpeza e preparação de dados...\n")
-source("02a_clean_data.R")
-source("02b_clean_data.R")
+source("02_clean_data.R")
 cat("✓ Limpeza de dados concluída\n")
 
 # 3. Análise exploratória
 cat("3. Iniciando análise exploratória...\n")
-source("03a_exploratory_analysis.R")
-source("03b_exploratory_analysis.R")
+source("03_explore_data.R")
 cat("✓ Análise exploratória concluída\n")
 
 # 4. Modelação
 cat("4. Iniciando modelação...\n")
-source("04a_model_regression.R")
+source("04_model.R")
 cat("✓ Modelação concluída\n")
 
 # 5. Verificar se todos os requisitos para o dashboard estão presentes
@@ -50,10 +47,8 @@ all_files_exist <- all(sapply(files_needed, file.exists))
 
 if (all_files_exist) {
   cat("✓ Todos os arquivos necessários estão presentes\n")
-  
-  # 6. Iniciar dashboard
   cat("6. Dashboard pronto para iniciar.\n")
-  cat("   Execute 'Rscript -e \"source('05a_dashboard_app.R')\"' para iniciar o dashboard.\n")
+  cat("   Execute 'library(shiny); runApp(\"05_dashboard.R\")' para iniciar o dashboard.\n")
 } else {
   missing_files <- files_needed[!sapply(files_needed, file.exists)]
   cat("⚠️ Alguns arquivos necessários estão faltando:\n")

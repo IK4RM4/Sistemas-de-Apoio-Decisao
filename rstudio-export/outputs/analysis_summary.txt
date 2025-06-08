@@ -1,0 +1,25 @@
+=== RESUMO DA ANÁLISE EXPLORATÓRIA ===
+
+DADOS PROCESSADOS:
+- Seoul bike sharing: 1000 registros
+- Sistemas globais: 12 sistemas
+- Dados meteorológicos: 175 registros
+
+GRÁFICOS GERADOS:
+- correlation_plot.png
+- histogram_density.png
+- hourly_by_season.png
+- rented_hist_density.png
+- rented_vs_date_hour_colored.png
+- rented_vs_date.png
+- temp_vs_demand.png
+- temperature_analysis.png
+- temporal_patterns.png
+- time_series_plot.png
+- top_bike_systems.png
+- weekday_period_avg.png
+
+OBSERVAÇÕES:
+- Todos os gráficos foram adaptados à estrutura dos dados disponíveis
+- Tratamento de dados faltantes implementado
+- Análise robusta mesmo com dados limitados
