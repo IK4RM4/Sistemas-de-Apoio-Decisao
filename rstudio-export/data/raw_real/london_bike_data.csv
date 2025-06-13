@@ -1,0 +1,101 @@
+station_id,station_name,lat,lon,city_name,country_code,region,data_source
+BikePoints_1,"River Street , Clerkenwell",51.529163,-0.10997,London,GB,Europe,Transport for London Public API
+BikePoints_2,"Phillimore Gardens, Kensington",51.499606,-0.197574,London,GB,Europe,Transport for London Public API
+BikePoints_3,"Christopher Street, Liverpool Street",51.521283,-0.084605,London,GB,Europe,Transport for London Public API
+BikePoints_4,"St. Chad's Street, King's Cross",51.530059,-0.120973,London,GB,Europe,Transport for London Public API
+BikePoints_5,"Sedding Street, Sloane Square",51.49313,-0.156876,London,GB,Europe,Transport for London Public API
+BikePoints_6,"Broadcasting House, Marylebone",51.518117,-0.144228,London,GB,Europe,Transport for London Public API
+BikePoints_7,"Charlbert Street, St. John's Wood",51.5343,-0.168074,London,GB,Europe,Transport for London Public API
+BikePoints_8,"Maida Vale, Maida Vale",51.529857,-0.183486,London,GB,Europe,Transport for London Public API
+BikePoints_9,"New Globe Walk, Bankside",51.507385,-0.09644,London,GB,Europe,Transport for London Public API
+BikePoints_10,"Park Street, Bankside",51.505974,-0.092754,London,GB,Europe,Transport for London Public API
+BikePoints_11,"Brunswick Square, Bloomsbury",51.523951,-0.122502,London,GB,Europe,Transport for London Public API
+BikePoints_12,"Malet Street, Bloomsbury",51.52168,-0.130431,London,GB,Europe,Transport for London Public API
+BikePoints_13,"Scala Street, Fitzrovia",51.519914,-0.136039,London,GB,Europe,Transport for London Public API
+BikePoints_14,"Argyle Street, Kings Cross",51.529416,-0.123944,London,GB,Europe,Transport for London Public API
+BikePoints_15,"Great Russell Street, Bloomsbury",51.517727,-0.127854,London,GB,Europe,Transport for London Public API
+BikePoints_16,"Cartwright Gardens , Bloomsbury",51.526357,-0.125979,London,GB,Europe,Transport for London Public API
+BikePoints_17,"Hatton Wall, Holborn",51.521661,-0.109006,London,GB,Europe,Transport for London Public API
+BikePoints_18,"Drury Lane, Covent Garden",51.51477,-0.122219,London,GB,Europe,Transport for London Public API
+BikePoints_19,"Taviton Street, Bloomsbury",51.52505,-0.131161,London,GB,Europe,Transport for London Public API
+BikePoints_20,"Drummond Street , Euston",51.527326,-0.136052,London,GB,Europe,Transport for London Public API
+BikePoints_21,"Lansdowne Drive, Hackney Central",51.539834,-0.062806,London,GB,Europe,Transport for London Public API
+BikePoints_22,"Northington Street , Holborn",51.522264,-0.114079,London,GB,Europe,Transport for London Public API
+BikePoints_23,"Red Lion Square, Holborn",51.519435,-0.119123,London,GB,Europe,Transport for London Public API
+BikePoints_25,"Doric Way , Somers Town",51.528833,-0.13225,London,GB,Europe,Transport for London Public API
+BikePoints_26,"Ampton Street , Clerkenwell",51.52728,-0.118295,London,GB,Europe,Transport for London Public API
+BikePoints_28,"Bolsover Street, Fitzrovia",51.523518,-0.143613,London,GB,Europe,Transport for London Public API
+BikePoints_29,"Hereford Road, Bayswater",51.513735,-0.193487,London,GB,Europe,Transport for London Public API
+BikePoints_30,"Windsor Terrace, Hoxton",51.529154,-0.093421,London,GB,Europe,Transport for London Public API
+BikePoints_31,"Fanshaw Street, Hoxton",51.529537,-0.083353,London,GB,Europe,Transport for London Public API
+BikePoints_33,"Central House, Aldgate",51.515231,-0.07015,London,GB,Europe,Transport for London Public API
+BikePoints_34,"Pancras Road, King's Cross",51.534123,-0.129386,London,GB,Europe,Transport for London Public API
+BikePoints_36,"De Vere Gardens, Kensington",51.501737,-0.18498,London,GB,Europe,Transport for London Public API
+BikePoints_37,"Penywern Road, Earl's Court",51.491593,-0.192369,London,GB,Europe,Transport for London Public API
+BikePoints_38,"Abingdon Villas, Kensington",51.497387,-0.197245,London,GB,Europe,Transport for London Public API
+BikePoints_39,"Shoreditch High Street, Shoreditch",51.526377,-0.07813,London,GB,Europe,Transport for London Public API
+BikePoints_40,"Commercial Street, Shoreditch",51.52127,-0.075578,London,GB,Europe,Transport for London Public API
+BikePoints_41,"Pindar Street, Liverpool Street",51.520955,-0.083493,London,GB,Europe,Transport for London Public API
+BikePoints_42,"Wenlock Road , Hoxton",51.530991,-0.093903,London,GB,Europe,Transport for London Public API
+BikePoints_43,"Crawford Street, Marylebone",51.52026,-0.157183,London,GB,Europe,Transport for London Public API
+BikePoints_44,"Bruton Street, Mayfair",51.510736,-0.144165,London,GB,Europe,Transport for London Public API
+BikePoints_45,"Boston Place, Marylebone",51.522511,-0.162298,London,GB,Europe,Transport for London Public API
+BikePoints_46,"Nesham Street, Wapping",51.507131,-0.06691,London,GB,Europe,Transport for London Public API
+BikePoints_47,"Warwick Avenue Station, Maida Vale",51.523344,-0.183846,London,GB,Europe,Transport for London Public API
+BikePoints_48,"Godliman Street, St. Paul's",51.512484,-0.099141,London,GB,Europe,Transport for London Public API
+BikePoints_49,"Curzon Street, Mayfair",51.507069,-0.145904,London,GB,Europe,Transport for London Public API
+BikePoints_50,"East Road, Hoxton",51.528673,-0.087459,London,GB,Europe,Transport for London Public API
+BikePoints_51,"Finsbury Library , Finsbury",51.526717,-0.104298,London,GB,Europe,Transport for London Public API
+BikePoints_52,"Roscoe Street, St. Luke's",51.522954,-0.094934,London,GB,Europe,Transport for London Public API
+BikePoints_53,"Grafton Street, Mayfair",51.509992,-0.143495,London,GB,Europe,Transport for London Public API
+BikePoints_54,"Golden Lane, Barbican",51.521747,-0.094475,London,GB,Europe,Transport for London Public API
+BikePoints_55,"Finsbury Circus, Liverpool Street",51.517075,-0.086685,London,GB,Europe,Transport for London Public API
+BikePoints_56,"Paddington Street, Marylebone",51.520583,-0.154701,London,GB,Europe,Transport for London Public API
+BikePoints_57,"Guilford Street , Bloomsbury",51.523346,-0.120202,London,GB,Europe,Transport for London Public API
+BikePoints_58,"New Inn Yard, Shoreditch",51.524526,-0.079248,London,GB,Europe,Transport for London Public API
+BikePoints_60,"Lisson Grove, St. John's Wood",51.526448,-0.17219,London,GB,Europe,Transport for London Public API
+BikePoints_61,"Great Dover Street, The Borough",51.497382,-0.089446,London,GB,Europe,Transport for London Public API
+BikePoints_62,"Cotton Garden Estate, Kennington",51.490757,-0.106323,London,GB,Europe,Transport for London Public API
+BikePoints_63,"Murray Grove , Hoxton",51.53089,-0.089782,London,GB,Europe,Transport for London Public API
+BikePoints_64,"William IV Street, Strand",51.509462,-0.124749,London,GB,Europe,Transport for London Public API
+BikePoints_65,"Gower Place , Euston",51.525227,-0.135188,London,GB,Europe,Transport for London Public API
+BikePoints_66,"Holborn Circus, Holborn",51.51795,-0.108657,London,GB,Europe,Transport for London Public API
+BikePoints_67,"Hatton Garden, Holborn",51.518825,-0.108028,London,GB,Europe,Transport for London Public API
+BikePoints_68,"Theobald's Road , Holborn",51.520596,-0.116688,London,GB,Europe,Transport for London Public API
+BikePoints_69,"Euston Road, Euston",51.526236,-0.134407,London,GB,Europe,Transport for London Public API
+BikePoints_70,"Calshot Street , King's Cross",51.53136,-0.117069,London,GB,Europe,Transport for London Public API
+BikePoints_71,"Newgate Street , St. Paul's",51.515768,-0.099894,London,GB,Europe,Transport for London Public API
+BikePoints_72,"Farringdon Lane, Clerkenwell",51.52352,-0.10834,London,GB,Europe,Transport for London Public API
+BikePoints_73,"Old Street Station, St. Luke's",51.525615,-0.088532,London,GB,Europe,Transport for London Public API
+BikePoints_74,"Vauxhall Cross, Vauxhall",51.485917,-0.124469,London,GB,Europe,Transport for London Public API
+BikePoints_75,"Torrens Street, Angel",51.532199,-0.10548,London,GB,Europe,Transport for London Public API
+BikePoints_76,"Longford Street, The Regent's Park",51.525595,-0.144083,London,GB,Europe,Transport for London Public API
+BikePoints_78,"Sadlers Sports Centre, Finsbury",51.524868,-0.099489,London,GB,Europe,Transport for London Public API
+BikePoints_79,"Arundel Street, Temple",51.511726,-0.113855,London,GB,Europe,Transport for London Public API
+BikePoints_80,"Webber Street , Southwark",51.500693,-0.102091,London,GB,Europe,Transport for London Public API
+BikePoints_81,"Great Titchfield Street, Fitzrovia",51.520253,-0.141327,London,GB,Europe,Transport for London Public API
+BikePoints_83,"Panton Street, West End",51.509639,-0.13151,London,GB,Europe,Transport for London Public API
+BikePoints_84,"Breams Buildings, Holborn",51.515937,-0.111778,London,GB,Europe,Transport for London Public API
+BikePoints_85,"Tanner Street, Bermondsey",51.500647,-0.0786,London,GB,Europe,Transport for London Public API
+BikePoints_86,"Sancroft Street, Vauxhall",51.489479,-0.115156,London,GB,Europe,Transport for London Public API
+BikePoints_88,"Percy Street, Bloomsbury",51.51863,-0.132676,London,GB,Europe,Transport for London Public API
+BikePoints_89,"Tavistock Place, Bloomsbury",51.52625,-0.123509,London,GB,Europe,Transport for London Public API
+BikePoints_90,"Harrington Square 1, Camden Town",51.533019,-0.139174,London,GB,Europe,Transport for London Public API
+BikePoints_91,"Walnut Tree Walk, Vauxhall",51.493686,-0.111014,London,GB,Europe,Transport for London Public API
+BikePoints_92,"Borough Road, Elephant & Castle",51.498898,-0.10044,London,GB,Europe,Transport for London Public API
+BikePoints_93,"Cloudesley Road, Angel",51.534408,-0.109025,London,GB,Europe,Transport for London Public API
+BikePoints_94,"Bricklayers Arms, Borough",51.495061,-0.085814,London,GB,Europe,Transport for London Public API
+BikePoints_95,"Aldersgate Street, Barbican",51.520841,-0.09734,London,GB,Europe,Transport for London Public API
+BikePoints_96,"Falkirk Street, Hoxton",51.53095,-0.078505,London,GB,Europe,Transport for London Public API
+BikePoints_97,"Gloucester Road (North), Kensington",51.497924,-0.183834,London,GB,Europe,Transport for London Public API
+BikePoints_98,"Hampstead Road, Euston",51.525542,-0.138231,London,GB,Europe,Transport for London Public API
+BikePoints_101,"Queen Street 1, Bank",51.511553,-0.09294,London,GB,Europe,Transport for London Public API
+BikePoints_102,"Jewry Street, Aldgate",51.513406,-0.076793,London,GB,Europe,Transport for London Public API
+BikePoints_103,"Vicarage Gate, Kensington",51.504723,-0.192538,London,GB,Europe,Transport for London Public API
+BikePoints_104,"Crosswall, Tower",51.511594,-0.077121,London,GB,Europe,Transport for London Public API
+BikePoints_105,"Westbourne Grove, Bayswater",51.515529,-0.19024,London,GB,Europe,Transport for London Public API
+BikePoints_106,"Woodstock Street, Mayfair",51.514105,-0.147301,London,GB,Europe,Transport for London Public API
+BikePoints_107,"Finsbury Leisure Centre, St. Luke's",51.526008,-0.096317,London,GB,Europe,Transport for London Public API
+BikePoints_109,"Soho Square , Soho",51.515631,-0.132328,London,GB,Europe,Transport for London Public API
+BikePoints_110,"Wellington Road, St. John's Wood",51.533043,-0.172528,London,GB,Europe,Transport for London Public API
+BikePoints_111,"Park Lane , Hyde Park",51.510017,-0.157275,London,GB,Europe,Transport for London Public API

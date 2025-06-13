@@ -1,0 +1,45 @@
+{
+  "processing_timestamp": ["2025-06-11 16:46:54"],
+  "data_quality": ["Enhanced multinational data - cleaned with robust error handling"],
+  "weather_data": {
+    "source": ["Real APIs + Enhanced Synthetic Backup"],
+    "cities": [19],
+    "countries": [14],
+    "regions": ["Asia_Pacific", "Europe", "North_America"],
+    "records": [1259],
+    "date_range": {
+      "start": ["2025-02-11"],
+      "end": ["2025-06-16"],
+      "duration_days": [125]
+    },
+    "coverage_by_region": [5, 8, 6],
+    "european_standards": {
+      "temperature": ["Celsius (°C)"],
+      "wind_speed": ["km/h"],
+      "precipitation": ["mm"],
+      "distance": ["km"]
+    }
+  },
+  "bike_data": {
+    "seoul": {
+      "records": [8760],
+      "city": ["Seoul"],
+      "source": ["Seoul Public Dataset - UCI Repository"],
+      "data_type": ["Enhanced bike sharing data"]
+    },
+    "london": {
+      "records": [100],
+      "city": ["London"],
+      "source": ["Transport for London Public API"],
+      "data_type": ["Enhanced bike sharing data"]
+    }
+  },
+  "system_architecture": {
+    "architecture": ["Enhanced multinational distributed system"],
+    "data_sources": ["Multiple APIs + intelligent synthetic backup"],
+    "geographic_distribution": [true],
+    "fault_tolerance": ["Robust error handling with fallback systems"],
+    "european_compliance": ["Full metric standardization"],
+    "scalability": ["Easy city/region expansion"]
+  }
+}

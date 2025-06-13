@@ -1,13 +1,6 @@
-City,Country,System,Stations,Bicycles,Operator,Launch_Year,Website,Source
-Toronto,Canada,Bike Share Toronto,625,6850,PBSC Urban Solutions,2011,https://bikesharetoronto.com,Research Data
-Copenhagen,Denmark,Bycyklen,125,1860,I Bike CPH,2013,https://bycyklen.dk,Research Data
-Paris,France,Vélib',1400,14500,Smovengo,2007,https://www.velib-metropole.fr,Research Data
-Berlin,Germany,nextbike,200,3000,nextbike GmbH,2009,https://www.nextbike.de,Research Data
-Amsterdam,Netherlands,OV-fiets,300,3100,NS Dutch Railways,2003,https://www.ov-fiets.nl,Research Data
-Seoul,South Korea,Seoul Bike (따릉이),1540,20000,Seoul Metropolitan Government,2015,https://www.bikeseoul.com,Research Data
-Barcelona,Spain,Bicing,517,6000,Clear Channel,2007,https://www.bicing.barcelona,Research Data
-Stockholm,Sweden,Stockholm City Bikes,140,1500,Clear Channel,2006,https://citybikes.se,Research Data
-Boston,United States,Bluebikes,400,4000,Motivate,2011,https://www.bluebikes.com,Research Data
-New York,United States,Citi Bike,2234,26808,Motivate,2013,https://citibikenyc.com,Real API
-San Francisco,United States,Bay Wheels,500,4500,Motivate,2017,https://www.baywheels.com,Research Data
-Washington DC,United States,Capital Bikeshare,783,9396,Motivate,2010,https://capitalbikeshare.com,Real API
+city,country,system_name,operator,launch_year,stations,bicycles,lat,lon,status,data_source,collection_date,config_version
+Seoul,South Korea,Seoul Bike (따릉이),Seoul Metropolitan Government,2015,1540,20000,37.5665,126.978,Active,Curated Research Dataset,2025-06-13,flexible
+New York,United States,Citi Bike,Lyft,2013,1300,17000,40.7128,-74.006,Active,Curated Research Dataset,2025-06-13,flexible
+Paris,France,Vélib' Métropole,Smovengo,2007,1400,14500,48.8566,2.3522,Active,Curated Research Dataset,2025-06-13,flexible
+London,United Kingdom,Santander Cycles,Serco,2010,750,11500,51.5074,-0.1278,Active,Curated Research Dataset,2025-06-13,flexible
+Barcelona,Spain,Bicing,Clear Channel,2007,517,6000,41.3851,2.1734,Active,Curated Research Dataset,2025-06-13,flexible

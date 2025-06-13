@@ -1,0 +1,38 @@
+{
+  "primary_dataset": {
+    "city": ["Seoul"],
+    "type": ["Bike Sharing Demand"],
+    "records": [8760],
+    "date_range": {
+      "start": ["2017-12-01"],
+      "end": ["2018-11-30"]
+    },
+    "daily_average": [16910],
+    "variables": [31]
+  },
+  "weather_data": {
+    "cities": [1],
+    "records": [40],
+    "coverage": ["Amsterdam"]
+  },
+  "geographic_context": {
+    "total_cities": [30126],
+    "bike_friendly_cities": [44],
+    "regions": {
+      "Americas": [2644],
+      "Asia-Pacific": [3792],
+      "Europe": [5231],
+      "North America": [3257],
+      "Other": [15202]
+    },
+    "climate_zones": {
+      "Tropical": [30126]
+    }
+  },
+  "distributed_features": {
+    "multi_city_support": [true],
+    "cluster_ready": [true],
+    "scalable_architecture": [true],
+    "weather_integration": [true]
+  }
+}

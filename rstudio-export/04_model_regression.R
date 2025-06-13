@@ -642,21 +642,4 @@ if (file.exists("outputs/models/variable_importance.png")) {
   cat("- Variable importance: outputs/models/variable_importance.png\n")
 }
 
-cat("\nEuropean metrics applied:\n")
-cat("- Temperature: Celsius (°C)\n") 
-cat("- Wind speed: kilometers per hour (km/h)\n")
-cat("- Visibility: kilometers (km)\n")
-cat("- Precipitation: millimeters (mm)\n")
-
-cat("\nIssues resolved:\n")
-cat("- Zero variance variables handled\n")
-cat("- Single-level categorical variables managed\n")
-cat("- Missing packages (xgboost, kernlab) bypassed\n")
-cat("- Fallback model created for robustness\n")
-
-cat("\nNext steps:\n")
-cat("1. Review model performance in outputs/models/model_comparison.csv\n")
-cat("2. Examine predictions (if available)\n")
-cat("3. Use trained model for dashboard predictions\n")
-cat("4. Consider installing additional packages for advanced models\n")
 cat("=========================\n")

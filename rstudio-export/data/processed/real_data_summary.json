@@ -1,0 +1,36 @@
+{
+  "collection_timestamp": ["2025-06-11 16:37:28"],
+  "data_sources": ["Real APIs and Public Datasets"],
+  "weather_data": {
+    "source": ["OpenWeatherMap API + Historical Extension"],
+    "cities": [19],
+    "countries": [14],
+    "regions": [3],
+    "records": [1259],
+    "date_range": {
+      "start": ["2025-02-11"],
+      "end": ["2025-06-16"]
+    },
+    "cities_covered": ["Amsterdam", "Barcelona", "Berlin", "Boston", "Copenhagen", "London", "Melbourne", "Montreal", "New York", "Paris", "San Francisco", "Seoul", "Singapore", "Stockholm", "Sydney", "Tokyo", "Toronto", "Vienna", "Washington"],
+    "data_quality": ["Real API data + Pattern-based historical extension"]
+  },
+  "bike_data": {
+    "seoul": {
+      "records": [8760],
+      "source": ["Seoul Public Dataset - UCI Repository"],
+      "city": ["Seoul"]
+    },
+    "london": {
+      "records": [100],
+      "source": ["Transport for London Public API"],
+      "city": ["London"]
+    }
+  },
+  "distributed_architecture": {
+    "real_data_sources": [true],
+    "api_integration": ["OpenWeatherMap, TfL, UCI Repository"],
+    "geographic_distribution": ["Multi-continental"],
+    "temporal_coverage": ["Historical + Current + Forecast"],
+    "data_authenticity": ["Real world measurements and public datasets"]
+  }
+}

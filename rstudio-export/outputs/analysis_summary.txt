@@ -1,25 +1,45 @@
-=== RESUMO DA ANÁLISE EXPLORATÓRIA ===
+=== EXPLORATORY DATA ANALYSIS SUMMARY ===
 
-DADOS PROCESSADOS:
-- Seoul bike sharing: 1000 registros
-- Sistemas globais: 12 sistemas
-- Dados meteorológicos: 175 registros
+SEOUL BIKE SHARING ANALYSIS:
+Period: 2025-02-11 to 2025-06-10 
+Total records: 2,880 
+Average demand: 133.2 bikes
+Peak demand: 435 bikes
+Temperature range: -3.7 °C to 32.7 °C
+Wind speed range: 0 km/h to 35.4 km/h
 
-GRÁFICOS GERADOS:
-- correlation_plot.png
-- histogram_density.png
-- hourly_by_season.png
-- rented_hist_density.png
-- rented_vs_date_hour_colored.png
-- rented_vs_date.png
-- temp_vs_demand.png
-- temperature_analysis.png
-- temporal_patterns.png
-- time_series_plot.png
-- top_bike_systems.png
-- weekday_period_avg.png
+GLOBAL BIKE SHARING SYSTEMS:
+Total systems: 5 
+Countries covered: 5 
+Total stations: 5,507 
+Total bicycles: 69,000 
 
-OBSERVAÇÕES:
-- Todos os gráficos foram adaptados à estrutura dos dados disponíveis
-- Tratamento de dados faltantes implementado
-- Análise robusta mesmo com dados limitados
+WEATHER DATA COVERAGE:
+Total records: 4,920 
+Cities covered: 5 
+Date range: 2025-06-11 to 2025-10-11 
+
+VISUALIZATIONS GENERATED:
+- 01_timeseries_demand.png 
+- 01_timeseries_robust.png 
+- 02_hourly_patterns_robust.png 
+- 02_hourly_patterns.png 
+- 03_demand_distribution.png 
+- 03_distribution_robust.png 
+- 04_weather_impact_robust.png 
+- 04_weather_impact.png 
+- 05_correlation_matrix.png 
+- 05_correlation_robust.png 
+- 06_global_systems.png 
+- 06_weekly_patterns_robust.png 
+- 06_weekly_patterns.png 
+- 07_multinational_weather_robust.png 
+- 07_weather_analysis.png 
+
+KEY INSIGHTS:
+- All visualizations adapted to available data structure
+- European metric units applied (°C, km/h, mm)
+- Robust analysis with missing data handling
+- Comprehensive statistical summaries generated
+- Weather impact on bike demand analyzed
+- Temporal patterns identified and visualized

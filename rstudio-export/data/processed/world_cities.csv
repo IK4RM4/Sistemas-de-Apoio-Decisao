@@ -1,13 +1,6 @@
-city,country,lat_d,lat_m,lat_s,ns,lon_d,lon_m,lon_s,ew
-Toronto,Canada,43,39,12,N,80,37,0,W
-Copenhagen,Denmark,55,40,34,N,12,34,6,E
-Paris,France,48,51,24,N,2,21,8,E
-Berlin,Germany,52,31,12,N,13,24,18,E
-Amsterdam,Netherlands,52,22,3,N,4,54,15,E
-Seoul,South Korea,37,33,59,N,126,58,41,E
-Barcelona,Spain,41,23,6,N,2,10,24,E
-Stockholm,Sweden,59,19,45,N,18,4,7,E
-Boston,United States,42,21,36,N,72,56,28,W
-New York,United States,40,42,46,N,75,59,38,W
-San Francisco,United States,37,46,30,N,123,34,50,W
-Washington DC,United States,38,54,26,N,78,57,47,W
+city,country,country_code,lat,lon,population,data_source,created_date,config_version,lat_d,lat_m,lat_s,lon_d,lon_m,lon_s,ns,ew,lat_decimal,lon_decimal
+Seoul,South Korea,KR,37.5665,126.978,9720846,Curated Geographic Dataset,2025-06-13,flexible,0,0,0,0,0,0,N,E,37.5665,126.978
+New York,United States,US,40.7128,-74.006,8336817,Curated Geographic Dataset,2025-06-13,flexible,0,0,0,0,0,0,N,E,40.7128,-74.006
+Paris,France,FR,48.8566,2.3522,2161000,Curated Geographic Dataset,2025-06-13,flexible,0,0,0,0,0,0,N,E,48.8566,2.3522
+London,United Kingdom,GB,51.5074,-0.1278,8982000,Curated Geographic Dataset,2025-06-13,flexible,0,0,0,0,0,0,N,E,51.5074,-0.1278
+Barcelona,Spain,ES,41.3851,2.1734,1620343,Curated Geographic Dataset,2025-06-13,flexible,0,0,0,0,0,0,N,E,41.3851,2.1734
