@@ -1,6 +1,6 @@
-city,country,system_name,operator,launch_year,stations,bicycles,lat,lon,status,data_source,collection_date,config_version,latitude,longitude
-Seoul,South Korea,Seoul Bike (따릉이),Seoul Metropolitan Government,2015,1540,20000,37.5665,126.978,Active,Curated Research Dataset,2025-06-13,flexible,37.5665,126.978
-New York,United States,Citi Bike,Lyft,2013,1300,17000,40.7128,-74.006,Active,Curated Research Dataset,2025-06-13,flexible,40.7128,-74.006
-Paris,France,Vélib' Métropole,Smovengo,2007,1400,14500,48.8566,2.3522,Active,Curated Research Dataset,2025-06-13,flexible,48.8566,2.3522
-London,United Kingdom,Santander Cycles,Serco,2010,750,11500,51.5074,-0.1278,Active,Curated Research Dataset,2025-06-13,flexible,51.5074,-0.1278
-Barcelona,Spain,Bicing,Clear Channel,2007,517,6000,41.3851,2.1734,Active,Curated Research Dataset,2025-06-13,flexible,41.3851,2.1734
+city,country,stations,bicycles,launch_year
+Seoul,South Korea,1540,20000,2015
+New York,United States,1300,17000,2013
+Paris,France,1400,14500,2007
+London,United Kingdom,750,11500,2010
+Barcelona,Spain,517,6000,2007

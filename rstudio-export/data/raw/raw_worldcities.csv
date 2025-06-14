@@ -1,6 +1,6 @@
-city,country,country_code,lat,lon,population,data_source,created_date,config_version
-Seoul,South Korea,KR,37.5665,126.978,9720846,Curated Geographic Dataset,2025-06-13,flexible
-New York,United States,US,40.7128,-74.006,8336817,Curated Geographic Dataset,2025-06-13,flexible
-Paris,France,FR,48.8566,2.3522,2161000,Curated Geographic Dataset,2025-06-13,flexible
-London,United Kingdom,GB,51.5074,-0.1278,8982000,Curated Geographic Dataset,2025-06-13,flexible
-Barcelona,Spain,ES,41.3851,2.1734,1620343,Curated Geographic Dataset,2025-06-13,flexible
+city,country,country_code,latitude,longitude,population,data_source,created_date
+Seoul,South Korea,KR,37.5665,126.978,9720846,Curated Geographic Dataset,2025-06-14
+New York,United States,US,40.7128,-74.006,8336817,Curated Geographic Dataset,2025-06-14
+Paris,France,FR,48.8566,2.3522,2161000,Curated Geographic Dataset,2025-06-14
+London,United Kingdom,GB,51.5074,-0.1278,8982000,Curated Geographic Dataset,2025-06-14
+Barcelona,Spain,ES,41.3851,2.1734,1620343,Curated Geographic Dataset,2025-06-14

@@ -1,5 +1,5 @@
 {
-  "execution_time": ["2025-06-13 18:57:38"],
+  "execution_time": ["2025-06-14 13:57:45"],
   "api_key_used": ["Valid"],
   "cities_processed": ["Seoul,KR", "New York,US", "Paris,FR", "London,GB", "Barcelona,ES"],
   "units_applied": {
@@ -10,7 +10,7 @@
     "pressure": ["hpa"]
   },
   "data_sources": {
-    "weather_endpoint": ["Backup Generator"],
+    "weather_endpoint": ["OpenWeather API"],
     "bike_systems": ["Curated Dataset"]
   },
   "files_generated": [4],

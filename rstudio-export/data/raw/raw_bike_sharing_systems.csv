@@ -1,6 +1,1227 @@
-city,country,system_name,operator,launch_year,stations,bicycles,lat,lon,status,data_source,collection_date,config_version
-Seoul,South Korea,Seoul Bike (따릉이),Seoul Metropolitan Government,2015,1540,20000,37.5665,126.978,Active,Curated Research Dataset,2025-06-13,flexible
-New York,United States,Citi Bike,Lyft,2013,1300,17000,40.7128,-74.006,Active,Curated Research Dataset,2025-06-13,flexible
-Paris,France,Vélib' Métropole,Smovengo,2007,1400,14500,48.8566,2.3522,Active,Curated Research Dataset,2025-06-13,flexible
-London,United Kingdom,Santander Cycles,Serco,2010,750,11500,51.5074,-0.1278,Active,Curated Research Dataset,2025-06-13,flexible
-Barcelona,Spain,Bicing,Clear Channel,2007,517,6000,41.3851,2.1734,Active,Curated Research Dataset,2025-06-13,flexible
+system_name,city,system_id,api_url,data_source,collection_date
+Careem BIKE,Dubai,careem_bike,https://www.careem.com/en-ae/careem-bike/,GBFS Official CSV,2025-06-14
+Dott Abu Dhabi,Abu Dhabi,dott-abu-dhabi,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Dubai,Dubai,dott-dubai,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Dubai Hills,Dubai,dott-dubai-hills,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Ras Al Khaimah,Ras Al Khaimah,dott-ras-al-khaimah,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Sharjah,Sharjah,dott-sharjah,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Bike Nordelta,Buenos Aires,bike_nordelta,https://bikeitau.com.br/nordelta/,GBFS Official CSV,2025-06-14
+Ecobici,Buenos Aires,bike_buenosaires,https://www.buenosaires.gob.ar/ecobici,GBFS Official CSV,2025-06-14
+MiBiciTuBici,Rosario,biketobike,https://www.mibicitubici.gob.ar/,GBFS Official CSV,2025-06-14
+city bike Linz,Linz,nextbike_al,https://citybikelinz.at/,GBFS Official CSV,2025-06-14
+Dott Mödling,Mödling,dott-modling,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Baden bei Wien,Baden bei Wien,dott-baden-bei-wien,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bregenz,Bregenz,dott-bregenz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Dornbirn,Dornbirn,dott-dornbirn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Feldkirchen bei Graz,Feldkirchen bei Graz,dott-feldkirchen-bei-graz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Innsbruck,Innsbruck,dott-innsbruck,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Klagenfurt,Klagenfurt,dott-klagenfurt,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Korneuburg,Korneuburg,dott-korneuburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Leoben,Leoben,dott-leoben,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Linz,Linz,dott-linz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Steyr,Steyr,dott-steyr,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Velden-Am-Worthersee,Velden-Am-Worthersee,dott-velden-am-worthersee,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Villach,Villach,dott-villach,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Wels,Wels,dott-wels,https://ridedott.com/,GBFS Official CSV,2025-06-14
+LINK Linz,Linz,Link_Linz,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Vienna,Vienna,Link_Vienna,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+nextbike Burgenland Austria,Neusiedler See,nextbike_na,https://www.nextbike.at/de/burgenland/,GBFS Official CSV,2025-06-14
+nextbike Klagenfurt Austria,Klagenfurt,nextbike_ka,https://www.nextbike.at/de/klagenfurt/,GBFS Official CSV,2025-06-14
+nextbike Niederösterreich Austria,Austria,nextbike_la,https://www.nextbike.at/de/,GBFS Official CSV,2025-06-14
+Stadtrad Innsbruck Austria,Innsbruck,nextbike_si,https://stadtrad.ivb.at/de/,GBFS Official CSV,2025-06-14
+VVT REGIORAD Tirol,Austria,nextbike_vt,https://regiorad.vvt.at/de/,GBFS Official CSV,2025-06-14
+WienMobil Rad,Vienna,nextbike_wr,https://www.nextbike.at/de/wien/,GBFS Official CSV,2025-06-14
+Greenbike Aruba,Aruba,greenbike_aruba,https://greenbikearuba.com,GBFS Official CSV,2025-06-14
+BL bike,Banja Luka,nextbike_bj,https://www.nextbike.ba/sr/banjaluka/,GBFS Official CSV,2025-06-14
+nextbike BIH,Bosnia and Herzegovina,nextbike_ba,https://www.nextbike.ba/bs/,GBFS Official CSV,2025-06-14
+Zenica,Zenica,nextbike_bz,https://www.nextbike.ba/bs/zenica/,GBFS Official CSV,2025-06-14
+Bird Antwerp,Antwerp,bird-antwerp,https://www.bird.co,GBFS Official CSV,2025-06-14
+Blue-bike,Antwerp,bluebike,https://www.blue-bike.be/nl,GBFS Official CSV,2025-06-14
+Bolt Brussels,Brussels,BoltEU_Brussels,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Charleroi,Charleroi,BoltEU_Charleroi,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Dinant,Dinant,BoltEU_Dinant,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Ghent,Ghent,BoltEU_Ghent,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Liège,Liège,BoltEU_Liege,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Namur,Namur,BoltEU_Namur,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Ypres,Ypres,BoltEU_Ypres,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Donkey Republic Antwerp,Antwerp,donkey_antwerp,https://www.donkey.bike/cities/bike-rental-antwerp/,GBFS Official CSV,2025-06-14
+Donkey Republic Ghent,Ghent,donkey_gh,https://www.donkey.bike/cities/bike-rental-ghent/,GBFS Official CSV,2025-06-14
+Donkey Republic Kortrijk & Leiedal,Kortrijk & Leiedal,donkey_kortrijk_leiedal,https://www.donkey.bike/cities/bike-rental-kortrijk-zuid-west-vlaanderen/,GBFS Official CSV,2025-06-14
+Donkey Republic Westhoek,Westhoek,donkey_westhoek,https://www.donkey.bike/cities/bike-rental-de-panne/,GBFS Official CSV,2025-06-14
+Dott Aalst,Aalst,dott-aalst,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Brussels,Brussels,dott-brussels,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Charleroi,Charleroi,dott-charleroi,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Ghent,Ghent,dott-ghent,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Liege,Liege,dott-liege,https://ridedott.com,GBFS Official CSV,2025-06-14
+Li Bia Velo,Namur,namur,https://www.libiavelo.be/,GBFS Official CSV,2025-06-14
+Lime Antwerp,Antwerp,lime_antwerp,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Brussels,Brussels,lime_brussels,https://www.li.me,GBFS Official CSV,2025-06-14
+nextbike BE Vlaamse Rand,Brussels region,nextbike_hf,https://nextbike.be/vlaamserand/nl/,GBFS Official CSV,2025-06-14
+Pony Brussels,Brussels,pony_brussels,https://getapony.com,GBFS Official CSV,2025-06-14
+Pony Charleroi,Charleroi,pony_Charleroi,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Liège,Liege,pony_liège,https://getapony.com,GBFS Official CSV,2025-06-14
+Velo Antwerpen,Antwerp,cc_smartbike_antwerp,https://www.velo-antwerpen.be/nl,GBFS Official CSV,2025-06-14
+Villo,Brussels,bruxelles,https://www.villo.be/,GBFS Official CSV,2025-06-14
+VOI Antwerp,Antwerp,voi_Antwerp,https://www.voi.com/,GBFS Official CSV,2025-06-14
+nextbike Bulgaria,Dobrich,netbike_bg,https://nextbike.eu/,GBFS Official CSV,2025-06-14
+Bike Brasilia,Brasilia,bike_brasilia,https://brasilia.tembici.com.br/,GBFS Official CSV,2025-06-14
+Bike Estácio,Curitiba,curitiba,https://www.tembici.com.br/en/curitiba/,GBFS Official CSV,2025-06-14
+Bike Itaú - Pernambuco,Recife,bike_pe,https://bikeitau.com.br/bikepe,GBFS Official CSV,2025-06-14
+Bike Itaú - Rio,Rio de Janeiro,bike_rio,https://bikeitau.com.br/bikerio/,GBFS Official CSV,2025-06-14
+Bike Itaú - Salvador,Salvador,bike_salvador,https://bikeitau.com.br/bikesalvador/,GBFS Official CSV,2025-06-14
+Bike Itaú - Sampa,São Paulo,bike_sampa,https://bikeitau.com.br/bikesampa,GBFS Official CSV,2025-06-14
+Bike Porto Alegre,Porto Alegre,bike_poa,https://bikeitau.com.br/porto-alegre/,GBFS Official CSV,2025-06-14
+Rivi Bike,Largo Dos Coqueiros,rivi_bike,https://www.rivieradesaolourenco.com/lazer-e-servicos/rivibike/,GBFS Official CSV,2025-06-14
+Accès Vélo,Saguenay,saguenay_bike,https://sts.saguenay.ca/infos-pratiques/acces-velo-1/acces-velo,GBFS Official CSV,2025-06-14
+àVélo,Ville de Québec,avelo_quebec,https://www.rtcquebec.ca/informations-pratiques/services-complementaires/avelo,GBFS Official CSV,2025-06-14
+Bike Share Toronto,Toronto,bike_share_toronto,https://www.bikesharetoronto.com/,GBFS Official CSV,2025-06-14
+Bird Calgary,Calgary,bird-calgary,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Edmonton,Edmonton,bird-edmonton,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Ottawa,Ottawa,bird-ottawa,https://www.bird.co,GBFS Official CSV,2025-06-14
+BIXI Montréal,Montreal,Bixi_MTL,https://www.bixi.com/,GBFS Official CSV,2025-06-14
+Lime Calgary,Calgary,lime_calgary,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Edmonton,Edmonton,lime_edmonton,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Kelowna,Kelowna,lime_kelowna,https://www.li.me,GBFS Official CSV,2025-06-14
+Lime Ottawa,Ottawa,lime_ottawa,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Vancouver,Vancouver,lime_vancouver_bc,https://www.li.me/,GBFS Official CSV,2025-06-14
+LocoMotion Montreal,Montreal,locomotion_montreal,https://locomotion.app,GBFS Official CSV,2025-06-14
+LocoMotion Sherbrooke,Sherbrooke,locomotion_sherbrooke,https://locomotion.app,GBFS Official CSV,2025-06-14
+Mobi Bike Share,Vancouver,Mobibikes_CA_Vancouver,https://www.mobibikes.ca/,GBFS Official CSV,2025-06-14
+Neuron Mobility,Airdrie,neuron_ard,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Brampton,neuron_bmt,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Calgary,neuron_yyc,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Kitchen-Cambridge-Waterloo,neuron_kcw,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Lethbridge,neuron_yql,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Oshawa,Oshawa,neuron_yoo,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Ottawa,neuron_yow,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Red Deer,neuron_yqf,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Saskatoon,neuron_yxe,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Vernon,neuron_yve,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+PBSC HQ,Montreal,pbsn,https://lyfturbansolutions.com/cities,GBFS Official CSV,2025-06-14
+Sobi Hamilton,Hamilton,sobi_hamilton,https://hamilton.socialbicycles.com/,GBFS Official CSV,2025-06-14
+UBC,UBC - Canada,13,https://gohopr.com/,GBFS Official CSV,2025-06-14
+2EM Car Sharing,Switzerland,2em_cars,https://www.2em.ch,GBFS Official CSV,2025-06-14
+Bird Basel,Basel,bird-basel,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Biel,Biel,bird-biel,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Bulle,Bulle,bird-bulle,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Grenchen,Grenchen,bird-grenchen,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Kloten,Kloten,bird-kloten,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Uster,Uster,bird-uster,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Winterthur,Winterthur,bird-winterthur,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Zurich,Zurich,bird-zurich,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bolt Basel,Basel,bolt_basel,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Zurich,Zurich,bolt_zurich,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+carvelo eCargo-Bike Sharing,Switzerland,carvelo2go_ch,https://www.carvelo.ch,GBFS Official CSV,2025-06-14
+Car-ship,Constance,car_ship,https://www.car-ship.jetzt/,GBFS Official CSV,2025-06-14
+Donkey Republic Geneva,Geneva,donkey_ge,https://www.donkey.bike/cities/bike-rental-geneva/,GBFS Official CSV,2025-06-14
+Donkey Republic Kreuzlingen,Kreuzlingen,donkey_kreuzlingen,https://www.donkey.bike/cities/bike-rental-kreuzlingen/,GBFS Official CSV,2025-06-14
+Donkey Republic Le Locle,Le Locle,donkey_le_locle,https://www.donkey.bike/cities/bike-rental-le-locle/,GBFS Official CSV,2025-06-14
+Donkey Republic Neuchâtel,Neuchâtel,donkey_neuchatel,https://www.donkey.bike/cities/bike-rental-neuchatel/,GBFS Official CSV,2025-06-14
+Donkey Republic Sion,Sion,donkey_sion,https://www.donkey.bike/cities/bike-rental-sion/,GBFS Official CSV,2025-06-14
+Donkey Republic Thun,Thun,donkey_thun,https://www.donkey.bike/cities/bike-rental-thun/,GBFS Official CSV,2025-06-14
+Donkey Republic Yverdon-les-Bains,Yverdon Les Bains,donkey_yverdon-les-bains,https://www.donkey.bike/cities/bike-rental-yverdon-les-bains/,GBFS Official CSV,2025-06-14
+Dott Basel,Basel,dott-basel,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Romanshorn,Romanshorn,dott-romanshorn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott St. Gallen,St. Gallen,dott-st.-gallen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Winterthur,Winterthur,dott-winterthur,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Zurich,Zurich,dott-zurich,https://ridedott.com/,GBFS Official CSV,2025-06-14
+edrive carsharing,Switzerland,edrivecarsharing_ch,https://www.edrivecarsharing.ch/,GBFS Official CSV,2025-06-14
+Lime Opfikon,Opfikon,lime_opfikon,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Basel,Basel,lime_basel,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Uster,Uster,lime_uster,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Wetzikon,Wetzikon,lime_wetzikon,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Winterthur,Winterthur,lime_winterthur,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Zug,Zug,lime_zug,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Zurich,Zurich,lime_zurich,https://www.li.me/,GBFS Official CSV,2025-06-14
+LINK Basel,Basel,Link_Basel,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+Mobility,Switzerland,mobility,https://www.mobility.ch,GBFS Official CSV,2025-06-14
+MOOINZ,Chur,nextbike_ms,https://www.mooinz.ch/,GBFS Official CSV,2025-06-14
+nextbike Switzerland,Switzerland,nextbike_ch,https://www.nextbike.ch/de/,GBFS Official CSV,2025-06-14
+PubliBike,Switzerland,publibike,https://www.publibike.ch,GBFS Official CSV,2025-06-14
+PickeBike Aubonne,Aubonne,pickebike_aubonne,https://www.pickebike.ch/de/,GBFS Official CSV,2025-06-14
+PickeBike Basel,Basel,pickebike_basel,https://www.pickebike.ch/de/,GBFS Official CSV,2025-06-14
+PickeBike Fribourg,Fribourg,pickebike_fribourg,https://www.pickebike.ch/de/,GBFS Official CSV,2025-06-14
+Share Birrer,Switzerland,share_birrer_ch,https://www.share-birrer.ch/,GBFS Official CSV,2025-06-14
+sharedmobility.ch,Switzerland,sharedmobility.ch,https://www.sharedmobility.ch/info,GBFS Official CSV,2025-06-14
+Velospot,Switzerland,velospot_ch,https://www.velospot.info/customer/public,GBFS Official CSV,2025-06-14
+Voi Switzerland,Switzerland,voi_ch,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Bike Itaú - Santiago,Santiago,bike_santiago,https://www.bikesantiago.cl/,GBFS Official CSV,2025-06-14
+Bogotá,Bogotá,bogota_bike,https://tembici.com.co/,GBFS Official CSV,2025-06-14
+Bolt Nicosia,Nicosia,BoltEU_Nicosia,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+nextbike Cyprus,Cyprus,nextbike_cy,https://www.nextbike.com.cy/el/,GBFS Official CSV,2025-06-14
+Velespeed,Nicosia,velespeed,https://en.velespeed.net/,GBFS Official CSV,2025-06-14
+nextbike Benešov,Benešov,nextbike_co,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Berounsko,Berounsko,nextbike_td,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Brno,Czechia,nextbike_te,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Česká Třebová,Česká Třebová,nextbike_nc,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Dvůr Králové,Dvůr Králové,nextbike_tf,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Frýdek-Místek,Frýdek-Místek,nextbike_ts,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Havířov,Havířov,nextbike_th,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Hodonín,"Hodonín, CZ",nextbike_nh,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Hořice,Hořice,nextbike_uf,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Hradec Králové,Hradec Králové,nextbike_tl,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Jablonec,Jablonec nad Nisou,nextbike_ud,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Jičín,"Jičín, CZ",nextbike_nt,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Jihlava,Jihlava,nextbike_tz,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Kladno,Kladno,nextbike_tk,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Klášterec nad Ohří,Klášterec nad Ohří,nextbike_ko,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Kolín,Kolin,nextbike_ni,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Kopřivnice,Kopřivnice,nextbike_kn,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Liberec,Liberec,nextbike_xa,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Mladoboleslavsko,Czechia,nextbike_tq,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Moravská Třebová,Moravská Třebová,nextbike_xc,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Most,"Most, CZ",nextbike_uo,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike OlbramoviceVotice,"Olbramovice, CZ",nextbike_cu,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Olomouc,Olomouc,nextbike_ti,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Opava,Opava,nextbike_tj,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Ostrava,Czechia,nextbike_to,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Pelhřimov,Pelhřimov,nextbike_cq,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Písek,Písek,nextbike_ty,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Praha,Czechia,nextbike_tg,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Přerov,Přerov,nextbike_nr,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Rychnovsko,Rychnovsko,nextbike_tx,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Třebíč,Třebíč,nextbike_tu,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Trutnov,"Trutnov, CZ",nextbike_xb,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Uherské Hradiště,Uherské Hradiště,nextbike_tt,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Vrchlabí,Vrchlabí,nextbike_vr,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+nextbike Zlín,Zlín,nextbike_tv,https://www.nextbikeczech.com/,GBFS Official CSV,2025-06-14
+AB mit Lara,Aschaffenburg,5534922f6997f4d861ce1b33f2efce21a470c22,https://www.abmitlara.de,GBFS Official CSV,2025-06-14
+AW-bike,"Remagen, DE",nextbike_rh,https://www.nextbike.de/aw-bike/,GBFS Official CSV,2025-06-14
+BARshare Barnim All,Berlin-Werneuchen,barshare-all,https://www.barshare.de/,GBFS Official CSV,2025-06-14
+BARshare Barnim Bikes,Werneuchen,barshare-bicycle,https://www.barshare.de/,GBFS Official CSV,2025-06-14
+BARshare Barnim Cargo Bikes,Werneuchen,barshare-other,https://www.barshare.de/,GBFS Official CSV,2025-06-14
+BARshare Barnim Cars,Berlin,barshare-car,https://www.barshare.de/,GBFS Official CSV,2025-06-14
+Bergisches e-Bike,Bergisches e-Bike,nextbike_ac,https://www.nextbike.de/bergisches-ebike/,GBFS Official CSV,2025-06-14
+Bolt Bremen,Bremen,BoltEU_Bremen,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Dusseldorf,Dusseldorf,BoltEU_Dusseldorf,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Essen,Essen,BoltEU_Essen,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Karlsruhe,Karlsruhe,bolt_karlsruhe,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Reutlingen-Tübingen,Reutlingen-Tübingen,bolt_reutlingen_tuebingen,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Stuttgart,"Stuttgart, DE",bolt_stuttgart,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bird Ulm,Ulm,bird-ulm,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bonn nextbike,Bonn,nextbike_bf,https://www.nextbike.de/bonn/,GBFS Official CSV,2025-06-14
+Bre.Bike,Bremen,nextbike_bq,https://www.nextbike.de/bre.bike/de/de/bremen/,GBFS Official CSV,2025-06-14
+CarSharing Renningen,Renningen,oekostadt_renningen,https://carsharing-renningen.de/,GBFS Official CSV,2025-06-14
+DCS Bike,"Mannheim, DE",nextbike_rr,https://www.nextbike.de/dcs-bike/,GBFS Official CSV,2025-06-14
+Deer,Germany,deer,https://www.deer-mobility.de/,GBFS Official CSV,2025-06-14
+Die Grüne Flotte,Freiburg im Breisgau,gruene-flotte_freiburg,https://gruene-flotte.com/carsharing/,GBFS Official CSV,2025-06-14
+Donkey Republic Bamberg,Bamberg,donkey_bamberg,https://www.donkey.bike/,GBFS Official CSV,2025-06-14
+Donkey Republic Hannover,Hanover,donkey_hannover,https://www.donkey.bike/cities/hanover,GBFS Official CSV,2025-06-14
+Donkey Republic Kiel,Kiel,donkey_kiel,https://www.donkey.bike/cities/bike-rental-kiel/,GBFS Official CSV,2025-06-14
+Donkey Republic Regensburg,Regensburg,donkey_regensburg,https://www.donkey.bike/cities/bike-rental-regensburg/,GBFS Official CSV,2025-06-14
+Dott Aachen,Aachen,dott-aachen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Baunatal,Baunatal,dott-baunatal,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Berlin,Berlin,dott-berlin,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bielefeld,Bielefeld,dott-bielefeld,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Böblingen,Böblingen,dott-boblingen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bochum,Bochum,dott-bochum,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bonn,Bonn,dott-bonn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Brühl,Brühl,dott-bruhl,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Brunswick,Braunschweig,dott-brunswick,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Celle,Celle,dott-celle,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Chemnitz,Chemnitz,dott-chemnitz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Cologne,Cologne,dott-cologne,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Cottbus,Cottbus,dott-cottbus,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Darmstadt,Darmstadt,dott-darmstadt,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Detmold,Detmold,dott-detmold,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Dortmund,Dortmund,dott-dortmund,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Duisburg,Duisburg,dott-duisburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Dusseldorf,Dusseldorf,dott-dusseldorf,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Ellwangen,Ellwangen,dott-ellwangen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Elmshorn,Elmshorn,dott-elmshorn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Erfurt,Erfurt,dott-erfurt,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Erlangen,Erlangen,dott-erlangen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Essen,Essen,dott-essen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Flensburg,Flensburg,dott-flensburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Frankfurt,Frankfurt,dott-frankfurt,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Friedrichshafen,Friedrichshafen,dott-friedrichshafen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gera,Gera,dott-gera,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gifhorn,Gifhorn,dott-gifhorn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gladbeck,Gladbeck,dott-gladbeck,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Greifswald,Greifswald,dott-greifswald,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hamburg,Hamburg,dott-hamburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hamm,Hamm,dott-hamm,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hannover,Hannover,dott-hannover,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Heidelberg,Heidelberg,dott-heidelberg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Heilbronn,Heilbronn,dott-heilbronn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hennef,Hennef,dott-hennef,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Herford,Herford,dott-herford,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Herne,Herne,dott-herne,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Herten,Herten,dott-herten,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hilden,Hilden,dott-hilden,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hildesheim,Hildesheim,dott-hildesheim,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Ingolstadt,Ingolstadt,dott-ingolstadt,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Jena,Jena,dott-jena,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kaiserslautern,Kaiserslautern,dott-kaiserslautern,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Karlsruhe,Karlsruhe,dott-karlsruhe,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kassel,Kassel,dott-kassel,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kiel,Kiel,dott-kiel,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Langenfeld,Langenfeld,dott-langenfeld,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Leipzig,Leipzig,dott-leipzig,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lindau,Lindau,dott-lindau,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lübeck,Lübeck,dott-lubeck,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Ludwigsburg,Ludwigsburg,dott-ludwigsburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Mainz,Mainz,dott-mainz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Mannheim,Mannheim,dott-mannheim,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Meerbusch,Meerbusch,dott-meerbusch,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Minden,Minden,dott-minden,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Monchengladbach,Monchengladbach,dott-monchengladbach,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Monheim am Rhein,Monheim am Rhein,dott-monheim-am-rhein,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Mulheim an der Ruhr,Mülheim,dott-mulheim-an-der-ruhr,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Munich,Munich,dott-munich,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Münster,Münster,dott-munster,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Neumünster,Neumünster,dott-neumunster,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Neuss,Neuss,dott-neuss,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nuremberg,Nuremberg,dott-nuremberg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Osnabrück,Osnabrück,dott-osnabruck,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Paderborn,Paderborn,dott-paderborn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Peine,Peine,dott-peine,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Pinneberg,Pinneberg,dott-pinneberg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Potsdam,Potsdam,dott-potsdam,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Recklinghausen,Recklinghausen,dott-recklinghausen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Regensburg,Regensburg,dott-regensburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Reutlingen,Reutlingen,dott-reutlingen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Rheda-Wiedenbrück,Rheda-Wiedenbrück,dott-rheda-wiedenbruck,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Rheine,Rheine,dott-rheine,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Rostock,Rostock,dott-rostock,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Rüsselsheim,Rüsselsheim,dott-russelsheim,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Saarbrücken,Saarbrücken,dott-saarbrucken,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Salzgitter,Salzgitter,dott-salzgitter,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Sankt Augustin,Sankt Augustin,dott-sankt-augustin,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Solingen,Solingen,dott-solingen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Stuttgart,Stuttgart,dott-stuttgart,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Troisdorf,Troisdorf,dott-troisdorf,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Tübingen,Tübingen,dott-tubingen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Überlingen,Überlingen,dott-uberlingen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Ulm,Ulm,dott-ulm,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Wiesbaden,Wiesbaden,dott-wiesbaden,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Wolfsburg,Wolfsburg,dott-wolfsburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Wuppertal,Wuppertal,dott-wuppertal,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Zwickau,Zwickau,dott-zwickau,https://ridedott.com/,GBFS Official CSV,2025-06-14
+EDEKA Grünheide,Grünheide (Mark),nextbike_ed,https://www.nextbike.de/gruenheide/,GBFS Official CSV,2025-06-14
+Eifel e-Bike,Eifel,nextbike_eb,https://www.nextbike.de/eifel-ebike/,GBFS Official CSV,2025-06-14
+EinfachMobil,Ortenaukreis,nextbike_eh,https://www.nextbike.de/einfachmobil/,GBFS Official CSV,2025-06-14
+Flinkster,Germany,flinkster_carsharing,https://www.flinkster.de/,GBFS Official CSV,2025-06-14
+fLotte Brandenburg,Berlin,flotte-brandenburg,http://www.flotte-brandenburg.de/,GBFS Official CSV,2025-06-14
+flux Bikesharing,Friedrichsdorf,nextbike_ev,https://www.nextbike.de/flux-bikesharing/,GBFS Official CSV,2025-06-14
+Frelo Freiburg,Freiburg,nextbike_df,https://www.frelo-freiburg.de/de/,GBFS Official CSV,2025-06-14
+Gmünd bewegt!,Schwäbisch Gmünd,gmuend_bewegt,https://www.stwgd.de/privatkunden/mobilitaet/e-carsharing.html,GBFS Official CSV,2025-06-14
+Graben - ready4green,Graben,nextbike_da,https://www.nextbike.de/ready4green/,GBFS Official CSV,2025-06-14
+Heraeus Hanau,Hanau,nextbike_hg,https://www.nextbike.de/,GBFS Official CSV,2025-06-14
+KVB Rad Germany,Cologne,nextbike_kg,https://www.kvb-rad.de/,GBFS Official CSV,2025-06-14
+KVV.nextbike,Karlsruhe,nextbike_fg,https://www.kvv-nextbike.de/,GBFS Official CSV,2025-06-14
+Landkreis Nordsachsen - Deutschland,Nordsachsen,nextbike_lc,https://www.nextbike.de/nordsachsen/,GBFS Official CSV,2025-06-14
+Leipzig Sandkasten,Leipzig,nextbike_sk,https://www.nextbike.de/,GBFS Official CSV,2025-06-14
+Lime Frankfurt,Frankfurt,lime_frankfurt,https://www.li.me,GBFS Official CSV,2025-06-14
+Lime Hamburg,Hamburg,lime_hamburg,https://li.me,GBFS Official CSV,2025-06-14
+Lime Oberhausen,Oberhausen,lime_oberhausen,https://www.li.me,GBFS Official CSV,2025-06-14
+LINK Constance,Constance,Link_Constance,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Nuremberg,Nuremberg,Link_nuremberg,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Regensburg,Regensburg,Link_Regensburg,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Wurzburg,Wurzburg,Link_Wurzburg,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+meinRad,Mainz,nextbike_mz,https://www.mainzer-mobilitaet.de/mehr-mobilitaet/meinrad/,GBFS Official CSV,2025-06-14
+meinSiggi,Bielefeld,nextbike_dg,https://www.nextbike.de/bielefeld/,GBFS Official CSV,2025-06-14
+metropolradruhr Germany,Ruhr,nextbike_mr,https://www.metropolradruhr.de/de/,GBFS Official CSV,2025-06-14
+MOBIbike,Dresden,nextbike_dx,https://www.nextbike.de/dresden/,GBFS Official CSV,2025-06-14
+mobic,Rhein-Erft-Kreis,nextbike_re,https://www.nextbike.de/mobic/,GBFS Official CSV,2025-06-14
+Movemix Bike,"Halle, DE",nextbike_mx,https://www.movemix-bike.de/,GBFS Official CSV,2025-06-14
+MV-Rad,Mecklenburg-Vorpommern,nextbike_um,https://mv-rad.de/,GBFS Official CSV,2025-06-14
+Naturenergie sharing,South Baden,naturenergie_sharing,https://www.naturenergie-sharing.de/,GBFS Official CSV,2025-06-14
+NEW MöBus nextbike,Mönchengladbach,nextbike_sn,https://www.nextbike.de/moenchengladbach/,GBFS Official CSV,2025-06-14
+nextbike Berlin,Berlin,nextbike_bn,https://www.nextbike.de/berlin/,GBFS Official CSV,2025-06-14
+nextbike Düsseldorf,Düsseldorf,nextbike_dd,https://www.nextbike.de/duesseldorf/,GBFS Official CSV,2025-06-14
+nextbike Frankfurt,Frankfurt,nextbike_ff,https://www.nextbike.de/frankfurt/,GBFS Official CSV,2025-06-14
+nextbike Gießen,Gießen,nextbike_ng,https://www.nextbike.de/giessen/,GBFS Official CSV,2025-06-14
+nextbike Gütersloh,Gütersloh,nextbike_dj,https://www.nextbike.de/guetersloh/,GBFS Official CSV,2025-06-14
+nextbike Kassel,Kassel,nextbike_dk,https://www.nextbike.de/kassel/,GBFS Official CSV,2025-06-14
+Mein konrad,Konstanz,nextbike_kk,https://www.stadtwerke-konstanz.de/mobilitaet/fahrradmietsystem//,GBFS Official CSV,2025-06-14
+nextbike Leipzig,Leipzig,nextbike_le,https://www.nextbike.de/leipzig/,GBFS Official CSV,2025-06-14
+nextbike Lippstadt,Lippstadt,nextbike_li,https://www.nextbike.de/lippstadt/,GBFS Official CSV,2025-06-14
+nextbike Marburg,Marburg,nextbike_nm,https://www.nextbike.de/marburg/,GBFS Official CSV,2025-06-14
+nextbike Norderstedt,Norderstedt,nextbike_nn,https://www.nextbike.de/norderstedt/,GBFS Official CSV,2025-06-14
+nextbike Rüsselsheim am Main,Rüsselsheim,nextbike_do,https://www.nextbike.de/ruesselsheim/,GBFS Official CSV,2025-06-14
+nextbike Wiesbaden,Wiesbaden,nextbike_wn,https://www.nextbike.de/wiesbaden/,GBFS Official CSV,2025-06-14
+Nibelungen-Bike,Braunschweig,nextbike_dn,https://www.nextbike.de/braunschweig/,GBFS Official CSV,2025-06-14
+OberSchwabenMobil CarSharing,Halle (Saale),oberschwabenmobil,https://www.oberschwabenmobil.de/,GBFS Official CSV,2025-06-14
+OLi-Bike,Oldenburg,nextbike_wo,https://www.oli-bike.de/de/oldenburg/,GBFS Official CSV,2025-06-14
+Potsdam Rad,Potsdam,nextbike_dc,https://www.nextbike.de/potsdam/,GBFS Official CSV,2025-06-14
+Roxy Freiburg,Freiburg im Breisgau,1227,https://roxy-mobility.com,GBFS Official CSV,2025-06-14
+RSVG-Bike,Rhein-Sieg-Kreis,nextbike_rb,https://www.nextbike.de/rsvg/,GBFS Official CSV,2025-06-14
+RVK,Voreifel,nextbike_dr,https://www.nextbike.de/rvk/,GBFS Official CSV,2025-06-14
+SAP Walldorf,Walldorf,nextbike_ds,https://www.nextbike.de/walldorf/,GBFS Official CSV,2025-06-14
+Call a Bike,Germany,callabike,https://www.callabike.de/,GBFS Official CSV,2025-06-14
+Call a Bike,Germany,callabike_ice,https://www.callabike.de/de/ice-stationen,GBFS Official CSV,2025-06-14
+LastenVelo Freiburg,Freiburg,lastenvelo_fr,https://www.lastenvelofreiburg.de/,GBFS Official CSV,2025-06-14
+StadtRadHamburg,Hamburg,stadtrad_hamburg,https://stadtrad.hamburg.de/,GBFS Official CSV,2025-06-14
+RegioRadStuttgart,Stuttgart,regiorad_stuttgart,https://www.regioradstuttgart.de/,GBFS Official CSV,2025-06-14
+StadtRADLueneburg,Lübeburg,stadtrad_lueneburg,https://stadtradlueneburg.de/,GBFS Official CSV,2025-06-14
+sprintRAD,Hannover,nextbike_dh,https://www.nextbike.de/hannover/,GBFS Official CSV,2025-06-14
+StadtRad Greifswald,Greifswald,nextbike_ug,https://stadtrad-greifswald.de/,GBFS Official CSV,2025-06-14
+Stadtmobil Stuttgart,Stuttgart,stadtmobil_stuttgart,https://stuttgart.stadtmobil.de/,GBFS Official CSV,2025-06-14
+Stadtmobil Karlsruhe,Karlsruhe,stadtmobil_karlsruhe,https://karlsruhe.stadtmobil.de/,GBFS Official CSV,2025-06-14
+Stadtmobil Rhein-Neckar,Rhein-Neckar,stadtmobil_rhein-neckar,https://rhein-neckar.stadtmobil.de/,GBFS Official CSV,2025-06-14
+Stadtmobil Südbaden,Südbaden,stadtmobil_suedbaden,https://www.stadtmobil-suedbaden.de/,GBFS Official CSV,2025-06-14
+Stadtwerk Tauberfranken,Germany,stadtwerk_tauberfranken,https://stadtwerk-tauberfranken.de/elektromobilitaet/e-carsharing/,GBFS Official CSV,2025-06-14
+swu2go Carsharing,Ulm,swu2go,https://www.swu.de/privatkunden/produkte-leistungen/mobilitaet/swu2go,GBFS Official CSV,2025-06-14
+TeilAuto Biberach,Biberach,teilauto_biberach,https://www.teilauto-biberach.de/,GBFS Official CSV,2025-06-14
+TeilAuto Neckar-Alb,Neckar-Alb,teilauto_neckar-alb,https://www.teilauto-neckar-alb.de/,GBFS Official CSV,2025-06-14
+TeilAuto Schwäbisch Hall,Schwäbisch Hall,teilauto_schwaebisch_hall,https://www.teilauto-hall.de/,GBFS Official CSV,2025-06-14
+UsedomRad Germany,Usedom,nextbike_ur,https://usedomrad.de/,GBFS Official CSV,2025-06-14
+VAG_Rad,Nuremberg,nextbike_dv,https://www.vagrad.de/de/nuernberg/,GBFS Official CSV,2025-06-14
+Velocity Aachen,Aachen,openvelo_aachen_velocity,https://velocity-aachen.de,GBFS Official CSV,2025-06-14
+Voi,Germany,voi_de,https://www.voi.com/,GBFS Official CSV,2025-06-14
+VRNnextbike,Rhine-Neckar,nextbike_vn,https://www.vrnnextbike.de/,GBFS Official CSV,2025-06-14
+westBike,Heinsberg,nextbike_gh,https://www.west-bike.de/,GBFS Official CSV,2025-06-14
+WinsenRad,Winsen (Luhe),nextbike_wd,https://www.winsenrad.de/,GBFS Official CSV,2025-06-14
+WK-Bike (Bremen),Bremen,nextbike_wk,https://www.wk-bike.de/de/bremen/,GBFS Official CSV,2025-06-14
+wupsiRad Leverkusen,Leverkusen,nextbike_dw,https://www.wupsirad.de/de/leverkusen/,GBFS Official CSV,2025-06-14
+Yoio Freiburg,Freiburg im Breisgau,71,http://www.yoio.app,GBFS Official CSV,2025-06-14
+zeo Carsharing,Bruchsal,zeo_bruchsal,https://www.zeo-carsharing.de/,GBFS Official CSV,2025-06-14
+Zeus Bamberg,Bamber,zeus_bamberg,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Castrop Rauxel,Castrop Rauxel,zeus_castrop-rauxel,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Duisburg,Druisburg,zeus_duisburg,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Freiburg,Freiburg im Breisgau,zeus_freiburg im breisgau,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Friedberg,Friedberg,zeus_friedberg,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Gera,Gera,zeus_gera,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Goppingen,Goppingen,zeus_goppingen,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Hagen,Hagen,zeus_hagen,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Hattingen,Hattingen,zeus_hattingen,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Heidelberg,Heidelberg,zeus_heidelberg,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Heilbronn,Heilbronn,zeus_heilbronn,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Hemmingen,Hemmingen,zeus_hemmingen,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Herne,Herne,zeus_herne,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Jena,Jena,zeus_jena,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Kempten,Kempten,zeus_kempten,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Konstanz,Konstanz,zeus_konstanz,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Limburgerhof,Limburgerhof,zeus_limburgerhof,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Ludwigsburg,Ludwigsburg,zeus_ludwigsburg,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Marburg,Marburg,zeus_marburg,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Neustadt,Neustadt,zeus_neustadt,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Pforzheim,Pforzheim,zeus_pforzheim,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Regensburg,Regensburg,zeus_regensburg,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Renningen-Malmsheim,Renningen-Malmsheim,zeus_renningen-malmsheim,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Reutlingen,Reutlingen,zeus_reutlingen,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Russelsheim,Russelsheim,zeus_russelsheim,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Schwäbisch Gmünd,Schwäbisch Gmünd,zeus_schwabish gmund,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Schweinfurt,Schweinfurt,zeus_schweinfurt,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Straubing,Straubing,zeus_straubing,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Tubingen,Tubingen,zeus_tubingen,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Tuttlingen,Tuttlingen,zeus_tuttlingen,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Villingen-Schwenningen,Villingen-Schwenningen,zeus_villingen-schwenningen,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Wurzburg,Wurzburg,zeus_wurzburg,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Donkey Republic Aalborg,Aalborg,donkey_aalborg,https://www.donkey.bike/cities/bike-rental-aalborg/,GBFS Official CSV,2025-06-14
+Donkey Republic Aarhus,Aarhus,donkey_aarhus,https://www.donkey.bike/cities/bike-rental-aarhus/,GBFS Official CSV,2025-06-14
+Donkey Republic Ballerup,Ballerup,donkey_ballerup,https://www.donkey.bike/,GBFS Official CSV,2025-06-14
+Donkey Republic Bandholm,Bandholm,donkey_bandholm,https://www.donkey.bike/cities/bike-rental-bandholm/,GBFS Official CSV,2025-06-14
+Donkey Republic Copenhagen,Copenhagen,donkey_copenhagen,https://www.donkey.bike/cities/bike-rental-copenhagen/,GBFS Official CSV,2025-06-14
+Donkey Republic Frederikshavn,Frederikshavn,donkey_frederikshavn,https://www.donkey.bike/cities/bike-rental-frederikshavn/,GBFS Official CSV,2025-06-14
+Donkey Republic Glostrup,Glostrup,donkey_glostrup,https://www.donkey.bike/cities/bike-rental-glostrup/,GBFS Official CSV,2025-06-14
+Donkey Republic Herning,Herning,donkey_herning,https://www.donkey.bike/cities/herning/,GBFS Official CSV,2025-06-14
+Donkey Republic Hillerød,Hillerød,donkey_hillerod,https://www.donkey.bike,GBFS Official CSV,2025-06-14
+Donkey Republic Klampenborg,Klampenborg,donkey_klampenborg,https://www.donkey.bike/cities/bike-rental-klampenborg/,GBFS Official CSV,2025-06-14
+Donkey Republic Lalandia (Rødby),Lalandia (Rødby),donkey_lalandia,https://www.donkey.bike/cities/bike-rental-lalandia-rodby/,GBFS Official CSV,2025-06-14
+Donkey Republic Middelfart,Middelfart,donkey_middelfart,https://www.donkey.bike/cities/bike-rental-middelfart/,GBFS Official CSV,2025-06-14
+Donkey Republic Odense,Odense,donkey_odense,https://www.donkey.bike/cities/bike-rental-odense/,GBFS Official CSV,2025-06-14
+Donkey Republic Rødvig,Rødvig,donkey_roedvig,https://www.donkey.bike/cities/bike-rental-rodvig/,GBFS Official CSV,2025-06-14
+Donkey Republic Store Heddinge,Store Heddinge,donkey_store_heddinge,https://www.donkey.bike/cities/bike-rental-store-heddinge/,GBFS Official CSV,2025-06-14
+Dott Copenhagen,Copenhagen,dott-copenhagen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Bolt Kuressaare,Kuressaare,BoltEU_Kuressaare,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Narva,Narva,BoltEU_Narva,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Ambici,Barcelona,nextbike_bs,https://www.ambici.cat,GBFS Official CSV,2025-06-14
+BBK Klimabizi,Urdaibai,nextbike_ey,https://www.nextbike.es/es/bbkklima/,GBFS Official CSV,2025-06-14
+biciArteixo,"Artexio, ES",nextbike_aa,https://www.biciarteixo.com/,GBFS Official CSV,2025-06-14
+Bicicoruña,A Coruña,acoruna,https://www.bicicoruna.es,GBFS Official CSV,2025-06-14
+bicimad,Madrid,bicimad_madrid,https://www.bicimad.com,GBFS Official CSV,2025-06-14
+BiciMAD (unofficial),Madrid,bici_madrid,https://www.bicimad.com/,GBFS Official CSV,2025-06-14
+BiciMislata Mislata,Mislata,nextbike_ad,https://bicimislata.mibisivalencia.es/en/,GBFS Official CSV,2025-06-14
+Bicing,Barcelona,bike_barcelona,https://www.bicing.barcelona/,GBFS Official CSV,2025-06-14
+BiciPalma,Palma,nextbike_ea,https://www.bicipalma.com/es/palma/,GBFS Official CSV,2025-06-14
+Bilbaobizi (Bilbao),Bilbao,nextbike_bo,https://www.bilbaobizi.bilbao.eus/eu/bilbao/,GBFS Official CSV,2025-06-14
+Bird Madrid,Madrid,bird-madrid,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Zaragoza,Zaragoza,bird zaragoza,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bizi,Zaragoza,zaragoza,https://bizi.zaragoza.es,GBFS Official CSV,2025-06-14
+Bizkaibizi Spain,"Bilbao, ES",nextbike_bw,https://www.bizkaibizi.eus/,GBFS Official CSV,2025-06-14
+Bolt Oviedo,Oviedo,BoltEU_Oviedo,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Dbizi,Donostia,sansebastian,https://www.dbizi.eus,GBFS Official CSV,2025-06-14
+Dott Estepona,Estepona,dott-estepona,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Ibiza,Ibiza,dott-ibiza,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott La-Manga,La-Manga,dott-la-manga,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lorca,Lorca,dott-lorca,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Murcia,Murcia,dott-murcia,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Tarragona,Tarragona,dott-tarragona,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Tenerife,Tenerife,dott-tenerife,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Tenerife-Sur,Tenerife-Sur,dott-tenerife-sur,https://ridedott.com/,GBFS Official CSV,2025-06-14
+ibizi,Ibiza City,nextbike_ei,https://www.nextbike.es/es/ibiza/,GBFS Official CSV,2025-06-14
+LINK Alcala de Henares,Alcalá de Henares,Link_Alcala_de_Henares,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Canary Islands,Canary Islands,Link_Canary_Islands,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Corralejo,Corralejo,Link_Corralejo,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK El Puerto de Santa Maria,El Puerto de Santa Maria,Link_El_Puerto_de_Santa_Maria,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Fuerteventura,Fuerteventura,Link_Fuerteventura,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Granada,Granada,Link_Granada,https://superpedestrian.com/,GBFS Official CSV,2025-06-14
+LINK Tenerife Sur,Tenerife Sur,Link_Tenerife_Sur,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Tenerife,Tenerife,Link_Tenerife,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Torrevieja,Torrevieja,Link_Torrevieja,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Velez-Malaga,Velez-Malaga,Link_Velez-Malaga,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+Lovesharing,Canary Islands,nextbike_ls,https://www.lovesharing.com/bikesharing/es/,GBFS Official CSV,2025-06-14
+nextbike BiciLOG,Logroño,nextbike_ej,https://www.nextbike-bicilog.com/,GBFS Official CSV,2025-06-14
+nextbike León,León,nextbike_sl,https://www.alsa-nextbike.es/es/leon/,GBFS Official CSV,2025-06-14
+Ontibici,"Ontinyent, ES",nextbike_oy,https://www.ontibici.com/,GBFS Official CSV,2025-06-14
+Sevici,Seville,seville,https://www.sevici.es/,GBFS Official CSV,2025-06-14
+Sitycleta (Las Palmas),Las Palmas de Gran Canaria,nextbike_el,https://www.sitycleta.com/es/laspalmas/,GBFS Official CSV,2025-06-14
+TORRENTBICI,Torrent,nextbike_en,https://www.mibisivalencia.es/torrentbici/,GBFS Official CSV,2025-06-14
+TUeBICI,"Santander, ES",nextbike_ek,https://www.tuebici.es/,GBFS Official CSV,2025-06-14
+Valenbisi,Valencia,valence,https://www.valenbisi.es/,GBFS Official CSV,2025-06-14
+Valladolid,Valladolid,BIKI_valladolid,https://biki-valladolid.es,GBFS Official CSV,2025-06-14
+Bolt Helsinki,Helsinki,BoltEU_Helsinki,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Donkey Republic Hämeenlinna,Hämeenlinna,donkey_haemeenlinna,https://www.donkey.bike/cities/bike-rental-hameenlinna/,GBFS Official CSV,2025-06-14
+Donkey Republic Hamina,Hamina,donkey_hamina,https://www.donkey.bike/cities/bike-rental-hamina/,GBFS Official CSV,2025-06-14
+Donkey Republic Hyvinkää,Hyvinkää,donkey_hyvinkaa,https://www.donkey.bike/cities/bike-rental-hyvinkaa/,GBFS Official CSV,2025-06-14
+Donkey Republic Iisalmi,Iisalmi,donkey_iisalmi,https://www.donkey.bike/cities/bike-rental-iisalmi/,GBFS Official CSV,2025-06-14
+Donkey Republic Imatra,Imatra,donkey_imatra,https://www.donkey.bike/cities/bike-rental-imatra/,GBFS Official CSV,2025-06-14
+Donkey Republic Kotka,Kotka,donkey_kotka,https://www.donkey.bike/cities/bike-rental-kotka/,GBFS Official CSV,2025-06-14
+Donkey Republic Kouvola,Kouvola,donkey_kouvola,https://www.donkey.bike/cities/bike-rental-kouvola/,GBFS Official CSV,2025-06-14
+Donkey Republic Lappeenranta,Lappeenranta,donkey_lappeenranta,https://www.donkey.bike/cities/bike-rental-lappeenranta/,GBFS Official CSV,2025-06-14
+Donkey Republic Mäntsälä,Mäntsälä,donkey_maentsaelae,https://www.donkey.bike/cities/bike-rental-mantsala/,GBFS Official CSV,2025-06-14
+Donkey Republic Mikkeli,Mikkeli,donkey_mikkeli,https://www.donkey.bike/cities/bike-rental-mikkeli/,GBFS Official CSV,2025-06-14
+Donkey Republic Porvoo,Porvoo,donkey_porvoo,https://www.donkey.bike/cities/bike-rental-porvoo/,GBFS Official CSV,2025-06-14
+Donkey Republic Raasepori,Raasepori,donkey_raasepori,https://www.donkey.bike/cities/bike-rental-raasepori/,GBFS Official CSV,2025-06-14
+Donkey Republic Riihimäki,Riihimäki,donkey_riihimaki,https://www.donkey.bike/cities/bike-rental-riihimaki/,GBFS Official CSV,2025-06-14
+Donkey Republic Turku,Turku,donkey_turku,https://www.donkey.bike/cities/bike-rental-hyvinkaa/,GBFS Official CSV,2025-06-14
+Dott Espoo,Espoo,dott-espoo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hameenlinna,Hameenlinna,dott-hameenlinna,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hamina,Hamina,dott-hamina,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Helsinki,Helsinki,dott-helsinki,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hyvinkaa,Hyvinkaa,dott-hyvinkaa,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Imatra,Imatra,dott-imatra,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Jakobstad,Jakobstad,dott-jakobstad,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Jarvenpaa,Jarvenpaa,dott-jarvenpaa,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Joensuu,Joensuu,dott-joensuu,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Jyvaskyla,Jyvaskyla,dott-jyvaskyla,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kaarina,Kaarina,dott-kaarina,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kangasala,Kangasala,dott-kangasala,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kerava,Kerava,dott-kerava,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kirkkonummi,Kirkkonummi,dott-kirkkonummi,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Klaukkala,Klaukkala,dott-klaukkala,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kokkola,Kokkola,dott-kokkola,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kotka,Kotka,dott-kotka,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kuopio,Kuopio,dott-kuopio,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lahti,Lahti,dott-lahti,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lappeenranta,Lappeenranta,dott-lappeenranta,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lempaala,Lempaala,dott-lempaala,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Myyrmaki,Myyrmaki,dott-myyrmaki,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nokia,Nokia,dott-nokia,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Porvoo,Porvoo,dott-porvoo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Raisio,Raisio,dott-raisio,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Salo,Salo,dott-salo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Seinajoki,Seinajoki,dott-seinajoki,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Tampere,Tampere,dott-tampere,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Turku,Turku,dott-turku,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Vaasa,Vaasa,dott-vaasa,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Vantaa,Vantaa,dott-vantaa,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Joe Rauma,Rauma,475,https://www.joescooter.fi/,GBFS Official CSV,2025-06-14
+Altervelo Libre-service,"Saint-Pierre, L'Étang-Salé & Saint-Louis",altervelo,https://altervelo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+AQTA,Auray,auray-quiberon,https://www.auray-quiberon.fr/,GBFS Official CSV,2025-06-14
+AuxR_M le vélo,Auxerre,auxrmlevelo,https://auxrmlevelo.com/fr/,GBFS Official CSV,2025-06-14
+Bird Bordeaux,Bordeaux,bird-bordeaux,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Castres,Castres,bird-castres,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Chalonsenchampagne,Châlons-en-Champagne,bird-chalonsenchampagne,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Dieppe,Dieppe,bird-dieppe,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Draguignan,Draguignan,bird-draguignan,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Epron,Epron,bird-epron,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Herouvillesaintclair,Herouville-Saint-Clair,bird-herouvillesaintclair,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Larochesuryon,La Roche-sur-Yon,bird-larochesuryon,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Laval,Laval,bird-laval,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Millau,Millau,bird-millau,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Montlucon,Montluçon,bird-montlucon,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Ouistreham,Ouistreham,bird-ouistreham,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Sarreguemines,Sarreguemines,bird-sarreguemines,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Vichy,Vichy,bird-vichy,https://bird.co,GBFS Official CSV,2025-06-14
+CaliVélo,Libourne,calivelo,https://calivelo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+CapCotentin,Cherbourg-en-Cotentin,capcotentin,https://capcotentin.ecovelo.mobi/,GBFS Official CSV,2025-06-14
+VélO2,Cergy-Pontoise,cergy,https://www.velo2.cergypontoise.fr/,GBFS Official CSV,2025-06-14
+Choletbus 2 Roues,Cholet,choletbus,https://choletbus.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Citiz AUPA,Bayonne,aupa,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Alpes Loire,Grenoble,citiz_alpes_loire,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Angers,Angers,citiz_angers,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz BFC,Besançon,citiz_bfc,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Développement,France,citiz_developpement,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Gironde,Bordeaux,citiz_gironde,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Grand Est,Strasbourg,citiz_grand_est,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Grand Poitiers,Poitiers,citiz_grand_poitiers,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz La Rochelle,La Rochelle,citiz_la_rochelle,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Lille Arras,Lille,citiz_lille_arras,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Métropole Lyon,Lyon,citiz_metropole_lyon,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Nantes,Nantes,citiz_nantes,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Occitanie,Toulouse,citiz_occitanie,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Ogalo,Saumur,ogalo,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Provence,Marseille,citiz_provence,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Citiz Rennes Métropole,Rennes,citiz_rennes_metropole,https://citiz.coop/,GBFS Official CSV,2025-06-14
+Cycl'AM,Ardenne Métropole,cyclam,https://cyclam.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Cyclolibre,Carcassonne,cyclolibre,https://cyclolibre.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Cyclovis,Soissons,cyclovis,https://cyclovis.ecovelo.mobi,GBFS Official CSV,2025-06-14
+C-Vélo,Clermont-Ferrand,CVelo_FR_Clermont-Ferrand,https://www.c-velo.fr,GBFS Official CSV,2025-06-14
+Donkey Republic Valenciennes,Valenciennes,donkey_valenciennes,https://www.donkey.bike/cities/bike-rental-valenciennes/,GBFS Official CSV,2025-06-14
+Dott Bordeaux,Bordeaux,dott-bordeaux,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Bourgoin Jallieu,Bourgoin-Jallieu,dott-bourgoin-jallieu,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott CASGBS,Communauté d'agglomération Saint Germain Boucles de Seine,dott-casgbs,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gpseo,Grand Paris Seine et Oise,dott-gpseo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Grenoble,Grenoble,dott-grenoble,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Lyon,Lyon,dott-lyon,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Ol-Vallee,Ol-Vallee,dott-ol-vallee,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Paris,Paris,dott-paris,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott SIEMU,Marne-la-Vallée,dott-siemu,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Impulsyon,La Roche-sur-Yon,impulsyon,https://impulsyon.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Karu'Vélo,Pointe-à-Pitre,karu,https://karuvelo.ecovelo.mobi/,GBFS Official CSV,2025-06-14
+Knot Strasbourg,Strasbourg,knot_strasbourg,https://knot.city/ride/where/strasbourg/,GBFS Official CSV,2025-06-14
+La Baule,La Baule,labaule,https://labaule.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Le Marcel,Troyes,lemarcel,https://lemarcelavelo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Le Vélo par TBM,Bordeaux,velo-tbm-bordeaux,https://www.infotbm.com/fr/le-velo,GBFS Official CSV,2025-06-14
+LE vélo STAR,Rennes,le_velo_star,https://www.star.fr/le-velo/nos-offres/vls/,GBFS Official CSV,2025-06-14
+Les Petites Reines,Les Sables-d'Olonne,petitesreines,https://lespetitesreines.ecovelo.mobi,GBFS Official CSV,2025-06-14
+levélo - Marseille,Marseille,levelo_inurba_marseille,https://levelo.ampmetropole.fr,GBFS Official CSV,2025-06-14
+Libélo,Valence,libelo,https://www.vrd-mobilites.fr/velo/,GBFS Official CSV,2025-06-14
+Lime Marseille,Marseille,lime_marseille,https://www.li.me,GBFS Official CSV,2025-06-14
+Lime Paris,Paris,lime_paris,https://li.me/,GBFS Official CSV,2025-06-14
+Link Cagnes-sur-Mer,Cagnes-sur-Mer,Link_Cagnes-sur-Mer,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+Link Perpignan,Perpignan,Link_Perpignan,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+Leo and Go,Lyon,84b174c4-eb74-5d07-bdeb-27f4215d2aa9,https://www.leoandgo.com/,GBFS Official CSV,2025-06-14
+LOVELO Libre-service,Rouen,inurba-rouen,https://lovelolibreservice.fr/,GBFS Official CSV,2025-06-14
+Naolib,Nantes,nantes,https://velo.naolib.fr/,GBFS Official CSV,2025-06-14
+Naolib Micromob',Chantrerie,chantrerie,https://naolib.fr/fr/velos/micromob-1,GBFS Official CSV,2025-06-14
+Ogalo Cyclette,Saumur,ogalo,https://ogalo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Optymo Belfort,Belfort,Optymo_FR_Belfort,https://www.optymo.fr/,GBFS Official CSV,2025-06-14
+Optymo Belfort Auto libre-service,Belfort,Optymo_Belfort_ALS,https://www.optymo.fr/,GBFS Official CSV,2025-06-14
+Pony Angers,Angers,pony_Angers,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Basque Country,Basque Country,pony_Basque_Country,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Beauvais,Beauvais,pony_Beauvais,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Bourges,Bourges,pony_Bourges,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Bordeaux,Bordeaux,pony_bordeaux,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Evry,Evry,pony_Evry,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Herouville,Herouville-Saint-Clair,pony_Herouville,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony La Roche-sur-Yon,La Roche-sur-Yon,pony_La_Roche_Sur_Yon,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Limoges,Limoges,pony_Limoges,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Lorient,Lorient,pony_Lorient,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Nice,"Nice, FR",pony_Nice,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Olivet,Olivet,pony_Olivet,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Paris,Paris,pony_paris,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Perpignan,Perpignan,pony_Perpignan,https://getapony.com/,GBFS Official CSV,2025-06-14
+Pony Poitiers,Poitiers,pony_poitiers,https://getapony.com/,GBFS Official CSV,2025-06-14
+Périvélo,Périgueux,perivelo,https://perivelolibreservice.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Rhoule,Piriac-sur-Mer,rhoule,https://rhoule.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Rubis'Velo,Bourg-en-Bresse,beb,https://rubis.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Semo Vélo,Louviers,semo,https://semo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Tempovelo,Agen,tempovelo,https://tempovelo.ecovelo.mobi/,GBFS Official CSV,2025-06-14
+Ti Vélo,Landerneau,ti_velo,https://www.landerneau.bzh,GBFS Official CSV,2025-06-14
+TIER Paris,Paris,tier_paris,https://www.tier.app,GBFS Official CSV,2025-06-14
+TLP Mobilites,Tarbes,tlpmobilites,https://tlpmobilites.ecovelo.mobi/,GBFS Official CSV,2025-06-14
+Twisto Vélolib,Caen,twisto_velolib_caen,https://www.twisto.fr/se-deplacer/velo/velolib,GBFS Official CSV,2025-06-14
+Velam,Amiens,amiens,https://velam.cyclocity.fr/,GBFS Official CSV,2025-06-14
+Velect'in,Calais,calais,https://velectin.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Vélib' Metropole,Paris,Paris,https://www.velib-metropole.fr/,GBFS Official CSV,2025-06-14
+Vélhop - Strasbourg,"Strasbourg, FR",nextbike_ae,https://vls.velhop.strasbourg.eu/,GBFS Official CSV,2025-06-14
+Vélo d'Aqui,Argelès-sur-Mer,velodaqui,https://velodaqui.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Vélo Tanlib,Niort,tanlib,https://tanlib.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Vélo'Baie,Saint-Brieuc,saintbrieuc,https://www.saintbrieuc-armor-agglo.bzh/velobaie,GBFS Official CSV,2025-06-14
+VéloCité,Besançon,besancon,https://www.velocite.besancon.fr/,GBFS Official CSV,2025-06-14
+VéloCité Mulhouse,Mulhouse,nextbike_af,https://velocite-mulhouse.fr/fr/,GBFS Official CSV,2025-06-14
+Vélomagg',Montpellier,montpellier,https://www.tam-voyages.com/presentation/?rub_code=1&thm_id=6,GBFS Official CSV,2025-06-14
+Vélopop,Avignon,velopop,https://velo-grandavignon.fr/fr/,GBFS Official CSV,2025-06-14
+VélOstan'lib,Nancy,nancy,https://www.velostanlib.fr/,GBFS Official CSV,2025-06-14
+VélÔToulouse,Toulouse,toulouse,http://www.velo.toulouse.fr/,GBFS Official CSV,2025-06-14
+VéloZef,Brest,velozef,https://www.bibus.fr/services/velozef-le-velo-assistance-electrique-en-libre-service,GBFS Official CSV,2025-06-14
+Vélo'Cité,Laon,velocite,https://velocite.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Vélo'v,Lyon,lyon,https://velov.grandlyon.com/en/home,GBFS Official CSV,2025-06-14
+Vélibéo,Brive-la-Gaillarde,velibeo,https://velibeo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Vélivert,Saint-Étienne,velivert_saint_etienne,https://www.velivert.fr/,GBFS Official CSV,2025-06-14
+VélYcéo,Saint-Nazaire,velyceo,https://velyceo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Vernou Vélo,Vernou-en-Sologne,vernouvelo,https://vernouvelo.ecovelo.mobi/,GBFS Official CSV,2025-06-14
+Vertuose,Longwy,vertuose,https://vertuose.ecovelo.mobi,GBFS Official CSV,2025-06-14
+Vilvolt,Épinal,vilvolt_epinal,https://vilvolt.fr/,GBFS Official CSV,2025-06-14
+Vivélo,Vichy,vivelo,https://www.mobivie.fr/se-deplacer/vivelo/,GBFS Official CSV,2025-06-14
+V'lille,Lille,v_lille,https://www.ilevia.fr/v-lille,GBFS Official CSV,2025-06-14
+Voi Le Havre,Le Havre,voi_Le_Havre,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Voi Marseille,Marseille,voi_Marseille,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Zebullo,Reims,zebullo,https://zebullo.ecovelo.mobi,GBFS Official CSV,2025-06-14
+BelfastBikes,Belfast,nextbike_bu,https://www.belfastbikes.co.uk/en/belfast/,GBFS Official CSV,2025-06-14
+Beryl - BCP,Bournemouth/Christchurch/Poole,beryl_bcp,https://beryl.cc/scheme/bournemouth-christchurch-and-poole,GBFS Official CSV,2025-06-14
+Beryl - Brighton,Brighton,beryl_brighton,https://beryl.cc/,GBFS Official CSV,2025-06-14
+Beryl - Cornwall,Cornwall,beryl_cornwall,https://beryl.cc/scheme/cornwall,GBFS Official CSV,2025-06-14
+Beryl - Greater Manchester,Manchester,beryl_greater_manchester,https://beryl.cc/scheme/greater-manchester,GBFS Official CSV,2025-06-14
+Beryl - Hackney Cargo Bike,Hackney,beryl_hackney_cargo_bike,https://beryl.cc/,GBFS Official CSV,2025-06-14
+Beryl - Hereford,Hereford,beryl_hereford,https://beryl.cc/scheme/hereford,GBFS Official CSV,2025-06-14
+Beryl - Hertsmere,Hertsmere,beryl_hertsmere,https://beryl.cc/scheme/hertsmere,GBFS Official CSV,2025-06-14
+Beryl - Isle of Wight,Isle of Wight,beryl_isle_of_wight,https://beryl.cc/scheme/isle-wight,GBFS Official CSV,2025-06-14
+Beryl - Leeds,Leeds,beryl_leeds,https://beryl.cc/,GBFS Official CSV,2025-06-14
+Beryl - Norwich,Norwich,beryl_norwich,https://beryl.cc/scheme/norwich,GBFS Official CSV,2025-06-14
+Beryl - Plymouth,Plymouth,beryl_plymouth,https://beryl.cc/scheme/plymouth,GBFS Official CSV,2025-06-14
+Beryl - Portsmouth,Portsmouth,beryl_portsmouth,https://beryl.cc/scheme/portsmouth,GBFS Official CSV,2025-06-14
+Beryl - Southampton,Southampton,beryl_southampton,https://beryl.cc/scheme/southampton,GBFS Official CSV,2025-06-14
+Beryl - Watford,Watford,beryl_watford,https://beryl.cc/scheme/watford,GBFS Official CSV,2025-06-14
+Beryl - West Midlands,West Midlands,beryl_west_midlands,https://beryl.cc/scheme/west-midlands,GBFS Official CSV,2025-06-14
+Beryl - Westminster Cargo Bike,Westminster,beryl_westminster_cargo_bike,https://beryl.cc/,GBFS Official CSV,2025-06-14
+Beryl - Wool,Wool,beryl_wool,https://beryl.cc/scheme/wool,GBFS Official CSV,2025-06-14
+Co-bikes,Exeter,nextbike_eu,https://www.co-bikes.co.uk/,GBFS Official CSV,2025-06-14
+Demoland,Great Britain,nextbike_tb,https://www.nextbike.de/,GBFS Official CSV,2025-06-14
+Donkey Republic Charlbury,Charlbury,donkey_charlbury,https://www.donkey.bike/cities/bike-rental-charlbury/,GBFS Official CSV,2025-06-14
+Donkey Republic Cheltenham Spa,Cheltenham Spa,donkey_cheltenham_spa,https://www.donkey.bike/cities/bike-rental-cheltenham-spa/,GBFS Official CSV,2025-06-14
+Donkey Republic Cirencester,Cirencester,donkey_cirencester,https://www.donkey.bike/cities/bike-rental-cirencester/,GBFS Official CSV,2025-06-14
+Donkey Republic Henley On Thames,Henley On Thames,donkey_henley_on_thames,https://www.donkey.bike/cities/bike-rental-henley-on-thames/,GBFS Official CSV,2025-06-14
+Donkey Republic Kingham,Kingham,donkey_kingham,https://www.donkey.bike/cities/bike-rental-kingham/,GBFS Official CSV,2025-06-14
+Donkey Republic Milton Park,Milton Park,donkey_miltonpark,https://www.donkey.bike,GBFS Official CSV,2025-06-14
+Donkey Republic Moreton In Marsh,Moreton In Marsh,donkey_moreton_in_marsh,https://www.donkey.bike/cities/bike-rental-moreton-in-marsh/,GBFS Official CSV,2025-06-14
+Donkey Republic Northleach,Northleach,donkey_northleach,https://www.donkey.bike/cities/bike-rental-northleach/,GBFS Official CSV,2025-06-14
+Donkey Republic Oxford,Oxford,donkey_oxford,https://www.donkey.bike/cities/bike-rental-oxford/,GBFS Official CSV,2025-06-14
+Donkey Republic Plymouth,Plymouth,donkey_plymouth,https://www.donkey.bike/cities/bike-rental-plymouth/,GBFS Official CSV,2025-06-14
+Donkey Republic Stroud,Stroud,donkey_stroud,https://www.donkey.bike/cities/bike-rental-stroud/,GBFS Official CSV,2025-06-14
+Donkey Republic Tetbury,Tetbury,donkey_tetbury,https://www.donkey.bike/cities/bike-rental-tetbury/,GBFS Official CSV,2025-06-14
+Donkey Republic The Cotswold Water Park,Cotswold,donkey_the_cotswold_water_park,https://www.donkey.bike/cities/bike-rental-the-cotswold-water-park/,GBFS Official CSV,2025-06-14
+Donkey Republic Whichford,Whichford,donkey_whichford,https://www.donkey.bike/cities/bike-rental-whichford/,GBFS Official CSV,2025-06-14
+Donkey Republic Worthing,Worthing,donkey_worthing,https://www.donkey.bike/cities/bike-rental-worthing/,GBFS Official CSV,2025-06-14
+Dott Basildon,Basildon,dott-basildon,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bath,Bath,dott-bath,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Braintree,Braintree,dott-braintree,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bristol,Bristol,dott-bristol,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Chelmsford,Chelmsford,dott-chelmsford,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Colchester,Colchester,dott-colchester,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Milton Keynes,Milton Keynes,dott-milton-keynes,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nottingham,Nottingham,dott-nottingham,https://ridedott.com/,GBFS Official CSV,2025-06-14
+LINK Nottingham,Nottingham,Link_Nottingham,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+Neuron Mobility,Newcastle,neuron_ncl,https://www.rideneuron.com,GBFS Official CSV,2025-06-14
+nextbike Stirling,Stirling,nextbike_uk,https://www.nextbike.co.uk/en/stirling/,GBFS Official CSV,2025-06-14
+OVO Bikes Glasgow,Glasgow,nextbike_gg,https://www.nextbike.co.uk/en/glasgow/,GBFS Official CSV,2025-06-14
+Santander Cycles - Brunel,Brunel University,nextbike_ub,https://www.nextbike.co.uk/en/brunel-university/,GBFS Official CSV,2025-06-14
+Santander Cycles - Milton Keynes,Milton Keynes,nextbike_ku,https://www.nextbike.co.uk/en/milton-keynes/,GBFS Official CSV,2025-06-14
+Santander Cycles - Swansea,Swansea University,nextbike_uu,https://www.nextbike.co.uk/en/swansea-university/,GBFS Official CSV,2025-06-14
+WESTcargo powered by nextbike,"Bristol, GB",nextbike_we,https://www.nextbike.co.uk/westcargo/,GBFS Official CSV,2025-06-14
+Zeus Cheltenham,Cheltenham,zeus_cheltenham,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Gloucester,Gloucester,zeus_gloucester,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Sunderland,Sunderland,zeus_sunderland,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Yeovil,Yeovil,zeus_yeovil,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Bolt Kutaisi,Kutaisi,BoltEU_Kutaisi,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Tbilisi,Tbilisi,BoltEU_Tbilisi,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Dott Athens,Athens,dott-athens,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Link Thessaloniki,"Thessaloniki, GR",Link_Thessaloniki,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+eMobi (Croatia),Osijek,nextbike_em,https://www.nextbike.hr/hr/osijek/,GBFS Official CSV,2025-06-14
+Grad Drniš (Croatia),Drniš,nextbike_gd,https://www.nextbike.hr/hr/drnis/,GBFS Official CSV,2025-06-14
+Grad Ivanić-Grad (Croatia),Ivanic Grad,nextbike_ig,https://www.nextbike.hr/hr/ivanicgrad/,GBFS Official CSV,2025-06-14
+Grad Karlovac (Croatia),Karlovac,nextbike_kc,https://www.nextbike.hr/hr/karlovac/,GBFS Official CSV,2025-06-14
+Grad Križevci (Croatia),Križevci,nextbike_gk,https://www.nextbike.hr/hr/krizevci/,GBFS Official CSV,2025-06-14
+Grad Metković (Croatia),Metković,nextbike_cm,https://www.nextbike.hr/hr/metkovic/,GBFS Official CSV,2025-06-14
+Grad Šibenik (Croatia),Šibenik,nextbike_bc,https://www.nextbike.hr/hr/sibenik/,GBFS Official CSV,2025-06-14
+Grad Sisak (Croatia),Sisak,nextbike_cs,https://www.nextbike.hr/hr/sisak/,GBFS Official CSV,2025-06-14
+Grad Slavonski Brod (Croatia),Slavonski Brod,nextbike_sb,https://www.nextbike.hr/hr/slavonskibrod/,GBFS Official CSV,2025-06-14
+Grad Split (Croatia),Croatia,nextbike_gt,https://www.nextbike.hr/hr/,GBFS Official CSV,2025-06-14
+Grad Velika Gorica (Croatia),Velika Gorica,nextbike_cg,https://www.nextbike.hr/hr/velikagorica/,GBFS Official CSV,2025-06-14
+Grad Vukovar (Croatia),Vukovar,nextbike_vu,https://www.nextbike.hr/hr/vukovar/,GBFS Official CSV,2025-06-14
+Grad Zadar (Croatia),Zadar,nextbike_zd,https://www.nextbike.hr/hr/zadar/,GBFS Official CSV,2025-06-14
+Grad Zaprešić (Croatia),Zaprešić,nextbike_sg,https://www.nextbike.hr/hr/zapresic/,GBFS Official CSV,2025-06-14
+Jastrebarsko (Croatia),Jastrebarsko,nextbike_cj,https://www.nextbike.hr/hr/jastrebarsko/,GBFS Official CSV,2025-06-14
+nextbike Croatia,Croatia,nextbike_hr,https://www.nextbike.hr/hr/,GBFS Official CSV,2025-06-14
+Općina Brinje (Croatia),Brinje,nextbike_br,https://www.nextbike.hr/hr/brinje/,GBFS Official CSV,2025-06-14
+Općina Pitomača (Croatia),Pitomača,nextbike_se,https://www.nextbike.hr/hr/pitomaca/,GBFS Official CSV,2025-06-14
+Donkey Republic Budapest,Budapest,donkey_budapest,https://www.donkey.bike/cities/bike-rental-budapest/,GBFS Official CSV,2025-06-14
+Dott Godollo,Godollo,dott-godollo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Budapest,Budapest,dott-budapest,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Dunaujvaros,Dunaujvaros,dott-dunaujvaros,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gyor,Gyor,dott-gyor,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Hatvan,Hatvan,dott-hatvan,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Miskolc,Miskolc,dott-miskolc,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Siófok,Siófok,dott-siofok,https://ridedott.com/,GBFS Official CSV,2025-06-14
+MOL Bubi,Budapest,nextbike_bh,https://molbubi.hu/hu/,GBFS Official CSV,2025-06-14
+Bolt Portlaoise,Portlaoise,BoltEU_Portlaoise,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Dublinbikes,Dublin,dublin,https://www.dublinbikes.ie/,GBFS Official CSV,2025-06-14
+Bird Tel Aviv,Tel Aviv,bird-tel-aviv,https://www.bird.co,GBFS Official CSV,2025-06-14
+Dott Tel-Aviv,Tel Aviv,dott-tel-aviv,https://ridedott.com,GBFS Official CSV,2025-06-14
+Lime Tel Aviv,Tel Aviv,lime_tel_aviv,https://li.me/,GBFS Official CSV,2025-06-14
+Donkey Republic Reykjavik,Reykjavik,donkey_reykjavik,https://www.donkey.bike/cities/bike-rental-reykjavik/,GBFS Official CSV,2025-06-14
+Amicarnapoli,Naples,amicarnapoli,https://www.amicarnapoli.it,GBFS Official CSV,2025-06-14
+ARVAL,Scandicci,nextbike_ia,https://www.nextbike.it/it/arval/,GBFS Official CSV,2025-06-14
+Bird Rome,Rome,bird-rome,https://www.bird.co,GBFS Official CSV,2025-06-14
+Dott Arezzo,Arezzo,dott-arezzo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bari,Bari,dott-bari,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Cagliari,"Cagliari, IT",dott-cagliari,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Catania,Catania,dott-catania,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Ferrara,Ferrara,dott-ferrara,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Milan,Milan,dott-milan,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Modena,Modena,dott-modena,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Monza,Monza,dott-monza,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Padua,Padua,dott-padua,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Palermo,Palermo,dott-palermo,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Reggio Emilia,Reggio Emilia,dott-reggio-emilia,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Rome,Rome,dott-rome,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Trento,Trento,dott-trento,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Turin,Turin,dott-turin,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Varese,Varese,dott-varese,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Verona,Verona,dott-verona,https://ridedott.com,GBFS Official CSV,2025-06-14
+Fa.Mo.Se,"Senigallia, IT",nextbike_fa,https://www.comune.senigallia.an.it/aree-tematiche/mobilita/bike-sharing-fa-mo-se/,GBFS Official CSV,2025-06-14
+Helbiz Bari,Bari,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Catania,Catania,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Cervia,Cervia,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Cesena,Cesena,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Ferrara,Ferrara,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Firenze,Firenze,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Fiumicino,Fiumicino,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Frosinone,Frosinone,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Genova,Genova,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz H-Farm,H-Farm,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Latina,Latina,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Modena,Modena,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Napoli,Napoli,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Palermo,Palermo,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Parma,Parma,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Pescara,Pescara,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Pisa,Pisa,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Reggio,Reggio,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Rho,Rho,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Rome,Rome,HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Milan Bikemi,Milan,milan-bikemi,https://bikemi.com/en,GBFS Official CSV,2025-06-14
+Link Moncalieri,Moncalieri,Link_Moncalieri,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+nextbike Bergamo,Bergamo,nextbike_ib,https://www.nextbike.it/it/bergamo/,GBFS Official CSV,2025-06-14
+Link Palermo,Palermo,Link_Palermo,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+Link Turin,Turin,Link_Turin,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+Verona Bike,Verona,verona-bike,https://bikeverona.it/en,GBFS Official CSV,2025-06-14
+Zeus Anzio,Anzio,zeus_anzio,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Augusta,Augusta,zeus_augusta,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Mazara,Mazara,zeus_mazara,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+CyclOcity,Toyama,toyama,https://www.cyclocity.jp/,GBFS Official CSV,2025-06-14
+docomo bike share service,Japan,docomo-cycle,https://docomo-cycle.jp/,GBFS Official CSV,2025-06-14
+docomo bike share service,Tokyo,docomo-cycle-tokyo,https://docomo-cycle.jp/,GBFS Official CSV,2025-06-14
+HELLO CYCLING,Japan,hellocycling,https://www.hellocycling.jp,GBFS Official CSV,2025-06-14
+kotobike,Japan,kotobike,https://kotobike.jp,GBFS Official CSV,2025-06-14
+Donkey Republic Liechtenstein,Liechtenstein,donkey_li,https://www.donkey.bike/cities/,GBFS Official CSV,2025-06-14
+LIEmobil Liechtenstein,Liechtenstein,liemobil_liechtenstein,https://liemobil.li/,GBFS Official CSV,2025-06-14
+Bolt Alytus,Alytus,BoltEU_Alytus,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Cyclocity,Vilnius,vilnius,https://www.cyclocity.lt/,GBFS Official CSV,2025-06-14
+Vel'OH!,Luxembourg,luxembourg,https://myveloh.lu/,GBFS Official CSV,2025-06-14
+nextbike LV,Rīga,nextbike_lv,https://www.nextbike.lv/,GBFS Official CSV,2025-06-14
+MonaBike,Monaco,mona_bike,https://monabike.mc/,GBFS Official CSV,2025-06-14
+Helbiz Malta,Malta,HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Ecobici,Mexico City,MEX,https://www.ecobici.cdmx.gob.mx,GBFS Official CSV,2025-06-14
+Mibici Guadalajara,Guadalajara,mibici_guadalajara,https://www.mibici.net/en/,GBFS Official CSV,2025-06-14
+Zeus Kuala Lumpur,Kuala Lumpur,zeus_kuala lumpur,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Bolt Antwerp,Antwerp,BoltEU_Antwerpen,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Enschede,Enschede,BoltEU_Enschede,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Groningen,Groningen,BoltEU_Groningen,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Nijmegen,Nijmegen,BoltEU_Nijmegen,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Check Technologies,Almere,check_almere,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Amersfoort,check_amersfoort,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Amsterdam,check_amsterdam,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Breda,check_breda,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Delft,check_delft,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Den Bosch,check_denbosch,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Den Haag,check_denhaag,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Eindhoven,check_eindhoven,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Groningen,check_groningen,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Hilversum,check_hilversum,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Lansingerland,check_lansingerland,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Leeuwarden,check_leeuwarden,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Nijmegen,check_nijmegen,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Rijswijk,check_rijswijk,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Rotterdam,check_rotterdam,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Schiedam,check_schiedam,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Technologies,Vlaardingen,check_vlaardingen,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Check Voorburg,"Voorburg, NL",check_voorburg,https://ridecheck.app/,GBFS Official CSV,2025-06-14
+Check Technologies,Zwolle,check_zwolle,https://ridecheck.app,GBFS Official CSV,2025-06-14
+Cykl,Wageningen,CKL,https://www.cykl.nl/,GBFS Official CSV,2025-06-14
+Donkey Republic Amsterdam,Amsterdam,donkey_am,https://www.donkey.bike/cities/bike-rental-amsterdam/,GBFS Official CSV,2025-06-14
+Donkey Republic Den Haag,Den Haag,donkey_den_haag,https://www.donkey.bike/cities/bike-rental-den-haag/,GBFS Official CSV,2025-06-14
+Donkey Republic Dordrecht,Dordrecht,donkey_dordrecht,https://www.donkey.bike/cities/bike-rental-dordrecht/,GBFS Official CSV,2025-06-14
+Donkey Republic Gorinchem,Gorinchem,donkey_gorinchem,https://www.donkey.bike/,GBFS Official CSV,2025-06-14
+Donkey Republic Rotterdam,Rotterdam,donkey_rt,https://www.donkey.bike/nl/steden/deelfietsen-rotterdam/,GBFS Official CSV,2025-06-14
+Donkey Republic Utrecht,Utrecht,donkey_ut,https://www.donkey.bike/cities/bike-rental-utrecht/,GBFS Official CSV,2025-06-14
+Donkey Republic Utrechtse Heuvelrug,Utrechtse Heuvelrug,donkey_utrechtse_heuvelrug,https://www.donkey.bike/,GBFS Official CSV,2025-06-14
+Dott Eindhoven,Eindhoven,dott-eindhoven,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Utrecht,Utrecht,dott-utrecht,https://ridedott.com/,GBFS Official CSV,2025-06-14
+GoAbout,Netherlands,goabout,https://goabout.com,GBFS Official CSV,2025-06-14
+NS OV Fiets,Netherlands,ns_ov_fiets,https://www.ns.nl/en/door-to-door/ov-fiets,GBFS Official CSV,2025-06-14
+Bergen City Bike,Bergen,bergen-city-bike,https://bergenbysykkel.no/en,GBFS Official CSV,2025-06-14
+Bolt Arpsborg,Arpsborg,boltsarpsborg,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Bergen,Bergen,boltbergen,https://bolt.eu/en/cities/bergen/,GBFS Official CSV,2025-06-14
+Bolt Drammen,Drammen,boltdrammen,https://bolt.eu/en/cities/drammen/,GBFS Official CSV,2025-06-14
+Bolt Fredrikstad,Fredrikstad,boltfredrikstad,https://bolt.eu/en/cities/fredrikstad/,GBFS Official CSV,2025-06-14
+Bolt Gjovik,Gjovik,boltgjovik,https://bolt.eu/en/cities/gjovik/,GBFS Official CSV,2025-06-14
+Bolt Hamar,Hamar,bolthamar,https://bolt.eu/en/cities/hamar/,GBFS Official CSV,2025-06-14
+Bolt Kristiansand,Kristiansand,boltkristiansand,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Lillehammer,Lillehammer,boltlillehammer,https://bolt.eu/en/cities/lillehammer/,GBFS Official CSV,2025-06-14
+Bolt Lillestrom,Lillestrom,boltlillestrom,https://bolt.eu/en/cities/lillestrom/,GBFS Official CSV,2025-06-14
+Bolt Oslo,Oslo,boltoslo,https://bolt.eu/en/cities/oslo/,GBFS Official CSV,2025-06-14
+Bysykkel,Lillestrom,lillestrom,https://www.bysykkel.org/,GBFS Official CSV,2025-06-14
+Dott Asker,Asker,dott-asker,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bodø,Bodø,dott-bodø,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Drammen,Drammen,dott-drammen,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lillestrøm,Lillestrøm,dott-lillestrøm,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Sandefjord,Sandefjord,dott-sandefjord,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Stjørdal,Stjørdal,dott-stjørdal,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Trondheim,Trondheim,dott-trondheim,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Getaround Stavanger,Stavanger,getaroundstavanger,https://getaround.com/,GBFS Official CSV,2025-06-14
+Hertz Bildeling,Bildeling,hertzbildeling,https://www.hertzbildeling.no/,GBFS Official CSV,2025-06-14
+Hyre,Norway,hyrenorge,https://www.hyre.no/,GBFS Official CSV,2025-06-14
+Kolumbus Bysykkel,Stavanger,kolumbusbysykkel,https://www.kolumbus.no/reise/sykkel-oversikt/bysykkelen/,GBFS Official CSV,2025-06-14
+Otto,Norway,otto,https://www.otto.no/,GBFS Official CSV,2025-06-14
+Oslo Bysykkel,Oslo,oslobysykkel,https://oslobysykkel.no/,GBFS Official CSV,2025-06-14
+Ryde Fredrikstad,Fredrikstad,rydefredrikstad,https://www.ryde-technology.com/,GBFS Official CSV,2025-06-14
+Ryde_Oslo,Oslo,rydeoslo,https://www.ryde-technology.com/,GBFS Official CSV,2025-06-14
+Ryde Porsgrunn,Porsgrunn,rydeskienporsgrunn,https://www.ryde-technology.com/,GBFS Official CSV,2025-06-14
+Ryde Sarpsborg,Sarpsborg,rydesarpsborg,https://www.ryde-technology.com/,GBFS Official CSV,2025-06-14
+Ryde Trondheim,Trondheim,rydetrondheim,https://www.ryde-technology.com/,GBFS Official CSV,2025-06-14
+Trondheim Bysykkel,Trondheim,trondheimbysykkel,https://trondheimbysykkel.no/,GBFS Official CSV,2025-06-14
+Voi Arendal,Arendal,voiarendal,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Voi Bergen,Bergen,voibergen,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Voi Kristiansand,Kristiansand,voikristiansand,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Voi Lillestrom,Lillestrom,voilillestrom,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Voi Oslo,Oslo,voioslo,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Voi Stavanger,Stavanger,voistavanger,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Voi Trondheim,Trondheim,voitrondheim,https://www.voi.com/,GBFS Official CSV,2025-06-14
+Zeus Oslo,Oslo,zeus_oslo,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Flamingo Dunedin,Dunedin,flamingo_dunedin,https://rideflamingo.com,GBFS Official CSV,2025-06-14
+Flamingo Palerston North,Palmerston North,flamingo_palmerston_north,https://rideflamingo.com,GBFS Official CSV,2025-06-14
+Flamingo Porirua,"Porirua, NZ",flamingo_porirua,https://rideflamingo.com,GBFS Official CSV,2025-06-14
+Flamingo Waimakariri,Waimakariri District,flamingo_waimakariri,https://rideflamingo.com,GBFS Official CSV,2025-06-14
+Flamingo Wellington,Wellington,flamingo_wellington,https://rideflamingo.com,GBFS Official CSV,2025-06-14
+JOLT,Hutt Valley,jolt_hutt_valley,https://joltscooters.co.nz,GBFS Official CSV,2025-06-14
+BIKER Białystok Poland,Białystok,nextbike_bp,https://bikerbialystok.pl/,GBFS Official CSV,2025-06-14
+Bolt Bialystok,Bialystok,BoltEU_Bialystok,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Bydgoszcz,Bydgoszcz,BoltEU_Bydgoszcz,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Elblag,Elblag,BoltEU_Elblag,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Inowrocław,Inowrocław,BoltEU_Inowroclaw,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Konin,Konin,BoltEU_Konin,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Mikołajki,Mikołajki,BoltEU_Mikolajki,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Suwałki,Suwałki,BoltEU_Suwalki,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Władysławowo,Władysławowo,BoltEU_Wladyslawowo,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Covilhã,Covilhã,BoltEU_Covilhã,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Esposende,Esposende,BoltEU_Esposende,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Bolt Ponta Delgada,Ponta Delgada,BoltEU_Ponta Delgada,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+Chełmski Rower,Chełmski,nextbike_cw,https://chelmskirower.pl/,GBFS Official CSV,2025-06-14
+Ciechanowski Rower Miejski Poland,Ciechanów,nextbike_pd,https://www.ciechanowskirower.pl/,GBFS Official CSV,2025-06-14
+Częstochowski Rower Miejski Poland,Częstochowa,nextbike_jp,https://rower.czestochowa.pl/,GBFS Official CSV,2025-06-14
+Dott Bialogard,Bialogard,dott-bialogard,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bielawa,Bielawa,dott-bielawa,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Braniewo,Braniewo,dott-braniewo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Brodnica,Brodnica,dott-brodnica,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bytom,Bytom,dott-bytom,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Chrzanów,Chrzanów,dott-chrzanow,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Dzierżoniów,Dzierżoniów,dott-dzierzoniow,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Elbląg,Elbląg,dott-elblag,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gdansk,Gdansk,dott-gdansk,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Goleniow,Goleniow,dott-goleniow,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Grodzisk Mazowiecki,Grodzisk Mazowiecki,dott-grodzisk-mazowiecki,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Grudziadz,Grudziądz,dott-grudziadz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gryfino,Gryfino,dott-gryfino,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Iława,Iława,dott-iława,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Jastrzebie-Zdroj,Jastrzebie-Zdroj,dott-jastrzebie-zdroj,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kalisz,Kalisz,dott-kalisz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Katowice,Katowice,dott-katowice,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kołobrzeg,Kołobrzeg,dott-kołobrzeg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Konin,Konin,dott-konin,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Koscierzyna,Koscierzyna,dott-koscierzyna,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Koszalin,Koszalin,dott-koszalin,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Krakow,Krakow,dott-krakow,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kwidzyn,Kwidzyn,dott-kwidzyn,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lebork,Lęborska,dott-lebork,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Legionowo,Legionowo,dott-legionowo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Leszno,Leszno,dott-leszno,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lubliniec,Lubliniec,dott-lubliniec,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Łuków,Łuków,dott-łukow,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Malbork,Malbork,dott-malbork,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Międzyzdroje,Międzyzdroje,dott-miedzyzdroje,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Mikołów,Mikołów,dott-mikołow,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nowogard,Nowogard,dott-nowogard,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nowy Dwór Mazowiecki,Nowy Dwór Mazowiecki,dott-nowy-dwor-mazowiecki,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nowy Sącz,Nowy Sącz,dott-nowy-sacz,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nowy-Targ,Nowy-Targ,dott-nowy-targ,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nysa,Nysa,dott-nysa,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Oława,Oława,dott-oława,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Oleśnica,Oleśnica,dott-olesnica,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Ostroda,"Ostróda, PL",dott-ostroda,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Oświęcim,Oświęcim,dott-oswiecim,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Piekary Śląskie,Piekary Śląskie,dott-piekary-slaskie,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Police,Police,dott-police,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Poznan,Poznan,dott-poznan,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Prawobrzeże,Prawobrzeże,dott-prawobrzeze,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Pruszcz Gdański,Pruszcz Gdański,dott-pruszcz-gdanski,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Rewal,Rewal,dott-rewal,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Ruda Śląska,Ruda Śląska,dott-ruda-slaska,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Siedlce,Siedlce,dott-siedlce,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Skawina,Skawina,dott-skawina,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Słupsk,Słupsk,dott-słupsk,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Starogard Gdański,Starogard Gdański,dott-starogard-gdanski,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Swidnica,Swidnica,dott-swidnica,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Swiecie,Swiecie,dott-swiecie,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Świnoujście,Świnoujście,dott-swinoujscie,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Szczecin,Szczecin,dott-szczecin,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Tarnowskie Góry,Tarnowskie Góry,dott-tarnowskie-gory,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Trzebnica,Trzebnica,dott-trzebnica,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Tczew,Tczew,dott-tczew,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Warsaw,Warsaw,dott-warsaw,https://ridedott.com,GBFS Official CSV,2025-06-14
+Dott Wrocław,Wrocław,dott-wrocław,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Zawiercie,Zawiercie,dott-zawiercie,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Żory,Żory,dott-zory,https://ridedott.com/,GBFS Official CSV,2025-06-14
+GRM Grodzisk Poland,Grodzisk Mazowiecki,nextbike_gp,https://www.rowery.grodzisk.pl/,GBFS Official CSV,2025-06-14
+JasKółka,Jastrzębie-Zdrój,nextbike_pj,https://www.rower.jastrzebie.pl/,GBFS Official CSV,2025-06-14
+Kajteroz - Chorzowski Rower Miejski Poland,Chorzów,nextbike_pv,https://kajteroz.pl/,GBFS Official CSV,2025-06-14
+Katowice Bike Poland,Katowice,nextbike_kw,https://citybybike.pl/,GBFS Official CSV,2025-06-14
+Koło Marek Poland,Markach,nextbike_mk,https://kolomarek.pl/,GBFS Official CSV,2025-06-14
+Kołobrzeski Rower Miejski Poland,Kołobrzeg,nextbike_kr,https://kolobrzeskirower.pl/,GBFS Official CSV,2025-06-14
+Koniński Rower Miejski Poland,Konin,nextbike_pn,https://koninskirower.pl/,GBFS Official CSV,2025-06-14
+Koszaliński Rower Miejski Poland,Koszalin,nextbike_ps,https://www.koszalinskirowermiejski.pl/,GBFS Official CSV,2025-06-14
+Łódzki Rower Publiczny,"Łódź, PL",nextbike_lp,https://www.lodzkirowerpubliczny.pl/,GBFS Official CSV,2025-06-14
+ŁoKeR - Łomża,Łomża,nextbike_oa,https://lomzarower.pl/,GBFS Official CSV,2025-06-14
+METROROWER,"Tychy, PL",nextbike_zz,https://metrorower.transportgzm.pl/,GBFS Official CSV,2025-06-14
+MEVO,Gdansk,inurba-gdansk,https://rowermevo.pl/,GBFS Official CSV,2025-06-14
+OK Bike Poland,Kędzierzyn-Koźle,nextbike_km,https://okbike.pl/,GBFS Official CSV,2025-06-14
+Otwocki Rower Miejski Poland,Otwock,nextbike_os,https://otwockirower.pl/,GBFS Official CSV,2025-06-14
+Piaseczyński Rower Miejski Poland,Piaseczno,nextbike_pi,https://www.piaseczynskirower.pl/,GBFS Official CSV,2025-06-14
+Piotrkowski Rower Miejski Poland,Piotrków Trybunalski,nextbike_dp,https://www.piotrkowskirower.pl/,GBFS Official CSV,2025-06-14
+Pobiedziski Rower Gminny Poland,Pobiedziska,nextbike_pu,https://rowery.pobiedziska.pl/,GBFS Official CSV,2025-06-14
+Pruszkowski Rower Miejski Poland,Pruszków,nextbike_or,https://www.pruszkowskirower.pl/,GBFS Official CSV,2025-06-14
+Rower Miejski Szamotuły Poland (RMS) Poland,Szamotuły,nextbike_rm,https://szamotuly.bike/,GBFS Official CSV,2025-06-14
+Rower Miejski w Ostrowie Wielkopolskim Poland,Ostrów Wielkopolski,nextbike_po,https://ostrowskirowermiejski.pl/,GBFS Official CSV,2025-06-14
+Rowerowe Łódzkie Poland (RL),Poland,nextbike_pw,https://www.rowerowelodzkie.pl/,GBFS Official CSV,2025-06-14
+Rower Powiatowy Sokołów Podlaski,Sokołów Podlaski,nextbike_rq,https://powiatowyrower.pl/,GBFS Official CSV,2025-06-14
+Sosnowiecki Rower Miejski Poland,Sosnowiec,nextbike_pr,https://sosnowieckirowermiejski.pl/,GBFS Official CSV,2025-06-14
+System Roweru Gminnego Poland,Pielgrzymka,nextbike_pg,https://rowery.pielgrzymka.biz/,GBFS Official CSV,2025-06-14
+System Rowerów Miejskich w Pszczynie Poland,Pszczyna,nextbike_ap,https://www.pszczynskirower.pl/,GBFS Official CSV,2025-06-14
+Tarnowski Rower Miejski Poland,Tarnów,nextbike_tn,https://rower.tarnow.pl/,GBFS Official CSV,2025-06-14
+Tychowski Rower Miejski Poland,"Tychowo, PL",nextbike_py,https://www.tychowskirower.pl/,GBFS Official CSV,2025-06-14
+Tyski Rower Miejski Poland,Tychy,nextbike_pt,https://www.tyskirower.pl/,GBFS Official CSV,2025-06-14
+VETURILO Poland,Poland,nextbike_vw,https://www.veturilo.waw.pl/,GBFS Official CSV,2025-06-14
+Wolsztyński Rower Miejski,Wolsztyn,nextbike_fp,https://www.rower.wolsztyn.pl/logowanie,GBFS Official CSV,2025-06-14
+WRM nextbike Poland,Wrocław,nextbike_pl,https://www.wroclawskirower.pl/,GBFS Official CSV,2025-06-14
+Zielonogórski Rower Miejski Poland,Zielona Góra,nextbike_pm,https://zielonogorskirowermiejski.pl/,GBFS Official CSV,2025-06-14
+Żyrardowski Rower Miejski Poland,Żyrardów,nextbike_zy,https://zyrardowskirower.pl/,GBFS Official CSV,2025-06-14
+Bird Braga,Braga,bird-braga,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Cascais,Cascais,bird-cascais,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Lisbon,Lisbon,bikr-lisbon,https://www.bird.co,GBFS Official CSV,2025-06-14
+LINK Faro,Faro,Link_Faro,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Lisbon,Lisbon,Link_Lisbon,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+LINK Almada,Almada,Link_Almada,https://www.superpedestrian.com,GBFS Official CSV,2025-06-14
+TubaBike (Barcelos),Barcelos,nextbike_bx,https://www.tubabike.pt/,GBFS Official CSV,2025-06-14
+Dott Doha,Doha,dott-doha,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Buzau VeloCity,Buzau,nextbike_bv,https://www.velocitybuzau.ro/ro/,GBFS Official CSV,2025-06-14
+Dej Velo City,Dej,dej_bikecity,https://www.dejvelocity.ro/,GBFS Official CSV,2025-06-14
+Drobeta Velopark,Drobeta,nextbike_rd,https://www.nextbike.ro/,GBFS Official CSV,2025-06-14
+Hunedoara,Hunedoara,hunedoara,https://www.velocorvin.ro/,GBFS Official CSV,2025-06-14
+Moinesti,Moinesti,moinesti,https://www.bikecitymoinesti.ro/en/,GBFS Official CSV,2025-06-14
+nextbike Romania,Focșani,nextbike_nw,https://nextbike.ro/,GBFS Official CSV,2025-06-14
+Saturn,Saturn,nextbike_rs,https://www.nextbike.ro/,GBFS Official CSV,2025-06-14
+Sibiu BikeCity,Sibiu,sibiu_bikecity,https://bikecity.sibiu.ro,GBFS Official CSV,2025-06-14
+Slatina Velo City,"Slatina, RO",nextbike_rv,https://www.slatinavelocity.ro/,GBFS Official CSV,2025-06-14
+Topoloveni Bike,Topoloveni,nextbike_rt,https://www.nextbike.ro/,GBFS Official CSV,2025-06-14
+Velo Sântana,Sântana,santana_bikecity,https://velosantana.ro,GBFS Official CSV,2025-06-14
+Dott Jeddah,Jeddah,dott-jeddah,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Riyadh,Riyadh,dott-riyadh,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Donkey Republic Ängelholm,Ängelholm,donkey_aengelholm,https://www.donkey.bike/cities/bike-rental-angelholm/,GBFS Official CSV,2025-06-14
+Donkey Republic Båstad,Båstad,donkey_baastad,https://www.donkey.bike/cities/bike-rental-bastad/,GBFS Official CSV,2025-06-14
+Donkey Republic Malmö,Malmö,donkey_malmoe,https://www.donkey.bike/cities/bike-rental-malmo/,GBFS Official CSV,2025-06-14
+Donkey Republic Ystad,Ystad,donkey_ystad,https://www.donkey.bike/cities/bike-rental-ystad/,GBFS Official CSV,2025-06-14
+Dott Eskilstuna,Eskilstuna,dott-eskilstuna,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Gothenburg,Gothenburg,dott-gothenburg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Helsingborg,Helsingborg,dott-helsingborg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Jonkoping,Jonkoping,dott-jonkoping,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Lidköping,Lidköping,dott-lidkoping,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Partille,Partille,dott-partille,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Skovde,Skovde,dott-skovde,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Trollhättan,Trollhättan,dott-trollhattan,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Varberg,Varberg,dott-varberg,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Värnamo,Värnamo,dott-varnamo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Vaxjo,Vaxjo,dott-vaxjo,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Gothenburg Cargo,Gothenburg,nextbike_zc,https://gothenburg-cargo.nextbike.com/,GBFS Official CSV,2025-06-14
+Lundahoj,Lund,lund,https://www.lundahoj.se/,GBFS Official CSV,2025-06-14
+Qick Borlänge,Borlänge,463,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+Qick Eskilstuna,Eskilstuna,462,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+Qick Falun,Falun,464,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+Qick Jönköping,Jönköping,52,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+Qick Linköping,Linköping,10,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+Qick Norrköping,Norrköping,53,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+Qick Örebro,Örebro,5,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+Qick Västerås,Västerås,104,https://www.qickscooters.com/,GBFS Official CSV,2025-06-14
+"Styr & Ställ (Sweden, Göteborg)",Göteborg,nextbike_zg,https://styrochstall.se/sv/,GBFS Official CSV,2025-06-14
+Zeus Borlänge,Borlänge,zeus_borlange,https://zeusscooters.com,GBFS Official CSV,2025-06-14
+Zeus Falun,Falun,zeus_falun,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Halmstad,Hamstad,zeus_halmstad,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+Zeus Karlstad,Karlstad,zeus_karlstad,https://zeusscooters.com/,GBFS Official CSV,2025-06-14
+BicikeLJ,Ljubljana,ljubljana,https://www.bicikelj.si/,GBFS Official CSV,2025-06-14
+MBajk,Maribor,maribor,https://www.mbajk.si/,GBFS Official CSV,2025-06-14
+Nomago Bikes - GO2GO,Nova Gorica,nextbike_ce,https://bikes.nomago.si/,GBFS Official CSV,2025-06-14
+Nomago Bikes - GO2GO Gorizia,Gorizia,nextbike_cd,https://bikes.nomago.si/,GBFS Official CSV,2025-06-14
+Nomago Bikes - KOLESCE,Slovenia,nextbike_cn,https://bikes.nomago.si/,GBFS Official CSV,2025-06-14
+Nomago Bikes - LJUBLJANA,Ljubljana,nextbike_cc,https://bikes.nomago.si/,GBFS Official CSV,2025-06-14
+Nomago Bikes - SLOVENIA,Kranjska Gora,nextbike_cx,https://bikes.nomago.si/,GBFS Official CSV,2025-06-14
+Nomago Bikes - ZANAPREJ,Zagorje ob Savi,nextbike_cf,https://bikes.nomago.si/,GBFS Official CSV,2025-06-14
+Arriva Nitra Slovakia,Nitra,nextbike_as,https://arriva.bike/,GBFS Official CSV,2025-06-14
+BikeKIA,Žilina,nextbike_ak,https://bikekia.sk/,GBFS Official CSV,2025-06-14
+Dott Banska Bystrica,Banska Bystrica,dott-banska-bystrica,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bardejov,Bardejov,dott-bardejov,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Bratislava,Bratislava,dott-bratislava,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Humenne,Humenne,dott-humenne,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Kosice,Kosice,dott-kosice,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Liptovsky-Mikulas,Liptovsky-Mikulas,dott-liptovsky-mikulas,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Martin,Martin,dott-martin,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Michalovce,Michalovce,dott-michalovce,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Nitra,Nitra,dott-nitra,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Pezinok,Pezinok,dott-pezinok,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Poprad,Poprad,dott-poprad,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Prešov,Prešov,dott-presov,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Prievidza,Prievidza,dott-prievidza,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Trnava,Trnava,dott-trnava,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Vranov-Nad-Toplou,Vranov-Nad-Toplou,dott-vranov-nad-toplou,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Dott Žiar nad Hronom,Žiar nad Hronom,dott-ziar-nad-hronom,https://ridedott.com/,GBFS Official CSV,2025-06-14
+Senica bajk,"Senica, SK",nextbike_av,https://www.senicabajk.sk,GBFS Official CSV,2025-06-14
+AAR Bike,Konya,linka_aar_bike,https://aarbike.com.tr/,GBFS Official CSV,2025-06-14
+KARBIS Turkey,İzmir,nextbike_tr,https://www.nextbike.com.tr/tr/Seferihisar/,GBFS Official CSV,2025-06-14
+nextbike Konya,Konya,nextbike_nk,https://www.nextbike.com.tr/tr/konya/,GBFS Official CSV,2025-06-14
+nextbike Kiev,Kiev,nextbike_nu,https://www.nextbike.ua/uk/,GBFS Official CSV,2025-06-14
+nextbike Vinnitsa (Ukraine),Vinnytsia,nextbike_uv,https://www.nextbike.ua/uk/Vinnytsia/,GBFS Official CSV,2025-06-14
+Arizona,"Tempe, AZ",17,https://gohopr.com/,GBFS Official CSV,2025-06-14
+Aventura BCycle,"Aventura, FL",bcycle_aventura,https://aventura.bcycle.com,GBFS Official CSV,2025-06-14
+Bay Wheels,"San Francisco, CA",lyft_bay,https://www.baywheels.com/,GBFS Official CSV,2025-06-14
+Bentonville BCycle,"Bentonville, AR",bcycle_bentonville,https://bentonville.bcycle.com,GBFS Official CSV,2025-06-14
+Bike Chattanooga,"Chattanooga, TN",bike_chattanooga,https://www.bikechattanooga.com/,GBFS Official CSV,2025-06-14
+BikeLNK,"Lincoln, NE",bcycle_bikelnk,https://bikelnk.bcycle.com,GBFS Official CSV,2025-06-14
+Bikeshare Kona,"Kona, HI",bikeshare_kona,https://hawaiiislandbikeshare.org/,GBFS Official CSV,2025-06-14
+BIKETOWN,"Portland, OR",biketown_pdx,https://www.biketownpdx.com/,GBFS Official CSV,2025-06-14
+Biki,"Honolulu, HI",go_biki,https://gobiki.org/,GBFS Official CSV,2025-06-14
+Bird Alexandria,"Alexandria, VA",bird-alexandria,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Arlingtonco,"Arlington, VA",bird-arlingtonco,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Atlanta,"Atlanta,GA",provider-null-atlanta,https://www.bird.co,GBFS Official CSV,2025-06-14
+Boulder BCycle,"Boulder, CO",bcycle_boulder,https://boulder.bcycle.com,GBFS Official CSV,2025-06-14
+Bird Cleveland,"Cleveland, OH",bird-cleveland,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Columbus,"Columbus, OH",bird-columbus,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Culver City,"Culver City, CA",bird-culver-city,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Detroit,"Detroit, MI",bird-detroit,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Durham,"Durham, NC",bird-durham,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Fairfax,"Fairfax, VA",bird-fairfax,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Indianapolis,"Indianapolis, IN",bird-indianapolis,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Kansas City,"Kansas City, MO",bird-kansas-city,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Los Angeles,"Los Angeles, CA",bird-los-angeles,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Louisville,"Louisville, KY",bird-louisville,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Miami,"Miami, FL",bird-miami,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Montgomery County,"Montgomery County, MD",provider-null-montgomery-county,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Nashville,"Nashville, TN",provider-null-nashville,https://bird.co,GBFS Official CSV,2025-06-14
+Bird New York,"New York, NY",bird-new-york,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Orlando,"Orlando, FL",provider-null-orlando,https://bird.co,GBFS Official CSV,2025-06-14
+Bird Portland,"Portland, OR",bird-portland,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Richmond,"Richmond, VA",provider-null-richmond,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Seattle Washington,"Seattle, WA",bird-seattle-washington,https://www.bird.co/,GBFS Official CSV,2025-06-14
+Bird St Louis,"St Louis, MO",bird-st-louis,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Tempe,"Tempe, AZ",bird-tempe,https://www.bird.co,GBFS Official CSV,2025-06-14
+Bird Washington DC,"Washington, DC",bird-washington-dc,https://www.bird.co,GBFS Official CSV,2025-06-14
+Blue Bikes,"Boston, MA",bluebikes,https://www.bluebikes.com/,GBFS Official CSV,2025-06-14
+Boaz Bikes,"Detroit, MI",576347857979998215,https://www.boazbikes.com/,GBFS Official CSV,2025-06-14
+Broward B-cycle,"Fort Lauderdale, FL",bcycle_broward,https://broward.bcycle.com,GBFS Official CSV,2025-06-14
+Bublr Bikes,"Milwaukee, WI",bcycle_bublr,https://bublrbikes.com,GBFS Official CSV,2025-06-14
+Capital Bike Share,"Washington, DC",cabi,http://www.capitalbikeshare.com,GBFS Official CSV,2025-06-14
+CapMetro,"Austin, TX",austin,https://www.capmetro.org/bikeshare,GBFS Official CSV,2025-06-14
+Cincy Red Bike,"Cincinnati, OH",bcycle_cincyredbike,https://www.cincyredbike.org,GBFS Official CSV,2025-06-14
+Citi Bike,"New York, NY",lyft_nyc,https://www.citibikenyc.com,GBFS Official CSV,2025-06-14
+Clemson BikeShare,"Clemson, SC",bcycle_clemson,https://clemson.bcycle.com,GBFS Official CSV,2025-06-14
+CoGo,"Columbus, OH",cogo,http://www.cogobikeshare.com/,GBFS Official CSV,2025-06-14
+Des Moines B-cycle,"Des Moines, IA",bcycle_desmoines,https://desmoines.bcycle.com,GBFS Official CSV,2025-06-14
+Lyft Scooters Chicago,"Chicago, IL",chicago,https://www.divvybikes.com,GBFS Official CSV,2025-06-14
+El Paso B-cycle,"El Paso, TX",bcycle_elpaso,https://elpaso.bcycle.com,GBFS Official CSV,2025-06-14
+Evie Carshare,"Twin Cities, MN",9b0e8df6-141e-11ee-be56-0242ac120002,https://eviecarshare.com/,GBFS Official CSV,2025-06-14
+Explore Bike Share,"Memphis, TN",bcycle_memphis,https://explorebikeshare.bcycle.com,GBFS Official CSV,2025-06-14
+GREENbike,"Salt Lake City, UT",bcycle_greenbikeslc,https://greenbikeslc.org,GBFS Official CSV,2025-06-14
+Greenville B-cycle,"Greenville, SC",bcycle_greenville,https://greenville.bcycle.com,GBFS Official CSV,2025-06-14
+Heartland B-cycle,"Omaha, NE",bcycle_heartland,https://heartland.bcycle.com,GBFS Official CSV,2025-06-14
+Helbiz Alexandria,"Alexandria, VA",HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Arlington,"Arlington, VA",HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Austin,"Austin, TX",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Durham,"Durham, NC",HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Flint,"Flint, MI",HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Jacksonville,"Jacksonville, FL",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Miami,"Miami, FL",HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Miami Lakes,"Miami Lakes, FL",HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Oklahoma City,"Oklahoma City, OK",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Orlando,"Orlando, FL",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Richmond,"Richmond, VA",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Sacramento,"Sacramento, CA",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Santa Barbara,"Santa Barbara, CA",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Santa Monica,"Santa Monica, CA",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+Helbiz Washington DC,"Washington, DC",HELBIZ-US,https://helbiz.com,GBFS Official CSV,2025-06-14
+Helbiz Waterloo,"Waterloo, IA",HELBIZ-US,https://helbiz.com/,GBFS Official CSV,2025-06-14
+HIBike,"Kona, HI",bike_share_hawaii,https://www.hawaiiislandbike.com/,GBFS Official CSV,2025-06-14
+Hopp Washington DC,"Washington, DC",BoltEU_Washington DC,https://www.bolt.eu/,GBFS Official CSV,2025-06-14
+HOPR Bishop Ranch,"San Ramon, CA",27,https://gohopr.com/,GBFS Official CSV,2025-06-14
+Indego,"Philadelphia, PA",bcycle_indego,https://www.rideindego.com,GBFS Official CSV,2025-06-14
+Indy - Pacers Bikeshare,"Indianapolis, IN",bcycle_pacersbikeshare,https://www.pacersbikeshare.org,GBFS Official CSV,2025-06-14
+Jackson County,"Jackson, MI",bcycle_jacksoncounty,https://jacksoncounty.bcycle.com,GBFS Official CSV,2025-06-14
+Lime Arlington,"Arlington, VA",lime_arlington,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Baltimore,"Baltimore, MD",lime_baltimore,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Chicago,"Chicago, IL",lime_chicago,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Cleveland,"Cleveland, OH",lime_cleveland,https://li.me/,GBFS Official CSV,2025-06-14
+Lime Colorado Springs,"Colorado Springs, CO",lime_colorado_springs,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Detroit,"Detroit, MI",lime_detroit,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Grand Rapids,"Grand Rapid, MI",lime_grand_rapids,https://li.me,GBFS Official CSV,2025-06-14
+Lime Louisville,"Louisville, KY",lime_louisville,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime New York,"New York, NY",lime_new_york,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Oakland,"Oakland, CA",lime_oakland,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Portland,"Portland, OR",lime_portland,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime San Francisco,"San Francisco, CA",lime_san_francisco,https://li.me,GBFS Official CSV,2025-06-14
+Lime San Jose,"San Jose, CA",lime_san_jose,https://www.li.me,GBFS Official CSV,2025-06-14
+Lime Seattle,"Seattle, WA",lime_seattle,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lime Washington DC,"Washington, DC",lime_washington_dc,https://www.li.me/,GBFS Official CSV,2025-06-14
+Lyft,"Washington, DC",lyft_dca,https://www.lyft.com/scooters/washington-dc,GBFS Official CSV,2025-06-14
+Lyft Scooters Denver,"Denver, CO",lyft_den,https://www.lyft.com/,GBFS Official CSV,2025-06-14
+Madison B-cycle,"Madison, WI",bcycle_madison,https://madison.bcycle.com,GBFS Official CSV,2025-06-14
+Metro Bike Share,"Los Angeles, CA",bcycle_lametro,https://bikeshare.metro.net,GBFS Official CSV,2025-06-14
+Mogo Detroit,"Detroit, MI",mogo,https://mogodetroit.org/,GBFS Official CSV,2025-06-14
+Nashville BCycle,"Nashville, TN",bcycle_nashville,https://nashville.bcycle.com,GBFS Official CSV,2025-06-14
+Nike Biketown,"Beaverton, OR",biketown_nike,https://www.nike.com/,GBFS Official CSV,2025-06-14
+PeaceHealth Rides,"Eugene, OR",peacehealth_rides,https://www.peacehealthrides.com/,GBFS Official CSV,2025-06-14
+Pogoh,"Pittsburgh, PA",pittsburgh,https://pogoh.com/,GBFS Official CSV,2025-06-14
+Redding Bikeshare,"Redding, CA",bcycle_redding,https://shastalivingstreets.org/redding-bikeshare/,GBFS Official CSV,2025-06-14
+Reddy Bikeshare,"Buffalo, NY",reddy_bikeshare,https://reddybikeshare.socialbicycles.com,GBFS Official CSV,2025-06-14
+Relay Bike Share,"Atlanta, GA",relay_bike_share,https://relaybikeshare.com/,GBFS Official CSV,2025-06-14
+Revel Miami,"Miami, FL",revel_miami,https://gorevel.com/miami/,GBFS Official CSV,2025-06-14
+Revel Oakland,"Oakland, CA",revel_oakland,https://gorevel.com/oakland/,GBFS Official CSV,2025-06-14
+Revel San Francisco,"San Francisco, CA",revel_sanfrancisco,https://gorevel.com,GBFS Official CSV,2025-06-14
+Revel Washington D.C.,"Washington, DC",revel_washingtondc,https://gorevel.com,GBFS Official CSV,2025-06-14
+RTC Bike Share,"Las Vegas, NV",bcycle_rtcbikeshare,https://rtcbikeshare.bcycle.com,GBFS Official CSV,2025-06-14
+RGV B-cycle,"McAllen, TX",bcycle_mcallen,https://rgv.bcycle.com,GBFS Official CSV,2025-06-14
+San Antonio B-cycle,"San Antonio, TX",bcycle_sanantonio,https://sanantonio.bcycle.com/,GBFS Official CSV,2025-06-14
+Santa Barbara BCycle,"Santa Barbara, CA",bcycle_santabarbara,https://santabarbara.bcycle.com,GBFS Official CSV,2025-06-14
+Santa Cruz BCycle,"Santa Cruz, CA",bcycle_santacruz,https://santacruz.bcycle.com/,GBFS Official CSV,2025-06-14
+SBU Wolf Ride Bike Share,"Stony Brook, NY",sbu,https://www.stonybrook.edu/commcms/sustainability/transportation/_Wolf_Ride_Bike_Share/,GBFS Official CSV,2025-06-14
+Spin Akron,"Akron, OH",spin akron,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Alexandria,"Alexandria, VA",spin alexandria,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Ann Arbor,"Ann Arbor, MI",spin ann_arbor,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Baltimore,"Baltimore, MD",spin baltimore,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Chicago,"Chicago, IL",spin chicago,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Columbus,"Columbus, OH",spin columbus,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Dayton,"Dayton, OH",spin dayton,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Detroit,"Detroit, MI",spin detroit,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Durham,"Durham, NC",spin durham,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin East Lansing,"East Lansing, MI",provider-null-lansing,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Fayetteville,"Fayetteville, AR",spin fayetteville,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Fort Collins,"Fort Collins, CO",spin fort_collins,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Gainesville,"Gainesville, FL",spin gainesville,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Lexington,"Lexington, KY",spin lexington,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Los Angeles,"Los Angeles, CA",spin los_angeles,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Michigan State University,"East Lansing, MI",spin michigan_state_university,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Milwaukee,"Milwaukee, WI",provider-null-milwaukee,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Minneapolis,"Minneapolis, MN",spin minneapolis,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Nashville,"Nashville, TN",spin nashville,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Ohio State,"Columbus, OH",spin ohio_state,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Phoenix,"Phoenix, AZ",spin phoenix,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Providence,"Providence, RI",spin providence,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Raleigh,"Raleigh, NC",spin raleigh,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Salt Lake City,"Salt Lake City, UT",provider-null-salt_lake_city,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin San Diego,"San Diego, CA",provider-null-san_diego,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin San Francisco,"San Francisco, CA",provider-null-san_francisco,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin San Marcos,"San Marcos, TX",provider-null-san_marcos,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Santa Monica,"Santa Monica, CA",provider-null-santa_monica,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin St George,"St George, UT",provider-null-st_george,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin St. Paul,"St. Paul, MN",provider-null-st_paul,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Stillwater,"Stillwater, OK",provider-null-stillwater,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Tallahassee,"Tallahassee, FL",provider-null-tallahassee,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Tampa,"Tampa, FL",provider-null-tampa,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Tempe,"Tempe, AZ",provider-null-tempe,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin University of Central Florida,"Orlando, FL",provider-null-university_of_central_florida,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Spin Washington DC,"Washington, DC",spin washington_dc,https://www.spin.pm,GBFS Official CSV,2025-06-14
+Truckee BCycle,"Truckee, CA",bcycle_truckee,https://truckee.bcycle.com/,GBFS Official CSV,2025-06-14
+Tugo,"Tucson, AZ",tugo,https://tugobikeshare.com/,GBFS Official CSV,2025-06-14
+Valentine Bike Share,"Valentine, NE",bcycle_valentine,https://heartlandbikeshare.org,GBFS Official CSV,2025-06-14
+Veo Washington DC,"Washington, DC",Veo Mobility,https://www.veoride.com/,GBFS Official CSV,2025-06-14
+WE-cycle,"Aspen, CO",we_cycle,https://www.we-cycle.org,GBFS Official CSV,2025-06-14
+Nextbike Prishtina,Prishtina,nextbike_gs,https://www.prishtinabike.com,GBFS Official CSV,2025-06-14
