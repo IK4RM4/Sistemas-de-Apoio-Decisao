@@ -1,0 +1,29 @@
+{
+  "execution_time": ["2025-06-14 15:46:16"],
+  "datasets_processed": {
+    "weather": [200],
+    "seoul": [2880],
+    "systems": [0],
+    "cities": [5]
+  },
+  "data_quality": {
+    "files_saved": [3],
+    "success_rate": [75]
+  },
+  "transformations": [
+    ["Padronização de nomes com regex"],
+    ["Remoção de links com stringr"],
+    ["Parsing seguro de datas múltiplos formatos"],
+    ["Extração de valores numéricos"],
+    ["Detecção de valores em falta"],
+    ["Conversões de unidades"],
+    ["Validação de intervalos"],
+    ["Criação de variáveis categóricas"]
+  ],
+  "date_formats_supported": [
+    ["ISO: YYYY-MM-DD"],
+    ["European: DD/MM/YYYY"],
+    ["American: MM/DD/YYYY"],
+    ["European dash: DD-MM-YYYY"]
+  ]
+}

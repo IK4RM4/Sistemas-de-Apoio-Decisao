@@ -1,3 +1,4 @@
 Model,RMSE,R_squared,Best_Model
-decision_tree,36.818,0.898,FALSE
-knn,22.62,0.962,TRUE
+random_forest,35.789,0.937,FALSE
+decision_tree,38.056,0.897,FALSE
+knn,22.718,0.963,TRUE

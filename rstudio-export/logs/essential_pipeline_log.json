@@ -1,0 +1,12 @@
+{
+  "execution_date": ["2025-06-14 10:36:38"],
+  "pipeline_type": ["essencial"],
+  "results": {
+    "01_fetch_data_IMPROVED.R": [false],
+    "02_clean_data_CORRIGIDO.R": [false],
+    "eda_simplificada": [true],
+    "modelacao_basica": [true]
+  },
+  "success_rate": [50],
+  "packages_used": ["tidyverse", "dplyr", "ggplot2", "readr", "stringr", "lubridate", "jsonlite", "httr", "rvest", "janitor"]
+}

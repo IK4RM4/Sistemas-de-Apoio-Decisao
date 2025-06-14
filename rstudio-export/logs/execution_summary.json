@@ -1,0 +1,16 @@
+{
+  "execution_time": ["2025-06-14 15:45:32"],
+  "api_status": ["Valid"],
+  "cities_processed": ["Seoul,KR", "New York,US", "Paris,FR", "London,GB", "Barcelona,ES"],
+  "data_sources_used": {
+    "weather": ["OpenWeather API"],
+    "bike_systems": ["External Source"]
+  },
+  "files_generated": [4],
+  "total_records": {
+    "weather": [200],
+    "bike_systems": [1226],
+    "cities": [5],
+    "seoul": [2880]
+  }
+}

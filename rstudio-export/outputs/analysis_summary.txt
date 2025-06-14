@@ -1,12 +1,12 @@
 === EXPLORATORY DATA ANALYSIS SUMMARY ===
 
 SEOUL BIKE SHARING ANALYSIS:
-Period: 2025-02-11 to 2025-06-10 
+Period: 2025-02-14 to 2025-06-13 
 Total records: 2,880 
-Average demand: 133.2 bikes
-Peak demand: 435 bikes
-Temperature range: -3.7 °C to 32.7 °C
-Wind speed range: 0 km/h to 35.4 km/h
+Average demand: 133.7 bikes
+Peak demand: 425 bikes
+Temperature range: -3 °C to 33.5 °C
+Wind speed range: 0 km/h to 29.5 km/h
 
 GLOBAL BIKE SHARING SYSTEMS:
 Total systems: 5 
@@ -15,9 +15,9 @@ Total stations: 5,507
 Total bicycles: 69,000 
 
 WEATHER DATA COVERAGE:
-Total records: 4,920 
+Total records: 200 
 Cities covered: 5 
-Date range: 2025-06-11 to 2025-10-11 
+Date range: 2025-06-14 to 2025-06-19 
 
 VISUALIZATIONS GENERATED:
 - 01_timeseries_demand.png 

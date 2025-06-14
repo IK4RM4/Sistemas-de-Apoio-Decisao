@@ -1,0 +1,6 @@
+{
+  "r_squared": [0.1289],
+  "rmse": [109.8047],
+  "coefficients": [46.7358, 2.9966, -0.484, 6.2078],
+  "model_type": ["Linear simples"]
+}
