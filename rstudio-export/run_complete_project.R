@@ -1,317 +1,262 @@
-# run_complete_project.R - Execução Completa do Projeto SAD 2024/2025
-# Sistema de Apoio à Decisão - Previsão de Demanda para Partilha de Bicicletas
+# run_essential.R 
+cat("========================================================================\n")
+cat("SISTEMAS DE APOIO À DECISÃO 2024/2025\n")
+cat("PIPELINE ESSENCIAL DE ANÁLISE DE PARTILHA DE BICICLETAS\n")
+cat("========================================================================\n\n")
 
-cat("=======================================================\n")
-cat("    PROJETO SAD 2024/2025 - EXECUÇÃO COMPLETA\n")
-cat("    Sistema de Previsão de Demanda para Bicicletas\n")
-cat("=======================================================\n")
+# === INSTALAÇÃO APENAS DE PACOTES ESSENCIAIS ===
 
-# === CONFIGURAÇÃO INICIAL ===
-
-# Verificar versão do R
-r_version <- R.Version()
-cat("Versão do R:", r_version$version.string, "\n")
-
-# Pacotes necessários para o projeto completo
-required_packages <- c(
-  # Manipulação de dados
-  "tidyverse", "dplyr", "readr", "tidyr", "stringr", "lubridate", "janitor",
-  
-  # Coleta de dados
-  "httr", "jsonlite", "rvest",
-  
-  # Visualização
-  "ggplot2", "plotly", "scales", "viridis", "gridExtra", "corrplot",
-  
-  # Modelação
-  "tidymodels", "ranger", "rpart", "kknn",
-  
-  # Dashboard
-  "shiny", "shinydashboard", "DT", "leaflet"
+essential_packages <- c(
+  "tidyverse", "dplyr", "ggplot2", "readr", "stringr", "lubridate", 
+  "jsonlite", "httr", "rvest", "janitor","RSQLite"
 )
 
-# Função para instalar pacotes em falta
-install_missing_packages <- function(packages) {
-  missing <- packages[!(packages %in% installed.packages()[,"Package"])]
-  
-  if (length(missing) > 0) {
-    cat("Instalando pacotes em falta:", paste(missing, collapse = ", "), "\n")
-    
-    # Tentar instalar pacotes com retry
-    for (pkg in missing) {
-      for (attempt in 1:3) {
-        tryCatch({
-          install.packages(pkg, dependencies = TRUE, quiet = TRUE)
-          cat("Instalado:", pkg, "\n")
-          break
-        }, error = function(e) {
-          if (attempt == 3) {
-            cat("Falhou:", pkg, "-", e$message, "\n")
-          } else {
-            cat("Tentativa", attempt, "falhada para", pkg, ", retentando...\n")
-            Sys.sleep(2)
-          }
-        })
-      }
-    }
-  } else {
-    cat("Todos os pacotes necessários já estão instalados.\n")
-  }
-}
+cat("Instalando apenas pacotes essenciais...\n")
 
-# Instalar pacotes em falta
-install_missing_packages(required_packages)
-
-# Carregar bibliotecas essenciais
-essential_libs <- c("tidyverse", "lubridate", "ggplot2")
-for (lib in essential_libs) {
-  if (!require(lib, character.only = TRUE, quietly = TRUE)) {
-    stop("Não foi possível carregar a biblioteca essencial: ", lib)
-  }
-}
-
-# Criar estrutura de diretórios
-cat("\nCriando estrutura de diretórios...\n")
-directories <- c(
-  "data/raw", "data/processed", 
-  "outputs/plots", "outputs/models", "outputs/statistics", "outputs/predictions"
-)
-
-for (dir in directories) {
-  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
-  cat("  ✓", dir, "\n")
-}
-
-# === FUNÇÕES AUXILIARES ===
-
-execute_script <- function(script_name, description) {
-  cat("\n", rep("=", 60), "\n")
-  cat("EXECUTANDO:", description, "\n")
-  cat("Ficheiro:", script_name, "\n")
-  cat(rep("=", 60), "\n")
-  
-  if (!file.exists(script_name)) {
-    cat("ERRO: Ficheiro não encontrado:", script_name, "\n")
-    return(FALSE)
-  }
-  
-  start_time <- Sys.time()
-  
-  tryCatch({
-    source(script_name, echo = FALSE)
-    end_time <- Sys.time()
-    execution_time <- round(as.numeric(difftime(end_time, start_time, units = "secs")), 2)
-    cat("✓ SUCESSO:", description, "concluído em", execution_time, "segundos\n")
+install_essential <- function(pkg) {
+  if (!require(pkg, character.only = TRUE, quietly = TRUE)) {
+    cat("Instalando:", pkg, "\n")
+    install.packages(pkg, repos = "https://cloud.r-project.org/")
+    library(pkg, character.only = TRUE)
     return(TRUE)
+  }
+  return(TRUE)
+}
+
+# Instalar pacotes essenciais
+for (pkg in essential_packages) {
+  tryCatch({
+    install_essential(pkg)
   }, error = function(e) {
-    cat("ERRO em", description, ":", e$message, "\n")
-    cat("Continuando com o próximo módulo...\n")
-    return(FALSE)
+    cat("Erro ao instalar", pkg, "- continuando sem este pacote\n")
   })
 }
 
-validate_outputs <- function(phase_name, expected_files) {
-  cat("\nValidando outputs da fase:", phase_name, "\n")
-  
-  valid_files <- 0
-  for (file in expected_files) {
-    if (file.exists(file)) {
-      file_size <- file.size(file)
-      if (file_size > 0) {
-        cat("  ✓", file, "(", round(file_size/1024, 1), "KB)\n")
-        valid_files <- valid_files + 1
-      } else {
-        cat("  ⚠", file, "(vazio)\n")
-      }
-    } else {
-      cat("  ✗", file, "(não encontrado)\n")
-    }
-  }
-  
-  success_rate <- round((valid_files / length(expected_files)) * 100, 1)
-  cat("Taxa de sucesso:", success_rate, "%\n")
-  
-  return(success_rate >= 70)  # 70% dos ficheiros devem existir
-}
+# === CRIAR ESTRUTURA DE DIRECTORIAS ===
 
-create_project_summary <- function() {
-  cat("\n", rep("=", 60), "\n")
-  cat("RESUMO FINAL DO PROJETO\n")
-  cat(rep("=", 60), "\n")
-  
-  # Verificar ficheiros de dados
-  data_files <- c(
-    "data/raw/raw_cities_weather_forecast.csv",
-    "data/raw/raw_bike_sharing_systems.csv", 
-    "data/raw/raw_worldcities.csv",
-    "data/raw/raw_seoul_bike_sharing.csv",
-    "data/processed/weather_forecast.csv",
-    "data/processed/seoul_bike_sharing.csv"
-  )
-  
-  cat("\nFICHEIROS DE DADOS:\n")
-  data_success <- 0
-  for (file in data_files) {
-    if (file.exists(file) && file.size(file) > 0) {
-      cat("  ✓", basename(file), "\n")
-      data_success <- data_success + 1
-    } else {
-      cat("  ✗", basename(file), "\n")
-    }
-  }
-  
-  # Verificar visualizações
-  plot_files <- list.files("outputs/plots", pattern = "*.png", full.names = TRUE)
-  cat("\nVISUALIZAÇÕES GERADAS:", length(plot_files), "\n")
-  for (plot in plot_files) {
-    cat("  ✓", basename(plot), "\n")
-  }
-  
-  # Verificar modelos
-  model_files <- list.files("outputs/models", pattern = "*.rds", full.names = TRUE)
-  cat("\nMODELOS TREINADOS:", length(model_files), "\n")
-  for (model in model_files) {
-    cat("  ✓", basename(model), "\n")
-  }
-  
-  # Estatísticas do projeto
-  cat("\nESTATÍSTICAS DO PROJETO:\n")
-  cat("  Ficheiros de dados:", data_success, "/", length(data_files), "\n")
-  cat("  Visualizações:", length(plot_files), "\n")
-  cat("  Modelos:", length(model_files), "\n")
-  
-  # Verificar se o dashboard pode ser executado
-  dashboard_ready <- file.exists("05_interactive_dashboard.R") && 
-    length(plot_files) > 0 && 
-    data_success >= 3
-  
-  cat("  Dashboard pronto:", ifelse(dashboard_ready, "✓ SIM", "NÃO"), "\n")
-  
-  # Recomendações finais
-  cat("\nPRÓXIMOS PASSOS:\n")
-  if (dashboard_ready) {
-    cat("  1. Executar dashboard: source('05_interactive_dashboard.R')\n")
-    cat("  2. Revisar visualizações em outputs/plots/\n")
-    cat("  3. Examinar modelos em outputs/models/\n")
-    cat("  4. Preparar relatório final\n")
-  } else {
-    cat("  1. Verificar ficheiros de dados em falta\n")
-    cat("  2. Re-executar módulos que falharam\n")
-    cat("  3. Verificar conectividade de rede para APIs\n")
-  }
-  
-  return(dashboard_ready)
-}
-
-# === EXECUÇÃO SEQUENCIAL DOS MÓDULOS ===
-
-cat("\nIniciando execução sequencial dos módulos...\n")
-
-# Lista de scripts para executar
-scripts <- list(
-  list(
-    file = "01_fetch_data.R",
-    alt_file = "01_fetch_data_FIXED.R", 
-    description = "Obtenção de Dados (APIs e Web Scraping)",
-    expected_outputs = c(
-      "data/raw/raw_cities_weather_forecast.csv",
-      "data/raw/raw_bike_sharing_systems.csv",
-      "data/raw/raw_worldcities.csv", 
-      "data/raw/raw_seoul_bike_sharing.csv"
-    )
-  ),
-  list(
-    file = "02_clean_data.R",
-    alt_file = "02_clean_data_FIXED.R",
-    description = "Limpeza e Estruturação de Dados", 
-    expected_outputs = c(
-      "data/processed/weather_forecast.csv",
-      "data/processed/seoul_bike_sharing.csv",
-      "data/processed/bike_sharing_systems.csv"
-    )
-  ),
-  list(
-    file = "03_exploratory_analysis.R",
-    alt_file = "03_exploratory_analysis_ENHANCED.R",
-    description = "Análise Exploratória e Visualização",
-    expected_outputs = c(
-      "outputs/plots/01_time_series_demand.png",
-      "outputs/plots/02_temporal_patterns.png", 
-      "outputs/plots/03_weather_impact.png"
-    )
-  ),
-  list(
-    file = "_model_regression.R", 
-    alt_file = "04_model_regression.R",
-    description = "Modelação Preditiva",
-    expected_outputs = c(
-      "outputs/models/model_comparison.csv",
-      "outputs/models/best_model.rds"
-    )
-  )
+cat("Criando estrutura de directorias...\n")
+dirs_to_create <- c(
+  "data/raw", "data/processed", "config", "outputs/plots", 
+  "outputs/statistics", "logs"
 )
 
-# Executar cada script
-execution_results <- list()
+for (dir in dirs_to_create) {
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+}
 
-for (i in seq_along(scripts)) {
-  script_info <- scripts[[i]]
+# === FUNÇÃO DE EXECUÇÃO SIMPLIFICADA ===
+
+execute_script_simple <- function(script_path, description) {
+  cat("\n", paste(rep("-", 50), collapse = ""), "\n")
+  cat("EXECUTANDO:", description, "\n")
+  cat(paste(rep("-", 50), collapse = ""), "\n")
   
-  # Tentar ficheiro principal, depois alternativo
-  script_file <- script_info$file
-  if (!file.exists(script_file) && !is.null(script_info$alt_file)) {
-    script_file <- script_info$alt_file
+  if (file.exists(script_path)) {
+    tryCatch({
+      source(script_path, echo = FALSE)
+      cat("✓ CONCLUÍDO:", description, "\n")
+      return(TRUE)
+    }, error = function(e) {
+      cat("✗ ERRO em", description, ":", e$message, "\n")
+      return(FALSE)
+    })
+  } else {
+    cat("✗ Ficheiro não encontrado:", script_path, "\n")
+    return(FALSE)
+  }
+}
+
+# === EXECUTAR PIPELINE ESSENCIAL ===
+
+cat("\nIniciando pipeline essencial...\n")
+
+# Scripts essenciais (sem modelação avançada e dashboard complexo)
+essential_scripts <- list(
+  list(path = "01_fetch_data_IMPROVED.R", desc = "Recolha de Dados"),
+  list(path = "02_clean_data_CORRIGIDO.R", desc = "Limpeza de Dados")
+)
+
+results <- list()
+for (script in essential_scripts) {
+  results[[script$path]] <- execute_script_simple(script$path, script$desc)
+}
+
+# === ANÁLISE EXPLORATÓRIA SIMPLIFICADA ===
+
+cat("\n", paste(rep("-", 50), collapse = ""), "\n")
+cat("EXECUTANDO: Análise Exploratória Simplificada\n")
+cat(paste(rep("-", 50), collapse = ""), "\n")
+
+# Análise EDA básica sem SQL complexo
+tryCatch({
+  # Carregar dados processados
+  if (file.exists("data/processed/seoul_bike_sharing.csv")) {
+    seoul_data <- read_csv("data/processed/seoul_bike_sharing.csv", show_col_types = FALSE)
+    
+    cat("Dados Seoul carregados:", nrow(seoul_data), "registos\n")
+    
+    # Estatísticas básicas
+    cat("\nEstatísticas Básicas:\n")
+    cat("Procura média por hora:", round(mean(seoul_data$rented_bike_count, na.rm = TRUE), 1), "\n")
+    cat("Procura máxima:", max(seoul_data$rented_bike_count, na.rm = TRUE), "\n")
+    cat("Período dos dados:", min(seoul_data$date, na.rm = TRUE), "a", max(seoul_data$date, na.rm = TRUE), "\n")
+    
+    # Visualização básica
+    if (require("ggplot2", quietly = TRUE)) {
+      cat("Criando visualizações básicas...\n")
+      
+      # Gráfico de procura ao longo do tempo
+      trend_plot <- ggplot(seoul_data, aes(x = as.Date(date), y = rented_bike_count)) +
+        geom_point(alpha = 0.3, color = "steelblue") +
+        geom_smooth(method = "loess", color = "red") +
+        labs(title = "Tendência de Procura de Bicicletas Seoul",
+             x = "Data", y = "Contagem de Bicicletas Alugadas") +
+        theme_minimal()
+      
+      ggsave("outputs/plots/seoul_demand_trend.png", trend_plot, width = 10, height = 6, dpi = 300)
+      
+      # Padrão horário
+      hourly_pattern <- seoul_data %>%
+        group_by(hour) %>%
+        summarise(avg_demand = mean(rented_bike_count, na.rm = TRUE), .groups = "drop")
+      
+      hourly_plot <- ggplot(hourly_pattern, aes(x = as.numeric(hour), y = avg_demand)) +
+        geom_line(color = "steelblue", size = 1.2) +
+        geom_point(color = "darkblue", size = 2) +
+        labs(title = "Padrão de Procura Horária",
+             x = "Hora do Dia", y = "Procura Média") +
+        theme_minimal() +
+        scale_x_continuous(breaks = seq(0, 23, 3))
+      
+      ggsave("outputs/plots/hourly_pattern.png", hourly_plot, width = 10, height = 6, dpi = 300)
+      
+      cat("Visualizações guardadas em outputs/plots/\n")
+    }
+    
+    results[["eda_simplificada"]] <- TRUE
+    
+  } else {
+    cat("Dados Seoul não encontrados - saltar análise\n")
+    results[["eda_simplificada"]] <- FALSE
   }
   
-  # Executar script
-  success <- execute_script(script_file, script_info$description)
-  execution_results[[i]] <- success
-  
-  # Validar outputs
-  if (success) {
-    validation_success <- validate_outputs(
-      script_info$description, 
-      script_info$expected_outputs
+}, error = function(e) {
+  cat("Erro na análise exploratória:", e$message, "\n")
+  results[["eda_simplificada"]] <- FALSE
+})
+
+# === MODELAÇÃO BÁSICA (SE POSSÍVEL) ===
+
+cat("\n", paste(rep("-", 50), collapse = ""), "\n")
+cat("EXECUTANDO: Modelação Básica\n")
+cat(paste(rep("-", 50), collapse = ""), "\n")
+
+tryCatch({
+  if (exists("seoul_data") && nrow(seoul_data) > 0) {
+    
+    # Modelo linear simples
+    cat("Criando modelo linear básico...\n")
+    
+    # Preparar dados para modelação
+    model_data <- seoul_data %>%
+      filter(!is.na(rented_bike_count), !is.na(temperature_c), !is.na(humidity_percent)) %>%
+      mutate(hour_numeric = as.numeric(hour))
+    
+    # Modelo linear simples
+    simple_model <- lm(rented_bike_count ~ temperature_c + humidity_percent + hour_numeric, 
+                       data = model_data)
+    
+    # Resumo do modelo
+    model_summary <- summary(simple_model)
+    cat("R² do modelo:", round(model_summary$r.squared, 3), "\n")
+    cat("RMSE:", round(sqrt(mean(simple_model$residuals^2)), 1), "\n")
+    
+    # Guardar resumo do modelo
+    model_info <- list(
+      r_squared = model_summary$r.squared,
+      rmse = sqrt(mean(simple_model$residuals^2)),
+      coefficients = model_summary$coefficients[,1],
+      model_type = "Linear simples"
     )
     
-    if (!validation_success) {
-      cat("AVISO: Alguns outputs esperados não foram gerados\n")
-    }
+    write(toJSON(model_info, pretty = TRUE), "outputs/simple_model_summary.json")
+    
+    results[["modelacao_basica"]] <- TRUE
+    
+  } else {
+    cat("Dados não disponíveis para modelação\n")
+    results[["modelacao_basica"]] <- FALSE
   }
   
-  # Pequena pausa entre módulos
-  Sys.sleep(1)
+}, error = function(e) {
+  cat("Erro na modelação básica:", e$message, "\n")
+  results[["modelacao_basica"]] <- FALSE
+})
+
+# === RESUMO FINAL ===
+
+cat("\n", paste(rep("=", 60), collapse = ""), "\n")
+cat("RESUMO DO PIPELINE ESSENCIAL\n")
+cat(paste(rep("=", 60), collapse = ""), "\n")
+
+successful_tasks <- sum(unlist(results))
+total_tasks <- length(results)
+
+cat("\nResultados:\n")
+for (task in names(results)) {
+  status <- ifelse(results[[task]], "✓ SUCESSO", "✗ FALHOU")
+  cat(sprintf("  %s: %s\n", task, status))
 }
 
-# === RELATÓRIO FINAL ===
+cat(sprintf("\nTaxa de sucesso: %d/%d (%.1f%%)\n", 
+            successful_tasks, total_tasks, 
+            (successful_tasks/total_tasks)*100))
 
-project_ready <- create_project_summary()
+# Verificar ficheiros criados
+cat("\nFicheiros criados:\n")
+output_files <- c(
+  "data/processed/seoul_bike_sharing.csv",
+  "data/processed/weather_forecast.csv", 
+  "outputs/plots/seoul_demand_trend.png",
+  "outputs/plots/hourly_pattern.png",
+  "outputs/simple_model_summary.json"
+)
 
-# Gerar estatísticas de execução
-successful_modules <- sum(unlist(execution_results))
-total_modules <- length(execution_results)
+for (file in output_files) {
+  if (file.exists(file)) {
+    cat("  ✓", file, "\n")
+  } else {
+    cat("  ✗", file, "(não criado)\n")
+  }
+}
 
-cat("\n", rep("=", 60), "\n")
-cat("EXECUÇÃO CONCLUÍDA\n")
-cat(rep("=", 60), "\n")
-cat("Módulos executados com sucesso:", successful_modules, "/", total_modules, "\n")
-cat("Taxa de sucesso geral:", round((successful_modules/total_modules)*100, 1), "%\n")
+# === PRÓXIMOS PASSOS ===
 
-if (project_ready) {
-  cat("\nPROJETO COMPLETO E PRONTO PARA USO!\n")
-  cat("\nPara iniciar o dashboard interativo, execute:\n")
-  cat("source('05_interactive_dashboard.R')\n")
+cat("\nPróximos passos recomendados:\n")
+
+if (successful_tasks >= 2) {
+  cat("1. Verificar visualizações em outputs/plots/\n")
+  cat("2. Rever dados processados em data/processed/\n")
+  cat("3. Instalar pacotes adicionais para análise completa:\n")
+  cat("   install.packages(c('tidymodels', 'shiny', 'plotly'))\n")
+  cat("4. Executar run_all.R para pipeline completo\n")
 } else {
-  cat("\nPROJETO PARCIALMENTE COMPLETO\n")
-  cat("\nAlguns módulos podem ter falhado. Verifique os logs acima.\n")
+  cat("1. Verificar erros nos scripts de recolha/limpeza de dados\n")
+  cat("2. Confirmar conexão à internet para APIs\n")
+  cat("3. Verificar estrutura de directorias\n")
 }
 
-# Informações sobre normas europeias aplicadas
-cat("\nNORMAS EUROPEIAS APLICADAS:\n")
-cat("  • Temperatura: Celsius (°C)\n")
-cat("  • Velocidade do vento: Quilómetros por hora (km/h)\n")
-cat("  • Distância/Visibilidade: Quilómetros (km)\n")
-cat("  • Precipitação: Milímetros (mm)\n")
-cat("  • Formato de data: dd/mm/aaaa\n")
-cat("  • Formato de hora: 24 horas\n")
+cat("Para análise completa, instalar todos os pacotes e executar run_all.R\n")
 
+# Guardar log simplificado
+simple_log <- list(
+  execution_date = Sys.time(),
+  pipeline_type = "essencial",
+  results = results,
+  success_rate = (successful_tasks/total_tasks)*100,
+  packages_used = essential_packages
+)
+
+write(toJSON(simple_log, pretty = TRUE), "logs/essential_pipeline_log.json")
+
+cat("\nLog guardado em: logs/essential_pipeline_log.json\n")

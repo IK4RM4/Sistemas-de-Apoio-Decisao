@@ -1,645 +1,705 @@
-# 04_model_FINAL.R - Professional predictive modeling with tidymodels
-# SAD Project 2024/2025 - Advanced bike sharing demand prediction
-
 library(tidymodels)
 library(readr)
 library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(vip)
+library(corrplot)
+library(glmnet)
+library(randomForest)
+library(xgboost)
+library(stringr) 
 
-# Create directories for outputs
+# Create output directories
 dir.create("outputs/models", recursive = TRUE, showWarnings = FALSE)
 dir.create("outputs/predictions", recursive = TRUE, showWarnings = FALSE)
+dir.create("outputs/model_evaluation", recursive = TRUE, showWarnings = FALSE)
 
-cat("INITIATING PREDICTIVE MODELING PROCESS\n")
-cat("=====================================\n")
+cat("SISTEMAS DE APOIO À DECISÃO - MODELAÇÃO PREDITIVA\n")
+cat("================================================\n")
 
-# === UTILITY FUNCTIONS ===
+# === DATA LOADING AND VALIDATION ===
 
-safe_load_data <- function(filepath, description = "") {
-  if (!file.exists(filepath)) {
-    cat("Warning: File not found:", filepath, "\n")
-    return(NULL)
+load_and_validate_data <- function() {
+  cat("Loading and validating datasets...\n")
+  
+  # Load Seoul bike sharing data
+  seoul_data <- read_csv("data/processed/seoul_bike_sharing.csv", show_col_types = FALSE)
+  
+  if (is.null(seoul_data) || nrow(seoul_data) == 0) {
+    stop("Seoul bike sharing data is required for modeling")
   }
   
-  tryCatch({
-    data <- read_csv(filepath, show_col_types = FALSE)
-    cat("Loaded", description, ":", nrow(data), "records\n")
-    return(data)
-  }, error = function(e) {
-    cat("Error loading", filepath, ":", e$message, "\n")
-    return(NULL)
-  })
+  cat("Seoul bike data loaded:", nrow(seoul_data), "records\n")
+  cat("Variables available:", ncol(seoul_data), "\n")
+  cat("Available columns:", paste(colnames(seoul_data), collapse = ", "), "\n")
+  cat("Date range:", min(seoul_data$date, na.rm = TRUE), "to", max(seoul_data$date, na.rm = TRUE), "\n")
+  
+  return(seoul_data)
 }
 
-# Function to enhance small datasets with synthetic variations
-enhance_dataset <- function(data, min_size = 100) {
-  if (nrow(data) < min_size) {
-    cat("Dataset too small (", nrow(data), "records) - generating synthetic variations...\n")
-    
-    # Create synthetic variations based on existing patterns
-    base_data <- data
-    multiplier <- ceiling(min_size / nrow(data))
-    
-    synthetic_data <- map_dfr(1:multiplier, function(i) {
-      base_data %>%
-        mutate(
-          # Add realistic noise to continuous variables
-          rented_bike_count = pmax(0, rented_bike_count + rnorm(nrow(.), 0, sd(rented_bike_count) * 0.1)),
-          temperature_c = temperature_c + rnorm(nrow(.), 0, 2),
-          humidity_percent = pmax(0, pmin(100, humidity_percent + rnorm(nrow(.), 0, 5))),
-          wind_speed_ms = pmax(0, wind_speed_ms + rnorm(nrow(.), 0, 1)),
-          
-          # Vary categorical variables
-          seasons = if("seasons" %in% colnames(.)) {
-            factor(sample(c("Spring", "Summer", "Autumn", "Winter"), nrow(.), replace = TRUE))
-          } else {
-            factor(rep("Spring", nrow(.)))
-          },
-          
-          holiday = if("holiday" %in% colnames(.)) {
-            factor(sample(c("Holiday", "No Holiday"), nrow(.), replace = TRUE, prob = c(0.1, 0.9)))
-          } else {
-            factor(rep("No Holiday", nrow(.)))
-          },
-          
-          # Adjust date if present
-          date = if("date" %in% colnames(.)) {
-            date + days(sample(-30:30, nrow(.), replace = TRUE))
-          } else {
-            date
-          }
+# === FEATURE ENGINEERING (SIMPLIFICADA) ===
+
+engineer_features <- function(data) {
+  cat("Engineering features for modeling...\n")
+  
+  # Check which columns are available
+  available_cols <- colnames(data)
+  cat("Available columns:", paste(available_cols, collapse = ", "), "\n")
+  
+  engineered_data <- data %>%
+    # Ensure proper data types
+    mutate(
+      date = as_date(date),
+      rented_bike_count = as.numeric(rented_bike_count),
+      hour = as.numeric(as.character(hour))
+    ) %>%
+    # Remove invalid records
+    filter(
+      !is.na(date),
+      !is.na(rented_bike_count),
+      rented_bike_count >= 0
+    ) %>%
+    # Create basic temporal features
+    mutate(
+      # Basic temporal features
+      year = year(date),
+      month = month(date),
+      day_of_year = yday(date),
+      weekday = wday(date),
+      is_weekend = as.numeric(weekday %in% c(1, 7)),
+      
+      # Hour-based features
+      hour_sin = sin(2 * pi * hour / 24),
+      hour_cos = cos(2 * pi * hour / 24),
+      
+      # Day of year cyclical features
+      day_sin = sin(2 * pi * day_of_year / 365),
+      day_cos = cos(2 * pi * day_of_year / 365),
+      
+      # Rush hour indicators
+      morning_rush = as.numeric(hour %in% 7:9),
+      evening_rush = as.numeric(hour %in% 17:19),
+      business_hours = as.numeric(hour %in% 9:17)
+    )
+  
+  # Add weather features if available (IMPROVED - avoid multicollinearity)
+  if ("temperature_c" %in% available_cols) {
+    engineered_data <- engineered_data %>%
+      mutate(
+        temperature_comfort = case_when(
+          temperature_c >= 15 & temperature_c <= 25 ~ "optimal",
+          temperature_c >= 10 & temperature_c <= 30 ~ "good",
+          TRUE ~ "poor"
         )
-    })
-    
-    enhanced_data <- bind_rows(data, synthetic_data[1:(min_size - nrow(data)), ])
-    cat("Dataset enhanced to", nrow(enhanced_data), "records\n")
-    return(enhanced_data)
+        # Removed temperature_squared to avoid multicollinearity
+      )
   }
   
-  return(data)
-}
-
-# === LOAD AND PREPARE DATA ===
-
-cat("Loading data for modeling...\n")
-
-seoul_bike <- safe_load_data("data/processed/seoul_bike_sharing.csv", "Seoul bike sharing data")
-
-if (is.null(seoul_bike) || nrow(seoul_bike) == 0) {
-  stop("Seoul bike sharing data is required for modeling")
-}
-
-cat("Data structure inspection:\n")
-cat("Available columns:", paste(colnames(seoul_bike), collapse = ", "), "\n")
-cat("Dimensions:", nrow(seoul_bike), "x", ncol(seoul_bike), "\n")
-
-# === DATA PREPARATION FOR MODELING ===
-
-cat("\nPreparing data for modeling...\n")
-
-# Verify target variable exists
-if (!"rented_bike_count" %in% colnames(seoul_bike)) {
-  stop("Target variable 'rented_bike_count' not found in dataset")
-}
-
-# Clean and prepare base data
-seoul_clean <- seoul_bike %>%
-  # Filter valid observations
-  filter(!is.na(rented_bike_count), rented_bike_count >= 0) %>%
-  # Ensure correct data types
-  mutate(
-    rented_bike_count = as.numeric(rented_bike_count),
-    date = if("date" %in% colnames(.)) as_date(date) else as_date("2024-01-01")
-  )
-
-cat("Base data prepared:", nrow(seoul_clean), "valid observations\n")
-
-# === FEATURE ENGINEERING ===
-
-cat("Performing feature engineering...\n")
-
-# Ensure required variables exist with safe defaults
-required_numeric_vars <- list(
-  temperature_c = 15,           # 15°C default temperature
-  humidity_percent = 60,        # 60% default humidity
-  wind_speed_ms = 3,           # 3 m/s default wind speed (European: 10.8 km/h)
-  visibility_km = 12,          # 12 km default visibility
-  dew_point_temperature_c = 10, # 10°C default dew point
-  solar_radiation_mj_m2 = 1,   # 1 MJ/m² default solar radiation
-  rainfall_mm = 0,             # 0 mm default rainfall
-  snowfall_mm = 0              # 0 mm default snowfall (converted from cm)
-)
-
-# Add missing numeric variables
-for (var_name in names(required_numeric_vars)) {
-  if (!var_name %in% colnames(seoul_clean)) {
-    seoul_clean <- seoul_clean %>%
-      mutate(!!var_name := required_numeric_vars[[var_name]])
-    cat("Created variable:", var_name, "with default value", required_numeric_vars[[var_name]], "\n")
+  if ("humidity_percent" %in% available_cols) {
+    engineered_data <- engineered_data %>%
+      mutate(
+        humidity_comfort = case_when(
+          humidity_percent <= 60 ~ "comfortable",
+          humidity_percent <= 80 ~ "moderate", 
+          TRUE ~ "uncomfortable"
+        )
+      )
   }
-}
-
-# Convert wind speed to European standard (km/h) if needed
-if ("wind_speed_ms" %in% colnames(seoul_clean) && !"wind_speed_kmh" %in% colnames(seoul_clean)) {
-  seoul_clean <- seoul_clean %>%
-    mutate(wind_speed_kmh = wind_speed_ms * 3.6)
-  cat("Converted wind speed from m/s to km/h (European standard)\n")
-}
-
-# Handle categorical variables
-categorical_vars <- list(
-  hour = 0:23,
-  seasons = c("Spring", "Summer", "Autumn", "Winter"),
-  holiday = c("Holiday", "No Holiday"),
-  functioning_day = c("Yes", "No")
-)
-
-for (var_name in names(categorical_vars)) {
-  if (var_name %in% colnames(seoul_clean)) {
-    # Check if variable has sufficient variation
-    unique_values <- unique(seoul_clean[[var_name]])
-    
-    if (length(unique_values) <= 1) {
-      # Create variation if only one unique value
-      seoul_clean <- seoul_clean %>%
-        mutate(!!var_name := factor(sample(categorical_vars[[var_name]], 
-                                           nrow(.), replace = TRUE)))
-      cat("Enhanced", var_name, "with artificial variation\n")
-    } else {
-      seoul_clean <- seoul_clean %>%
-        mutate(!!var_name := as.factor(.data[[var_name]]))
-    }
+  
+  # Wind speed features (choose ONE to avoid multicollinearity)
+  if ("wind_speed_ms" %in% available_cols) {
+    engineered_data <- engineered_data %>%
+      mutate(
+        wind_comfort = case_when(
+          wind_speed_ms <= 4.16 ~ "calm",      # <= 15 km/h
+          wind_speed_ms <= 6.94 ~ "breezy",    # <= 25 km/h
+          TRUE ~ "windy"
+        )
+      )
+  } else if ("wind_speed_kmh" %in% available_cols) {
+    engineered_data <- engineered_data %>%
+      mutate(
+        wind_speed_ms = wind_speed_kmh / 3.6,
+        wind_comfort = case_when(
+          wind_speed_kmh <= 15 ~ "calm",
+          wind_speed_kmh <= 25 ~ "breezy",
+          TRUE ~ "windy"
+        )
+      ) %>%
+      select(-wind_speed_kmh)  # Remove to avoid duplication
+  }
+  
+  # Simplified interaction terms (only if really beneficial)
+  if (all(c("temperature_c", "humidity_percent") %in% available_cols)) {
+    engineered_data <- engineered_data %>%
+      mutate(
+        temp_humidity_interaction = temperature_c * (humidity_percent / 100)
+      )
+  }
+  
+  # Remove temp_wind_interaction to reduce multicollinearity
+  
+  # Weather severity index
+  if ("rainfall_mm" %in% available_cols) {
+    engineered_data$rainfall_mm <- ifelse(is.na(engineered_data$rainfall_mm), 0, engineered_data$rainfall_mm)
   } else {
-    # Create variable if it doesn't exist
-    seoul_clean <- seoul_clean %>%
-      mutate(!!var_name := factor(sample(categorical_vars[[var_name]], 
-                                         nrow(.), replace = TRUE)))
-    cat("Created categorical variable:", var_name, "\n")
+    engineered_data$rainfall_mm <- 0
   }
+  
+  if ("snowfall_cm" %in% available_cols) {
+    engineered_data$snowfall_cm <- ifelse(is.na(engineered_data$snowfall_cm), 0, engineered_data$snowfall_cm)
+  } else {
+    engineered_data$snowfall_cm <- 0
+  }
+  
+  engineered_data <- engineered_data %>%
+    mutate(
+      weather_severity = case_when(
+        rainfall_mm > 5 | snowfall_cm > 2 ~ "severe",
+        rainfall_mm > 1 | snowfall_cm > 0.5 ~ "moderate",
+        TRUE ~ "mild"
+      )
+    )
+  
+  # Convert categorical variables to factors (only if they exist)
+  if ("seasons" %in% available_cols) {
+    engineered_data <- engineered_data %>%
+      mutate(seasons = factor(seasons, levels = c("Spring", "Summer", "Autumn", "Winter")))
+  }
+  
+  if ("holiday" %in% available_cols) {
+    engineered_data <- engineered_data %>%
+      mutate(holiday = factor(holiday, levels = c("No Holiday", "Holiday")))
+  }
+  
+  if ("functioning_day" %in% available_cols) {
+    engineered_data <- engineered_data %>%
+      mutate(functioning_day = factor(functioning_day, levels = c("Yes", "No")))
+  }
+  
+  # Convert new categorical variables to factors
+  if ("temperature_comfort" %in% colnames(engineered_data)) {
+    engineered_data <- engineered_data %>%
+      mutate(temperature_comfort = factor(temperature_comfort, levels = c("poor", "good", "optimal")))
+  }
+  
+  if ("humidity_comfort" %in% colnames(engineered_data)) {
+    engineered_data <- engineered_data %>%
+      mutate(humidity_comfort = factor(humidity_comfort, levels = c("uncomfortable", "moderate", "comfortable")))
+  }
+  
+  if ("wind_comfort" %in% colnames(engineered_data)) {
+    engineered_data <- engineered_data %>%
+      mutate(wind_comfort = factor(wind_comfort, levels = c("windy", "breezy", "calm")))
+  }
+  
+  if ("weather_severity" %in% colnames(engineered_data)) {
+    engineered_data <- engineered_data %>%
+      mutate(weather_severity = factor(weather_severity, levels = c("severe", "moderate", "mild")))
+  }
+  
+  cat("Features engineered:", ncol(engineered_data), "total variables\n")
+  cat("Records after cleaning:", nrow(engineered_data), "\n")
+  
+  return(engineered_data)
 }
 
-# Add temporal features for better modeling
-seoul_clean <- seoul_clean %>%
-  mutate(
-    # Extract temporal features from date
-    weekday = factor(wday(date, label = TRUE)),
-    month = factor(month(date, label = TRUE)),
-    year = factor(year(date)),
-    
-    # Create interaction features for European weather patterns
-    temp_humidity_interaction = temperature_c * (humidity_percent / 100),
-    wind_temp_interaction = wind_speed_kmh * temperature_c,
-    
-    # Weather comfort index (European climate adapted)
-    weather_comfort = case_when(
-      temperature_c >= 15 & temperature_c <= 25 & 
-        humidity_percent <= 70 & wind_speed_kmh <= 20 ~ "Excellent",
-      temperature_c >= 10 & temperature_c <= 30 & 
-        humidity_percent <= 80 & wind_speed_kmh <= 30 ~ "Good",
-      TRUE ~ "Poor"
-    ) %>% factor()
-  )
+# === DATA SPLITTING ===
 
-# Enhance dataset if too small
-seoul_clean <- enhance_dataset(seoul_clean, min_size = 200)
+split_data <- function(data) {
+  cat("Splitting data into training and testing sets...\n")
+  
+  set.seed(2024)  # For reproducibility
+  
+  # Stratified split based on demand quartiles
+  data_with_quartiles <- data %>%
+    mutate(demand_quartile = ntile(rented_bike_count, 4))
+  
+  # 80-20 split
+  data_split <- initial_split(data_with_quartiles, prop = 0.8, strata = demand_quartile)
+  train_data <- training(data_split)
+  test_data <- testing(data_split)
+  
+  # Remove quartile column
+  train_data <- train_data %>% select(-demand_quartile)
+  test_data <- test_data %>% select(-demand_quartile)
+  
+  cat("Training set:", nrow(train_data), "records\n")
+  cat("Testing set:", nrow(test_data), "records\n")
+  
+  return(list(train = train_data, test = test_data, split = data_split))
+}
 
-cat("Feature engineering completed:", nrow(seoul_clean), "observations ready for modeling\n")
+# === MODEL RECIPES (SIMPLIFICADAS) ===
 
-# === TRAIN/TEST SPLIT ===
-
-cat("\nSplitting data into training and testing sets...\n")
-
-set.seed(42)  # For reproducibility
-
-# Stratified split based on demand levels
-seoul_clean <- seoul_clean %>%
-  mutate(demand_level = case_when(
-    rented_bike_count <= quantile(rented_bike_count, 0.33) ~ "Low",
-    rented_bike_count <= quantile(rented_bike_count, 0.67) ~ "Medium",
-    TRUE ~ "High"
+create_model_recipes <- function(train_data) {
+  cat("Creating model recipes...\n")
+  
+  available_cols <- colnames(train_data)
+  cat("Available columns for recipes:", paste(available_cols, collapse = ", "), "\n")
+  
+  # Base recipe - only with existing columns (IMPROVED)
+  base_recipe <- recipe(rented_bike_count ~ ., data = train_data) %>%
+    step_rm(date) %>%  # Remove date variable
+    step_impute_median(all_numeric_predictors()) %>%
+    step_impute_mode(all_nominal_predictors()) %>%
+    step_dummy(all_nominal_predictors()) %>%
+    step_zv(all_predictors()) %>%  # Remove zero variance
+    step_corr(all_numeric_predictors(), threshold = 0.95) %>%  # Remove highly correlated
+    step_lincomb(all_numeric_predictors()) %>%  # Remove linear combinations
+    step_normalize(all_numeric_predictors())
+  
+  # Weather only recipe (if weather columns exist) - IMPROVED
+  weather_vars <- intersect(c("temperature_c", "humidity_percent", "wind_speed_ms", "wind_speed_kmh", "visibility_km"), available_cols)
+  
+  weather_recipe <- NULL
+  if (length(weather_vars) > 0) {
+    weather_formula <- as.formula(paste("rented_bike_count ~", paste(weather_vars, collapse = " + ")))
+    weather_recipe <- recipe(weather_formula, data = train_data) %>%
+      step_impute_median(all_numeric_predictors()) %>%
+      step_corr(all_numeric_predictors(), threshold = 0.95) %>%  # Remove correlations
+      step_zv(all_predictors()) %>%
+      step_normalize(all_numeric_predictors())
+  }
+  
+  # Temporal only recipe - IMPROVED
+  temporal_vars <- intersect(c("hour", "weekday", "month", "is_weekend", "morning_rush", "evening_rush", "business_hours", "hour_sin", "hour_cos", "day_sin", "day_cos", "seasons", "holiday"), available_cols)
+  
+  temporal_recipe <- NULL
+  if (length(temporal_vars) > 0) {
+    temporal_formula <- as.formula(paste("rented_bike_count ~", paste(temporal_vars, collapse = " + ")))
+    temporal_recipe <- recipe(temporal_formula, data = train_data) %>%
+      step_impute_mode(all_nominal_predictors()) %>%
+      step_dummy(all_nominal_predictors()) %>%
+      step_zv(all_predictors()) %>%
+      step_lincomb(all_numeric_predictors()) %>%  # Remove linear dependencies
+      step_normalize(all_numeric_predictors())
+  }
+  
+  cat("Model recipes created\n")
+  
+  return(list(
+    base = base_recipe,
+    weather = weather_recipe,
+    temporal = temporal_recipe
   ))
-
-# Adjust split ratio based on data size
-split_prop <- ifelse(nrow(seoul_clean) > 500, 0.8, 0.75)
-
-data_split <- initial_split(seoul_clean, prop = split_prop, strata = demand_level)
-train_data <- training(data_split)
-test_data <- testing(data_split)
-
-# Remove helper column
-train_data <- train_data %>% select(-demand_level)
-test_data <- test_data %>% select(-demand_level)
-
-cat("Training data:", nrow(train_data), "observations\n")
-cat("Testing data:", nrow(test_data), "observations\n")
-
-# === MODEL RECIPES ===
-
-cat("\nCreating modeling recipes...\n")
-
-# Base recipe with comprehensive preprocessing
-base_recipe <- recipe(rented_bike_count ~ ., data = train_data) %>%
-  # Remove non-predictive variables
-  step_rm(matches("date"), starts_with("demand_")) %>%
-  # Remove problematic variables first
-  step_zv(all_predictors()) %>%
-  step_nzv(all_predictors()) %>%
-  # Handle variables with single levels
-  step_rm(any_of(c("year"))) %>%  # Remove year if it has only one level
-  # Handle missing values
-  step_impute_median(all_numeric_predictors()) %>%
-  step_impute_mode(all_nominal_predictors()) %>%
-  # Feature transformations (normalize after removing zero variance)
-  step_normalize(all_numeric_predictors()) %>%
-  step_dummy(all_nominal_predictors(), one_hot = FALSE) %>%
-  # Final cleanup
-  step_corr(all_numeric_predictors(), threshold = 0.95)
-
-# Simplified recipe for problematic cases
-simple_recipe <- recipe(rented_bike_count ~ temperature_c + humidity_percent + 
-                          hour + seasons + holiday, data = train_data) %>%
-  step_impute_median(all_numeric_predictors()) %>%
-  step_impute_mode(all_nominal_predictors()) %>%
-  step_normalize(all_numeric_predictors()) %>%
-  step_dummy(all_nominal_predictors(), one_hot = FALSE) %>%
-  step_zv(all_predictors())
-
-cat("Modeling recipes created\n")
+}
 
 # === MODEL SPECIFICATIONS ===
 
-cat("Defining model specifications...\n")
-
-# Linear Regression (baseline) - always available
-lm_spec <- linear_reg() %>%
-  set_engine("lm") %>%
-  set_mode("regression")
-
-# Random Forest (using ranger - usually available)
-rf_spec <- rand_forest(
-  mtry = tune(),
-  trees = tune(), 
-  min_n = tune()
-) %>%
-  set_engine("ranger") %>%
-  set_mode("regression")
-
-# Decision Tree (simple alternative)
-tree_spec <- decision_tree(
-  cost_complexity = tune(),
-  tree_depth = tune(),
-  min_n = tune()
-) %>%
-  set_engine("rpart") %>%
-  set_mode("regression")
-
-# K-Nearest Neighbors (simple alternative)
-knn_spec <- nearest_neighbor(
-  neighbors = tune(),
-  weight_func = tune()
-) %>%
-  set_engine("kknn") %>%
-  set_mode("regression")
-
-cat("Model specifications defined\n")
-
-# === HYPERPARAMETER TUNING ===
-
-cat("Setting up hyperparameter tuning...\n")
-
-# Create cross-validation folds
-set.seed(42)
-cv_folds <- vfold_cv(train_data, v = min(5, floor(nrow(train_data) / 30)))
-
-# Define tuning grids
-rf_grid <- grid_regular(
-  mtry(range = c(1, min(10, 5))),  # Safer range
-  trees(range = c(50, 200)),
-  min_n(range = c(2, 10)),
-  levels = 3
-)
-
-tree_grid <- grid_regular(
-  cost_complexity(range = c(-10, -1)),
-  tree_depth(range = c(1, 10)),
-  min_n(range = c(2, 20)),
-  levels = 3
-)
-
-knn_grid <- grid_regular(
-  neighbors(range = c(3, 15)),
-  weight_func(values = c("rectangular", "triangular")),
-  levels = 3
-)
-
-# === WORKFLOW CREATION AND TRAINING ===
-
-cat("\nCreating and training model workflows...\n")
-
-# Linear Model (no tuning needed)
-lm_workflow <- workflow() %>%
-  add_recipe(simple_recipe) %>%  # Use simpler recipe for linear model
-  add_model(lm_spec)
-
-# Random Forest workflow
-rf_workflow <- workflow() %>%
-  add_recipe(base_recipe) %>%
-  add_model(rf_spec)
-
-# Decision Tree workflow
-tree_workflow <- workflow() %>%
-  add_recipe(simple_recipe) %>%
-  add_model(tree_spec)
-
-# KNN workflow
-knn_workflow <- workflow() %>%
-  add_recipe(simple_recipe) %>%
-  add_model(knn_spec)
-
-# Train models with error handling
-models_results <- list()
-
-# Linear Model (quick training)
-cat("Training Linear Regression model...\n")
-tryCatch({
-  lm_fit <- fit(lm_workflow, data = train_data)
-  models_results[["linear_regression"]] <- lm_fit
-  cat("  Linear Regression: SUCCESS\n")
-}, error = function(e) {
-  cat("  Linear Regression: FAILED -", e$message, "\n")
-})
-
-# Random Forest (with tuning)
-cat("Training Random Forest model...\n")
-tryCatch({
-  rf_tune <- tune_grid(
-    rf_workflow,
-    resamples = cv_folds,
-    grid = rf_grid,
-    metrics = metric_set(rmse, rsq),
-    control = control_grid(save_pred = TRUE, verbose = FALSE)
-  )
+create_model_specs <- function() {
+  cat("Creating model specifications...\n")
   
-  rf_best <- select_best(rf_tune, metric = "rmse")
-  rf_final <- finalize_workflow(rf_workflow, rf_best)
-  rf_fit <- fit(rf_final, data = train_data)
+  # Linear regression models
+  lm_spec <- linear_reg() %>%
+    set_engine("lm") %>%
+    set_mode("regression")
   
-  models_results[["random_forest"]] <- list(fit = rf_fit, tune_results = rf_tune)
-  cat("  Random Forest: SUCCESS\n")
-}, error = function(e) {
-  cat("  Random Forest: FAILED -", e$message, "\n")
-})
-
-# Decision Tree (with tuning)
-cat("Training Decision Tree model...\n")
-tryCatch({
-  tree_tune <- tune_grid(
-    tree_workflow,
-    resamples = cv_folds,
-    grid = tree_grid,
-    metrics = metric_set(rmse, rsq),
-    control = control_grid(save_pred = TRUE, verbose = FALSE)
-  )
+  # Ridge regression with regularization
+  ridge_spec <- linear_reg(penalty = tune(), mixture = 0) %>%
+    set_engine("glmnet") %>%
+    set_mode("regression")
   
-  tree_best <- select_best(tree_tune, metric = "rmse")
-  tree_final <- finalize_workflow(tree_workflow, tree_best)
-  tree_fit <- fit(tree_final, data = train_data)
+  # Lasso regression with regularization
+  lasso_spec <- linear_reg(penalty = tune(), mixture = 1) %>%
+    set_engine("glmnet") %>%
+    set_mode("regression")
   
-  models_results[["decision_tree"]] <- list(fit = tree_fit, tune_results = tree_tune)
-  cat("  Decision Tree: SUCCESS\n")
-}, error = function(e) {
-  cat("  Decision Tree: FAILED -", e$message, "\n")
-})
-
-# KNN (with tuning)
-cat("Training K-Nearest Neighbors model...\n")
-tryCatch({
-  knn_tune <- tune_grid(
-    knn_workflow,
-    resamples = cv_folds,
-    grid = knn_grid,
-    metrics = metric_set(rmse, rsq),
-    control = control_grid(save_pred = TRUE, verbose = FALSE)
-  )
+  # Random forest
+  rf_spec <- rand_forest(
+    mtry = tune(),
+    trees = 500,
+    min_n = tune()
+  ) %>%
+    set_engine("randomForest") %>%
+    set_mode("regression")
   
-  knn_best <- select_best(knn_tune, metric = "rmse")
-  knn_final <- finalize_workflow(knn_workflow, knn_best)
-  knn_fit <- fit(knn_final, data = train_data)
+  cat("Model specifications created: linear, ridge, lasso, random forest\n")
   
-  models_results[["knn"]] <- list(fit = knn_fit, tune_results = knn_tune)
-  cat("  K-Nearest Neighbors: SUCCESS\n")
-}, error = function(e) {
-  cat("  K-Nearest Neighbors: FAILED -", e$message, "\n")
-})
+  return(list(
+    linear = lm_spec,
+    ridge = ridge_spec,
+    lasso = lasso_spec,
+    random_forest = rf_spec
+  ))
+}
 
-# === MODEL EVALUATION ===
+# === MODEL TRAINING AND EVALUATION ===
 
-cat("\nEvaluating models on test data...\n")
+train_and_evaluate_models <- function(recipes, specs, split_data) {
+  cat("Training and evaluating models...\n")
+  
+  train_data <- split_data$train
+  test_data <- split_data$test
+  
+  # Create cross-validation folds
+  set.seed(2024)
+  cv_folds <- vfold_cv(train_data, v = 5, strata = rented_bike_count)
+  
+  # Model combinations to test (only non-NULL recipes)
+  model_combinations <- list()
+  
+  if (!is.null(recipes$weather)) {
+    model_combinations <- append(model_combinations, 
+                                 list(list(name = "Linear_Weather", recipe = recipes$weather, spec = specs$linear)))
+  }
+  
+  if (!is.null(recipes$temporal)) {
+    model_combinations <- append(model_combinations, 
+                                 list(list(name = "Linear_Temporal", recipe = recipes$temporal, spec = specs$linear)))
+  }
+  
+  if (!is.null(recipes$base)) {
+    model_combinations <- append(model_combinations, 
+                                 list(list(name = "Linear_Full", recipe = recipes$base, spec = specs$linear),
+                                      list(name = "Ridge_Full", recipe = recipes$base, spec = specs$ridge),
+                                      list(name = "Lasso_Full", recipe = recipes$base, spec = specs$lasso),
+                                      list(name = "RandomForest_Full", recipe = recipes$base, spec = specs$random_forest)))
+  }
+  
+  results <- list()
+  
+  for (combo in model_combinations) {
+    cat("Training model:", combo$name, "\n")
+    
+    tryCatch({
+      # Create workflow
+      workflow_obj <- workflow() %>%
+        add_recipe(combo$recipe) %>%
+        add_model(combo$spec)
+      
+      # Handle tuning vs non-tuning models
+      if (combo$name %in% c("Linear_Weather", "Linear_Temporal", "Linear_Full")) {
+        # Fit without tuning
+        model_fit <- fit(workflow_obj, data = train_data)
+        
+        # Evaluate on test set
+        predictions <- predict(model_fit, new_data = test_data) %>%
+          bind_cols(test_data) %>%
+          select(.pred, rented_bike_count)
+        
+        metrics_result <- predictions %>%
+          metrics(truth = rented_bike_count, estimate = .pred)
+        
+      } else {
+        # Tune hyperparameters
+        if (combo$name == "Ridge_Full") {
+          tune_grid <- grid_regular(penalty(range = c(-5, 0)), levels = 10)
+        } else if (combo$name == "Lasso_Full") {
+          tune_grid <- grid_regular(penalty(range = c(-5, 0)), levels = 10)
+        } else if (combo$name == "RandomForest_Full") {
+          tune_grid <- grid_regular(
+            mtry(range = c(2, 8)),
+            min_n(range = c(5, 25)),
+            levels = 3
+          )
+        }
+        
+        # Perform tuning
+        tune_results <- tune_grid(
+          workflow_obj,
+          resamples = cv_folds,
+          grid = tune_grid,
+          metrics = metric_set(rmse, rsq, mae)
+        )
+        
+        # Select best model
+        best_params <- select_best(tune_results, metric = "rmse")
+        final_workflow <- finalize_workflow(workflow_obj, best_params)
+        model_fit <- fit(final_workflow, data = train_data)
+        
+        # Evaluate on test set
+        predictions <- predict(model_fit, new_data = test_data) %>%
+          bind_cols(test_data) %>%
+          select(.pred, rented_bike_count)
+        
+        metrics_result <- predictions %>%
+          metrics(truth = rented_bike_count, estimate = .pred)
+      }
+      
+      # Store results
+      results[[combo$name]] <- list(
+        model = model_fit,
+        predictions = predictions,
+        metrics = metrics_result,
+        workflow = workflow_obj
+      )
+      
+      # Print key metrics
+      rmse_val <- metrics_result %>% filter(.metric == "rmse") %>% pull(.estimate)
+      rsq_val <- metrics_result %>% filter(.metric == "rsq") %>% pull(.estimate)
+      mae_val <- metrics_result %>% filter(.metric == "mae") %>% pull(.estimate)
+      
+      cat("  RMSE:", round(rmse_val, 3), "| R²:", round(rsq_val, 3), "| MAE:", round(mae_val, 3), "\n")
+      
+    }, error = function(e) {
+      cat("  Error training", combo$name, ":", e$message, "\n")
+    })
+  }
+  
+  return(results)
+}
 
-# Function to safely evaluate models
-evaluate_model <- function(model_fit, model_name) {
+# === MODEL COMPARISON AND SELECTION ===
+
+compare_and_select_models <- function(results) {
+  cat("Comparing model performances...\n")
+  
+  # Extract metrics for comparison
+  comparison_data <- map_dfr(results, function(result) {
+    result$metrics %>%
+      pivot_wider(names_from = .metric, values_from = .estimate)
+  }, .id = "model_name")
+  
+  # Rank models by RMSE (lower is better)
+  comparison_ranked <- comparison_data %>%
+    arrange(rmse) %>%
+    mutate(
+      rank = row_number(),
+      rmse_improvement = round((max(rmse) - rmse) / max(rmse) * 100, 1)
+    )
+  
+  cat("Model performance ranking:\n")
+  print(comparison_ranked %>% select(model_name, rank, rmse, rsq, mae, rmse_improvement))
+  
+  # Select best model
+  best_model_name <- comparison_ranked$model_name[1]
+  best_model_result <- results[[best_model_name]]
+  
+  cat("Best model selected:", best_model_name, "\n")
+  
+  # Save comparison results
+  write_csv(comparison_ranked, "outputs/model_evaluation/model_comparison.csv")
+  
+  return(list(
+    comparison = comparison_ranked,
+    best_model = best_model_result,
+    best_model_name = best_model_name,
+    all_results = results
+  ))
+}
+
+# === FEATURE IMPORTANCE ANALYSIS (IMPROVED) ===
+
+analyze_feature_importance <- function(best_model, best_model_name) {
+  cat("Analyzing feature importance...\n")
+  
   tryCatch({
-    # Handle different model result structures
-    if (is.list(model_fit) && "fit" %in% names(model_fit)) {
-      fit_object <- model_fit$fit
+    # Check model type using grepl instead of str_detect
+    if (grepl("Linear|Ridge|Lasso", best_model_name)) {
+      # For linear models, extract coefficients
+      model_fit <- best_model$model
+      
+      if (inherits(model_fit, "workflow")) {
+        fitted_model <- extract_fit_parsnip(model_fit)
+      } else {
+        fitted_model <- model_fit
+      }
+      
+      # Create VIP plot
+      vip_plot <- fitted_model %>%
+        vip(num_features = 15) +
+        labs(
+          title = paste("Feature Importance:", best_model_name),
+          subtitle = "Top 15 most important variables"
+        ) +
+        theme_minimal() +
+        theme(plot.title = element_text(size = 14, face = "bold"))
+      
+      ggsave("outputs/model_evaluation/feature_importance.png", vip_plot,
+             width = 10, height = 8, dpi = 300)
+      
+      cat("Feature importance analysis completed for linear model\n")
+      
+    } else if (grepl("RandomForest", best_model_name)) {
+      # For random forest, use built-in importance
+      rf_model <- extract_fit_engine(best_model$model)
+      
+      # Check if importance is available
+      if ("importance" %in% names(rf_model)) {
+        importance_data <- importance(rf_model) %>%
+          as.data.frame() %>%
+          tibble::rownames_to_column("variable") %>%
+          arrange(desc(IncNodePurity)) %>%
+          head(15)
+        
+        vip_plot <- ggplot(importance_data, aes(x = reorder(variable, IncNodePurity), y = IncNodePurity)) +
+          geom_col(fill = "steelblue", alpha = 0.8) +
+          coord_flip() +
+          labs(
+            title = paste("Feature Importance:", best_model_name),
+            x = "Variables",
+            y = "Importance (IncNodePurity)"
+          ) +
+          theme_minimal() +
+          theme(plot.title = element_text(size = 14, face = "bold"))
+        
+        ggsave("outputs/model_evaluation/feature_importance.png", vip_plot,
+               width = 10, height = 8, dpi = 300)
+        
+        cat("Feature importance analysis completed for random forest\n")
+      } else {
+        cat("Random forest model does not have importance information\n")
+      }
     } else {
-      fit_object <- model_fit
+      cat("Model type not supported for feature importance analysis\n")
     }
     
-    # Generate predictions
-    predictions <- predict(fit_object, new_data = test_data) %>%
-      bind_cols(test_data) %>%
-      select(.pred, rented_bike_count)
-    
-    # Calculate metrics
-    metrics_result <- predictions %>%
-      metrics(truth = rented_bike_count, estimate = .pred)
-    
-    return(list(
-      predictions = predictions,
-      metrics = metrics_result,
-      fit = fit_object
-    ))
   }, error = function(e) {
-    cat("Error evaluating", model_name, ":", e$message, "\n")
-    return(NULL)
+    cat("Could not generate feature importance plot:", e$message, "\n")
+    
+    # Create a simple placeholder plot
+    tryCatch({
+      placeholder_plot <- ggplot(data.frame(x = 1, y = 1), aes(x, y)) +
+        geom_text(label = "Feature importance\nnot available\nfor this model", size = 6) +
+        labs(title = paste("Model:", best_model_name)) +
+        theme_void() +
+        theme(plot.title = element_text(size = 14, face = "bold", hjust = 0.5))
+      
+      ggsave("outputs/model_evaluation/feature_importance.png", placeholder_plot,
+             width = 10, height = 8, dpi = 300)
+      
+      cat("Created placeholder feature importance plot\n")
+    }, error = function(e2) {
+      cat("Could not create placeholder plot:", e2$message, "\n")
+    })
   })
 }
 
-# Evaluate all successful models
-evaluation_results <- list()
+# === PREDICTION VISUALIZATION ===
 
-for (model_name in names(models_results)) {
-  cat("Evaluating", model_name, "...\n")
-  result <- evaluate_model(models_results[[model_name]], model_name)
-  if (!is.null(result)) {
-    evaluation_results[[model_name]] <- result
-    
-    # Print key metrics
-    rmse_val <- result$metrics %>% filter(.metric == "rmse") %>% pull(.estimate)
-    rsq_val <- result$metrics %>% filter(.metric == "rsq") %>% pull(.estimate)
-    
-    cat("  RMSE:", round(rmse_val, 3), "\n")
-    cat("  R²:", round(rsq_val, 3), "\n")
-  }
-}
-
-# === SELECT BEST MODEL ===
-
-if (length(evaluation_results) == 0) {
-  cat("No models were successfully trained. Creating fallback simple model...\n")
+create_prediction_visualizations <- function(model_results) {
+  cat("Creating prediction visualizations...\n")
   
-  # Create a very simple linear model as fallback
-  fallback_data <- train_data %>%
-    select(rented_bike_count, temperature_c, humidity_percent, hour) %>%
-    filter(complete.cases(.)) %>%
-    mutate(hour_numeric = as.numeric(as.character(hour)))
+  best_predictions <- model_results$best_model$predictions
   
-  fallback_model <- lm(rented_bike_count ~ temperature_c + humidity_percent + hour_numeric, 
-                       data = fallback_data)
+  # Actual vs Predicted scatter plot
+  pred_plot <- ggplot(best_predictions, aes(x = rented_bike_count, y = .pred)) +
+    geom_point(alpha = 0.6, color = "steelblue") +
+    geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed", linewidth = 1) +
+    geom_smooth(method = "lm", se = TRUE, color = "darkgreen", alpha = 0.3) +
+    labs(
+      title = paste("Prediction Accuracy:", model_results$best_model_name),
+      subtitle = "Red line: perfect prediction, Green line: model trend",
+      x = "Actual Bike Count",
+      y = "Predicted Bike Count"
+    ) +
+    theme_minimal() +
+    theme(plot.title = element_text(size = 14, face = "bold")) +
+    coord_equal()
   
-  # Test the fallback model
-  test_simple <- test_data %>%
-    mutate(hour_numeric = as.numeric(as.character(hour))) %>%
-    filter(complete.cases(select(., temperature_c, humidity_percent, hour_numeric)))
+  ggsave("outputs/model_evaluation/prediction_accuracy.png", pred_plot,
+         width = 10, height = 8, dpi = 300)
   
-  fallback_pred <- predict(fallback_model, newdata = test_simple)
-  fallback_rmse <- sqrt(mean((test_simple$rented_bike_count - fallback_pred)^2))
-  fallback_rsq <- cor(test_simple$rented_bike_count, fallback_pred)^2
-  
-  cat("Fallback model RMSE:", round(fallback_rmse, 3), "\n")
-  cat("Fallback model R²:", round(fallback_rsq, 3), "\n")
-  
-  # Save fallback model
-  saveRDS(fallback_model, "outputs/models/fallback_model.rds")
-  
-  # Create fallback results
-  fallback_results <- data.frame(
-    Model = "Fallback_Linear",
-    RMSE = fallback_rmse,
-    R_squared = fallback_rsq,
-    Best_Model = TRUE,
-    stringsAsFactors = FALSE
-  )
-  
-  write_csv(fallback_results, "outputs/models/model_comparison.csv")
-  
-  cat("Fallback modeling completed successfully\n")
-  
-} else {
-  # Original best model selection code
-  rmse_comparison <- map_dfr(evaluation_results, function(x) {
-    x$metrics %>% filter(.metric == "rmse")
-  }, .id = "model")
-  
-  best_model_name <- rmse_comparison %>%
-    arrange(.estimate) %>%
-    slice(1) %>%
-    pull(model)
-  
-  best_model_result <- evaluation_results[[best_model_name]]
-  best_rmse <- min(rmse_comparison$.estimate)
-  best_rsq <- evaluation_results[[best_model_name]]$metrics %>%
-    filter(.metric == "rsq") %>%
-    pull(.estimate)
-  
-  cat("\nBEST MODEL SELECTED\n")
-  cat("==================\n")
-  cat("Model:", best_model_name, "\n")
-  cat("RMSE:", round(best_rmse, 3), "\n")
-  cat("R²:", round(best_rsq, 3), "\n")
-  
-  # Save models and results (original code)
-  for (model_name in names(evaluation_results)) {
-    model_path <- paste0("outputs/models/", model_name, "_model.rds")
-    saveRDS(evaluation_results[[model_name]]$fit, model_path)
-    cat("Saved:", model_path, "\n")
-  }
-  
-  saveRDS(best_model_result$fit, "outputs/models/best_model.rds")
-  
-  # Create comparison
-  comparison_df <- rmse_comparison %>%
-    left_join(
-      map_dfr(evaluation_results, function(x) {
-        x$metrics %>% filter(.metric == "rsq")
-      }, .id = "model"),
-      by = "model",
-      suffix = c("_rmse", "_rsq")
-    ) %>%
+  # Residual analysis
+  residuals_data <- best_predictions %>%
     mutate(
-      RMSE = round(.estimate_rmse, 3),
-      R_squared = round(.estimate_rsq, 3),
-      Best_Model = model == best_model_name
-    ) %>%
-    select(Model = model, RMSE, R_squared, Best_Model)
-  
-  write_csv(comparison_df, "outputs/models/model_comparison.csv")
-  
-  # Save predictions
-  predictions_df <- best_model_result$predictions %>%
-    mutate(
-      model_used = best_model_name,
       residuals = rented_bike_count - .pred,
-      abs_error = abs(residuals)
+      fitted_values = .pred
     )
   
-  write_csv(predictions_df, "outputs/predictions/test_predictions.csv")
+  residual_plot <- ggplot(residuals_data, aes(x = fitted_values, y = residuals)) +
+    geom_point(alpha = 0.6, color = "coral") +
+    geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+    geom_smooth(method = "loess", se = TRUE, color = "blue") +
+    labs(
+      title = "Residual Analysis",
+      subtitle = "Checking for patterns in model errors",
+      x = "Fitted Values",
+      y = "Residuals"
+    ) +
+    theme_minimal() +
+    theme(plot.title = element_text(size = 14, face = "bold"))
+  
+  ggsave("outputs/model_evaluation/residual_analysis.png", residual_plot,
+         width = 10, height = 8, dpi = 300)
+  
+  # Histogram of residuals
+  residual_hist <- ggplot(residuals_data, aes(x = residuals)) +
+    geom_histogram(aes(y = after_stat(density)), bins = 30, 
+                   fill = "lightblue", alpha = 0.7, color = "white") +
+    geom_density(color = "darkblue", linewidth = 1.2) +
+    labs(
+      title = "Distribution of Model Residuals",
+      subtitle = "Checking assumption of normality",
+      x = "Residuals",
+      y = "Density"
+    ) +
+    theme_minimal() +
+    theme(plot.title = element_text(size = 14, face = "bold"))
+  
+  ggsave("outputs/model_evaluation/residual_distribution.png", residual_hist,
+         width = 10, height = 8, dpi = 300)
 }
 
-# === VARIABLE IMPORTANCE (if available) ===
+# === SAVE MODELS ===
 
-tryCatch({
-  if (exists("best_model_name") && best_model_name == "random_forest") {
-    # Extract variable importance for Random Forest
-    vip_plot <- best_model_result$fit %>%
-      extract_fit_parsnip() %>%
-      vip(num_features = 15) +
-      labs(title = "Variable Importance - Random Forest") +
-      theme_minimal()
-    
-    ggsave("outputs/models/variable_importance.png", vip_plot, 
-           width = 10, height = 8, dpi = 300)
-    
-    cat("Variable importance plot saved\n")
-  }
-}, error = function(e) {
-  cat("Could not generate variable importance plot:", e$message, "\n")
-})
+save_models <- function(model_results) {
+  cat("Saving trained models...\n")
+  
+  # Save best model
+  saveRDS(model_results$best_model$model, "outputs/models/best_model.rds")
+  
+  # Save all model results
+  saveRDS(model_results$all_results, "outputs/models/all_models.rds")
+  
+  # Save predictions
+  write_csv(model_results$best_model$predictions, "outputs/predictions/test_predictions.csv")
+  
+  # Save model comparison
+  write_csv(model_results$comparison, "outputs/model_evaluation/final_model_comparison.csv")
+  
+  cat("Models and results saved successfully\n")
+}
+
+# === MAIN EXECUTION ===
+
+cat("Starting predictive modeling pipeline...\n\n")
+
+# Load and prepare data
+seoul_data <- load_and_validate_data()
+engineered_data <- engineer_features(seoul_data)
+split_result <- split_data(engineered_data)
+
+# Create recipes and model specifications
+recipes <- create_model_recipes(split_result$train)
+specs <- create_model_specs()
+
+# Train and evaluate models
+model_results <- train_and_evaluate_models(recipes, specs, split_result)
+
+# Compare and select best model
+final_results <- compare_and_select_models(model_results)
+
+# Analyze feature importance
+analyze_feature_importance(final_results$best_model, final_results$best_model_name)
+
+# Create visualizations
+create_prediction_visualizations(final_results)
+
+# Save models and results
+save_models(final_results)
 
 # === FINAL SUMMARY ===
 
-cat("\nMODELING PROCESS COMPLETED\n")
-cat("=========================\n")
+cat("\nPREDICTIVE MODELING COMPLETED\n")
+cat("============================\n")
+cat("Models trained:", length(final_results$all_results), "\n")
+cat("Best model:", final_results$best_model_name, "\n")
 
-if (length(evaluation_results) > 0) {
-  cat("Total models trained:", length(evaluation_results), "\n")
-  cat("Training observations:", nrow(train_data), "\n")
-  cat("Testing observations:", nrow(test_data), "\n")
-  cat("Best performing model:", best_model_name, "\n")
-  cat("Best RMSE:", round(best_rmse, 3), "\n")
-  cat("Best R²:", round(best_rsq, 3), "\n")
-} else {
-  cat("Fallback model created due to training issues\n")
-  cat("Training observations:", nrow(train_data), "\n")
-  cat("Testing observations:", nrow(test_data), "\n")
-}
+best_metrics <- final_results$comparison %>% filter(rank == 1)
+cat("Best model performance:\n")
+cat("  RMSE:", round(best_metrics$rmse, 3), "\n")
+cat("  R²:", round(best_metrics$rsq, 3), "\n")
+cat("  MAE:", round(best_metrics$mae, 3), "\n")
 
 cat("\nFiles generated:\n")
-cat("- Model comparison: outputs/models/model_comparison.csv\n")
-if (file.exists("outputs/models/best_model.rds")) {
-  cat("- Best model: outputs/models/best_model.rds\n")
-}
-if (file.exists("outputs/models/fallback_model.rds")) {
-  cat("- Fallback model: outputs/models/fallback_model.rds\n")
-}
-if (file.exists("outputs/predictions/test_predictions.csv")) {
-  cat("- Test predictions: outputs/predictions/test_predictions.csv\n")
-}
-if (file.exists("outputs/models/variable_importance.png")) {
-  cat("- Variable importance: outputs/models/variable_importance.png\n")
-}
+cat("- Best model: outputs/models/best_model.rds\n")
+cat("- All models: outputs/models/all_models.rds\n")
+cat("- Predictions: outputs/predictions/test_predictions.csv\n")
+cat("- Model comparison: outputs/model_evaluation/final_model_comparison.csv\n")
+cat("- Visualizations: outputs/model_evaluation/*.png\n")
 
-cat("=========================\n")
+cat("\nNext phase: Interactive Dashboard (05_dashboard.R)\n")
+cat("============================\n")

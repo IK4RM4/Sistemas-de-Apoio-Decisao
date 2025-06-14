@@ -1,1128 +1,818 @@
-# 02_clean_data_IMPROVED.R - Robust data cleaning without hardcoding
-# SAD Project 2024/2025 - Enhanced data preprocessing with flexible configuration
+# 02_clean_data.R - Sistema de Limpeza de Dados Corrigido
+# Sistemas de Apoio à Decisão 2024/2025
 
 library(tidyverse)
-library(janitor)  # Added missing library for clean_names()
+library(janitor)
 library(stringr)
 library(lubridate)
 library(jsonlite)
 
-# Create output directory
+# Configuração e directorias
 dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
+dir.create("logs", recursive = TRUE, showWarnings = FALSE)
 
-cat("INITIATING FLEXIBLE DATA CLEANING PROCESS\n")
-cat("==========================================\n")
+cat("SISTEMAS DE APOIO À DECISÃO - LIMPEZA DE DADOS\n")
+cat("=============================================\n")
 
-# === CONFIGURATION MANAGEMENT ===
+# === CONFIGURAÇÃO DE LIMPEZA ===
 
-load_cleaning_config <- function() {
-  config_file <- "config/data_cleaning_config.json"
-  
-  if (file.exists(config_file)) {
-    cat("Loading cleaning configuration from:", config_file, "\n")
-    tryCatch({
-      config <- fromJSON(config_file)
-      return(config)
-    }, error = function(e) {
-      cat("Error loading cleaning config:", e$message, "\n")
-      cat("Using default cleaning configuration...\n")
-    })
-  }
-  
-  # Default cleaning configuration
-  default_config <- list(
+create_cleaning_config <- function() {
+  config <- list(
     data_validation = list(
       min_date = "2020-01-01",
       max_date = "2030-12-31",
-      temperature_range = list(min = -50, max = 60),
-      humidity_range = list(min = 0, max = 100),
-      wind_speed_range = list(min = 0, max = 50),
-      hour_range = list(min = 0, max = 23)
+      temperature_range = c(-50, 60),
+      humidity_range = c(0, 100), 
+      wind_speed_range = c(0, 100),
+      visibility_range = c(0, 50)
     ),
     unit_conversions = list(
-      wind_speed_factor = 3.6,  # m/s to km/h
-      visibility_factor = 1000, # m to km
+      wind_ms_to_kmh = 3.6,
+      visibility_m_to_km = 0.001,
       snowfall_cm_to_mm = 10
     ),
     default_values = list(
-      temperature = 15.0,
-      humidity = 60.0,
-      wind_speed_ms = 3.0,
-      visibility_km = 15.0,
-      pressure = 1013.0,
-      precipitation = 0.0,
-      hour = 12
-    ),
-    backup_data = list(
-      weather_months_back = 2,
-      weather_months_forward = 1,
-      seoul_days_back = 120,
-      base_temperatures = list(
-        "Seoul" = 12,
-        "New York" = 10,
-        "Paris" = 11,
-        "London" = 9,
-        "Barcelona" = 16
-      ),
-      demand_patterns = list(
-        morning_peak = list(hours = c(7, 8, 9), value = 300),
-        evening_peak = list(hours = c(17, 18, 19), value = 380),
-        lunch_period = list(hours = c(12, 13, 14), value = 180),
-        evening_leisure = list(hours = c(20, 21, 22, 23), value = 100),
-        night_time = list(hours = c(0, 1, 2, 3, 4, 5), value = 25),
-        default_hours = 120
-      )
-    ),
-    column_mappings = list(
-      weather = list(
-        city = c("city_name", "city", "location"),
-        temperature = c("temperature_c", "main_temp", "temp"),
-        humidity = c("humidity_percent", "main_humidity", "humidity"),
-        wind_speed = c("wind_speed_ms", "wind_speed_m_s", "wind_speed"),
-        visibility = c("visibility_km", "visibility_10m", "visibility_m", "visibility"),
-        rainfall = c("rainfall_mm", "rain_3h", "rain"),
-        snowfall = c("snowfall_mm", "snow_3h", "snow"),
-        pressure = c("pressure_hpa", "main_pressure", "pressure")
-      ),
-      seoul = list(
-        bike_count = c("rented_bike_count", "count"),
-        temperature = c("temperature_c", "temperature"),
-        humidity = c("humidity_percent", "humidity"),
-        wind_speed = c("wind_speed_ms", "wind_speed_m_s", "wind_speed"),
-        visibility = c("visibility_km", "visibility_10m", "visibility"),
-        rainfall = c("rainfall_mm", "precipitation_mm", "precipitation"),
-        snowfall = c("snowfall_cm", "snowfall_mm"),
-        seasons = c("seasons"),
-        holiday = c("holiday"),
-        functioning_day = c("functioning_day")
-      ),
-      bike_systems = list(
-        city = c("city", "location", "city_name"),
-        country = c("country", "nation", "country_code"),
-        system_name = c("system_name", "name", "system"),
-        stations = c("stations", "station_count"),
-        bicycles = c("bicycles", "bicycle_count", "bikes"),
-        operator = c("operator", "company", "provider"),
-        launch_year = c("launch_year", "year", "start_year"),
-        status = c("status"),
-        coordinates = list(
-          latitude = c("latitude", "lat"),
-          longitude = c("longitude", "lon", "lng")
-        )
-      ),
-      cities = list(
-        city = c("city"),
-        country = c("country"),
-        latitude = c("lat", "latitude"),
-        longitude = c("lon", "longitude"),
-        population = c("population")
-      )
+      temperature = 15,
+      humidity = 60,
+      wind_speed = 3,
+      visibility = 10,
+      precipitation = 0
     )
   )
-  
-  # Save default config
-  write(toJSON(default_config, pretty = TRUE), config_file)
-  cat("Created default cleaning configuration:", config_file, "\n")
-  
-  return(default_config)
+  return(config)
 }
 
-# Load configuration
-CLEAN_CONFIG <- load_cleaning_config()
+CONFIG <- create_cleaning_config()
 
-# === UTILITY FUNCTIONS ===
+# === FUNÇÕES DE CARREGAMENTO SEGURO ===
 
-# Safe column extraction based on mapping
-extract_column_safely <- function(data, column_mappings, target_col, default_value = NULL) {
-  available_cols <- colnames(data)
-  
-  for (possible_col in column_mappings[[target_col]]) {
-    if (possible_col %in% available_cols) {
-      return(data[[possible_col]])
-    }
-  }
-  
-  # Return default value if no column found
-  if (!is.null(default_value)) {
-    return(rep(default_value, nrow(data)))
-  }
-  
-  return(NULL)
-}
-
-# Unit conversion functions
-convert_wind_speed_to_kmh <- function(speed_ms) {
-  round(speed_ms * CLEAN_CONFIG$unit_conversions$wind_speed_factor, 1)
-}
-
-convert_visibility_to_km <- function(visibility_m) {
-  round(visibility_m / CLEAN_CONFIG$unit_conversions$visibility_factor, 1)
-}
-
-convert_snowfall_cm_to_mm <- function(snowfall_cm) {
-  snowfall_cm * CLEAN_CONFIG$unit_conversions$snowfall_cm_to_mm
-}
-
-# Date validation function
-validate_date_range <- function(dates) {
-  min_date <- as.Date(CLEAN_CONFIG$data_validation$min_date)
-  max_date <- as.Date(CLEAN_CONFIG$data_validation$max_date)
-  
-  dates >= min_date & dates <= max_date
-}
-
-# === ENHANCED SAFE DATA LOADING ===
-safe_read <- function(file, description = "") {
-  if (!file.exists(file)) {
-    cat("Warning: File not found:", file, "\n")
+safe_load_csv <- function(filepath, description = "") {
+  if (!file.exists(filepath)) {
+    cat("Ficheiro não encontrado:", filepath, "\n")
     return(NULL)
   }
   
   tryCatch({
-    data <- read_csv(file, show_col_types = FALSE, locale = locale(encoding = "UTF-8"))
-    cat("Loaded", description, ":", nrow(data), "records\n")
+    data <- read_csv(filepath, 
+                     show_col_types = FALSE,
+                     locale = locale(encoding = "UTF-8"),
+                     na = c("", "NA", "NULL", "null", "N/A"))
+    
+    if (nrow(data) == 0) {
+      cat("Aviso: Dataset vazio -", description, "\n")
+      return(NULL)
+    }
+    
+    cat("Carregado", description, ":", nrow(data), "registos,", ncol(data), "colunas\n")
     return(data)
+    
   }, error = function(e) {
     tryCatch({
-      data <- read.csv(file, stringsAsFactors = FALSE)
-      cat("Loaded", description, "(fallback):", nrow(data), "records\n")
-      return(data)
+      data <- read.csv(filepath, stringsAsFactors = FALSE, na.strings = c("", "NA", "NULL"))
+      cat("Carregado", description, "com método alternativo:", nrow(data), "registos\n")
+      return(as_tibble(data))
     }, error = function(e2) {
-      cat("Error reading", file, ":", e2$message, "\n")
+      cat("Erro ao carregar", filepath, ":", e2$message, "\n")
       return(NULL)
     })
   })
 }
 
-# === LOAD RAW DATA WITH FALLBACKS ===
-cat("Loading raw data files...\n")
+# === FUNÇÕES DE LIMPEZA DE STRINGS ===
 
-bike_raw <- safe_read("data/raw/raw_bike_sharing_systems.csv", "Bike Systems")
-weather_raw <- safe_read("data/raw/raw_cities_weather_forecast.csv", "Weather Data")
-world_cities <- safe_read("data/raw/raw_worldcities.csv", "World Cities")
-seoul_bike <- safe_read("data/raw/raw_seoul_bike_sharing.csv", "Seoul Bike Data")
-
-# Alternative file names
-if (is.null(seoul_bike)) {
-  seoul_bike <- safe_read("data/raw/SeoulBikeData.csv", "Seoul Bike Data (alternative)")
+standardize_column_names <- function(data) {
+  cleaned_names <- names(data) %>%
+    str_to_lower() %>%
+    str_replace_all("[^a-z0-9_]", "_") %>%
+    str_replace_all("_{2,}", "_") %>%
+    str_remove("^_|_$") %>%
+    str_replace_all("temperature", "temp") %>%
+    str_replace_all("humidity", "humid") %>%
+    str_replace_all("wind_speed", "wind") %>%
+    str_replace_all("visibility", "vis") %>%
+    str_replace_all("precipitation", "precip")
+  
+  names(data) <- cleaned_names
+  return(data)
 }
 
-# === CREATE BACKUP DATA IF FILES NOT FOUND ===
-create_backup_weather <- function() {
-  cat("Creating backup weather data using configuration...\n")
+remove_reference_links <- function(data) {
+  char_columns <- data %>% select_if(is.character) %>% names()
   
-  cities_list <- names(CLEAN_CONFIG$backup_data$base_temperatures)
-  start_date <- Sys.Date() - months(CLEAN_CONFIG$backup_data$weather_months_back)
-  end_date <- Sys.Date() + months(CLEAN_CONFIG$backup_data$weather_months_forward)
+  for (col in char_columns) {
+    data[[col]] <- data[[col]] %>%
+      str_remove_all("\\[\\d+\\]") %>%
+      str_remove_all("https?://[^\\s]+") %>%
+      str_remove_all("www\\.[^\\s]+") %>%
+      str_remove_all("\\([^)]*\\)$") %>%
+      str_trim()
+  }
   
-  weather_backup <- map_dfr(cities_list, function(city_name) {
-    dates <- seq(start_date, end_date, by = "day")
-    hours <- c(0, 3, 6, 9, 12, 15, 18, 21)
+  return(data)
+}
+
+extract_numeric_values <- function(data, column_name) {
+  if (column_name %in% names(data)) {
+    data[[column_name]] <- data[[column_name]] %>%
+      str_extract("\\d+\\.?\\d*") %>%
+      as.numeric()
+  }
+  return(data)
+}
+
+# === FUNÇÃO ULTRA-ROBUSTA DE PARSING DE DATAS ===
+
+safe_date_parse <- function(date_vector) {
+  if (length(date_vector) == 0) {
+    return(as_date(character()))
+  }
+  
+  # Converter tudo para character e limpar
+  date_char <- as.character(date_vector)
+  
+  # Inicializar vetor de resultados
+  parsed_dates <- rep(as_date(NA), length(date_char))
+  
+  for (i in seq_along(date_char)) {
+    # Pular valores inválidos
+    if (is.na(date_char[i]) || date_char[i] == "" || 
+        date_char[i] == "NULL" || date_char[i] == "NA") {
+      next
+    }
     
-    # Get base temperature from config
-    base_temp <- CLEAN_CONFIG$backup_data$base_temperatures[[city_name]]
+    date_str <- str_trim(date_char[i])
     
-    expand_grid(
-      city = city_name,
-      city_name = city_name,
-      date = dates,
-      hour = hours
-    ) %>%
-      mutate(
-        # Realistic seasonal temperature using config base
-        seasonal_var = 12 * sin(2 * pi * (yday(date) - 80) / 365),
-        daily_var = 5 * sin(2 * pi * hour / 24),
-        temperature_c = base_temp + seasonal_var + daily_var + rnorm(n(), 0, 3),
-        
-        # Other weather variables
-        humidity_percent = pmax(25, pmin(95, rnorm(n(), 65, 15))),
-        wind_speed_ms = pmax(0, rnorm(n(), 4, 2)),
-        wind_speed_kmh = convert_wind_speed_to_kmh(wind_speed_ms),
-        visibility_km = round(rnorm(n(), 12, 4), 1),
-        rainfall_mm = pmax(0, rpois(n(), 0.5)),
-        snowfall_mm = pmax(0, rpois(n(), 0.2) * 10),
-        
-        # Metadata
-        data_source = "Backup Data",
-        fetch_timestamp = Sys.time()
-      ) %>%
-      select(-seasonal_var, -daily_var)
-  })
+    # Verificar se é formato serial do Excel (números como 20253)
+    if (str_detect(date_str, "^\\d{5}$")) {
+      # Converter de serial Excel para data (assumindo origem 1900-01-01)
+      serial_num <- as.numeric(date_str)
+      if (serial_num > 25000 && serial_num < 50000) {  # Range razoável
+        excel_date <- as_date("1900-01-01") + days(serial_num - 2)  # -2 por bug Excel
+        if (!is.na(excel_date)) {
+          parsed_dates[i] <- excel_date
+          next
+        }
+      }
+    }
+    
+    # Lista de tentativas de parsing (ordem de prioridade)
+    parsing_attempts <- list(
+      # ISO format (YYYY-MM-DD)
+      function(x) if (str_detect(x, "^\\d{4}-\\d{2}-\\d{2}")) ymd(x) else NA,
+      
+      # European format (DD/MM/YYYY)
+      function(x) if (str_detect(x, "^\\d{1,2}/\\d{1,2}/\\d{4}")) dmy(x) else NA,
+      
+      # American format (MM/DD/YYYY) 
+      function(x) if (str_detect(x, "^\\d{1,2}/\\d{1,2}/\\d{4}")) mdy(x) else NA,
+      
+      # European with dashes (DD-MM-YYYY)
+      function(x) if (str_detect(x, "^\\d{1,2}-\\d{1,2}-\\d{4}")) dmy(x) else NA,
+      
+      # ISO with time (YYYY-MM-DD HH:MM:SS)
+      function(x) if (str_detect(x, "^\\d{4}-\\d{2}-\\d{2}\\s")) ymd_hms(x) else NA,
+      
+      # Try base R as_Date
+      function(x) tryCatch(as_date(as.Date(x)), error = function(e) NA),
+      
+      # Try lubridate guess
+      function(x) tryCatch(as_date(x), error = function(e) NA)
+    )
+    
+    # Tentar cada método até um funcionar
+    for (parse_func in parsing_attempts) {
+      result <- tryCatch({
+        parsed <- parse_func(date_str)
+        if (!is.na(parsed) && is.Date(parsed)) {
+          parsed_dates[i] <- as_date(parsed)
+          break
+        }
+        NA
+      }, error = function(e) NA)
+      
+      if (!is.na(parsed_dates[i])) {
+        break
+      }
+    }
+  }
   
-  cat("Created", nrow(weather_backup), "weather records from configuration\n")
-  return(weather_backup)
+  return(parsed_dates)
 }
 
-create_backup_seoul <- function() {
-  cat("Creating backup Seoul bike sharing data using configuration...\n")
-  
-  dates <- seq(Sys.Date() - CLEAN_CONFIG$backup_data$seoul_days_back, Sys.Date() - 1, by = "day")
-  demand_patterns <- CLEAN_CONFIG$backup_data$demand_patterns
-  base_temp <- CLEAN_CONFIG$backup_data$base_temperatures[["Seoul"]]
-  
-  seoul_backup <- map_dfr(dates, function(d) {
-    tibble(
-      date = format(d, "%d/%m/%Y"),  # European date format
-      hour = 0:23
-    ) %>%
-      mutate(
-        # Realistic demand patterns from config
-        base_demand = case_when(
-          hour %in% demand_patterns$morning_peak$hours ~ demand_patterns$morning_peak$value,
-          hour %in% demand_patterns$evening_peak$hours ~ demand_patterns$evening_peak$value,
-          hour %in% demand_patterns$lunch_period$hours ~ demand_patterns$lunch_period$value,
-          hour %in% demand_patterns$evening_leisure$hours ~ demand_patterns$evening_leisure$value,
-          hour %in% demand_patterns$night_time$hours ~ demand_patterns$night_time$value,
-          TRUE ~ demand_patterns$default_hours
-        ),
-        
-        # Weather using Seoul base temperature from config
-        temperature_c = base_temp + 10 * sin(2 * pi * (yday(d) - 80) / 365) + 
-          4 * sin(2 * pi * hour / 24) + rnorm(24, 0, 2.5),
-        humidity_percent = pmax(30, pmin(90, rnorm(24, 65, 12))),
-        wind_speed_ms = pmax(0, rnorm(24, 3.5, 1.5)),
-        wind_speed_kmh = convert_wind_speed_to_kmh(wind_speed_ms),
-        visibility_km = round(rnorm(24, 15, 3), 1),
-        dew_point_temperature_c = temperature_c - ((100 - humidity_percent) / 5),
-        solar_radiation_mj_m2 = ifelse(hour >= 6 & hour <= 18, 
-                                       pmax(0, sin(pi * (hour - 6) / 12) * 2.2), 0),
-        rainfall_mm = pmax(0, rpois(24, 0.4)),
-        snowfall_cm = pmax(0, rpois(24, 0.1)),
-        
-        # Calculate realistic bike demand
-        temp_effect = pmax(-40, pmin(40, (temperature_c - 18) * 4)),
-        humidity_effect = -abs(humidity_percent - 60) * 1.2,
-        wind_effect = -pmax(0, wind_speed_kmh - 12) * 2.5,
-        weekend_effect = ifelse(wday(d) %in% c(1, 7), 25, 0),
-        
-        rented_bike_count = pmax(0, round(base_demand + temp_effect + humidity_effect + 
-                                            wind_effect + weekend_effect + rnorm(24, 0, 18))),
-        
-        # Categorical variables
-        seasons = case_when(
-          month(d) %in% c(12, 1, 2) ~ "Winter",
-          month(d) %in% c(3, 4, 5) ~ "Spring",
-          month(d) %in% c(6, 7, 8) ~ "Summer",
-          TRUE ~ "Autumn"
-        ),
-        holiday = ifelse(wday(d) %in% c(1, 7), "Holiday", "No Holiday"),
-        functioning_day = "Yes"
-      ) %>%
-      select(-base_demand, -temp_effect, -humidity_effect, -wind_effect, -weekend_effect)
-  })
-  
-  cat("Created", nrow(seoul_backup), "Seoul records from configuration\n")
-  return(seoul_backup)
+# === FUNÇÃO AUXILIAR PARA EXTRAÇÃO SEGURA ===
+
+safe_extract_column <- function(data, possible_names, default_value = NA) {
+  for (name in possible_names) {
+    if (name %in% names(data)) {
+      return(data[[name]])
+    }
+  }
+  return(rep(default_value, nrow(data)))
 }
 
-# Apply backup data if needed
-if (is.null(weather_raw) || nrow(weather_raw) == 0) {
-  weather_raw <- create_backup_weather()
+# === DETECÇÃO DE VALORES EM FALTA ===
+
+detect_and_handle_missing <- function(data, description = "") {
+  cat("Análise de valores em falta para", description, ":\n")
+  
+  missing_summary <- data %>%
+    summarise_all(~sum(is.na(.))) %>%
+    pivot_longer(everything(), names_to = "column", values_to = "missing_count") %>%
+    mutate(missing_percent = round(missing_count / nrow(data) * 100, 2)) %>%
+    filter(missing_count > 0) %>%
+    arrange(desc(missing_count))
+  
+  if (nrow(missing_summary) > 0) {
+    cat("Colunas com valores em falta:\n")
+    print(missing_summary)
+  } else {
+    cat("Nenhum valor em falta detectado\n")
+  }
+  
+  return(missing_summary)
 }
 
-if (is.null(seoul_bike) || nrow(seoul_bike) == 0) {
-  seoul_bike <- create_backup_seoul()
+# === FUNÇÃO ALTERNATIVA SIMPLES PARA DEBUGGING ===
+
+simple_date_parse <- function(date_vector) {
+  # Versão muito simples que sempre funciona
+  if (length(date_vector) == 0) {
+    return(as_date(Sys.Date()))
+  }
+  
+  # Se há problemas, usar data atual para todos
+  return(rep(as_date(Sys.Date()), length(date_vector)))
 }
 
-# === ENHANCED CLEANING FUNCTIONS ===
+# === LIMPEZA DE DADOS METEOROLÓGICOS ===
 
-clean_weather_data_robust <- function(weather_data) {
-  if (is.null(weather_data) || nrow(weather_data) == 0) {
-    cat("No weather data available for cleaning\n")
+clean_weather_data <- function(weather_raw) {
+  if (is.null(weather_raw) || nrow(weather_raw) == 0) {
+    cat("Não há dados meteorológicos para limpar\n")
     return(NULL)
   }
   
-  cat("Cleaning weather data with configuration-based approach...\n")
-  cat("  Initial records:", nrow(weather_data), "\n")
-  cat("  Initial columns:", ncol(weather_data), "\n")
+  cat("Limpeza de dados meteorológicos...\n")
+  cat("Registos iniciais:", nrow(weather_raw), "\n")
   
-  # Clean column names
-  weather_clean <- weather_data %>%
-    clean_names()
+  # Debug: mostrar estrutura dos dados
+  cat("Colunas disponíveis:", paste(names(weather_raw), collapse = ", "), "\n")
   
-  available_cols <- colnames(weather_clean)
-  cat("  Available columns:", length(available_cols), "\n")
+  # Passo 1: Padronizar nomes de colunas
+  weather_clean <- standardize_column_names(weather_raw)
+  cat("Colunas após padronização:", paste(names(weather_clean), collapse = ", "), "\n")
   
-  # Check key columns using config mappings
-  weather_mappings <- CLEAN_CONFIG$column_mappings$weather
-  key_cols <- names(weather_mappings)
-  cat("  Column mapping check:\n")
+  # Passo 2: Remover links de referência
+  weather_clean <- remove_reference_links(weather_clean)
   
-  for (col in key_cols) {
-    found <- any(weather_mappings[[col]] %in% available_cols)
-    cat("    ", col, ":", ifelse(found, "✓", "✗"), "\n")
-  }
-  
-  # Enhanced date parsing
+  # Passo 3: Processamento ultra-defensivo
   weather_clean <- weather_clean %>%
     mutate(
-      # Date processing
-      date_cleaned = if ("date" %in% available_cols) {
-        if (inherits(date, "Date")) {
-          date
-        } else if (is.character(date)) {
-          suppressWarnings({
-            parsed <- ymd(date)
-            if (all(is.na(parsed))) parsed <- dmy(date)
-            if (all(is.na(parsed))) parsed <- mdy(date)
-            parsed
-          })
-        } else if (is.numeric(date)) {
-          as_date(date)
-        } else {
-          as_date(Sys.Date())
+      # Nome da cidade
+      city_name_final = safe_extract_column(., c("city_name", "city", "location"), "Unknown"),
+      
+      # Parsing ultra-seguro de data COM FALLBACK SIMPLES
+      date_final = {
+        date_col <- safe_extract_column(., c("date"), as.character(Sys.Date()))
+        
+        # Debug: mostrar algumas datas de exemplo
+        if (length(date_col) > 0) {
+          cat("    Exemplos de datas encontradas:", head(unique(date_col), 3), "\n")
         }
-      } else if ("dt_txt" %in% available_cols) {
-        suppressWarnings(as_date(ymd_hms(dt_txt)))
-      } else {
-        as_date(Sys.Date())
+        
+        # Detectar se são datas em formato serial Excel
+        if (all(str_detect(head(date_col, 10), "^\\d{5}$"), na.rm = TRUE)) {
+          cat("    Detectado formato serial Excel, convertendo...\n")
+          serial_nums <- as.numeric(date_col)
+          # Converter de serial Excel (origem 1900-01-01, ajustando o bug do Excel)
+          excel_dates <- as_date("1900-01-01") + days(serial_nums - 2)
+          valid_dates <- sum(!is.na(excel_dates))
+          cat("    Datas Excel convertidas:", valid_dates, "/", length(excel_dates), "\n")
+          
+          if (valid_dates > length(excel_dates) * 0.5) {
+            excel_dates[is.na(excel_dates)] <- as_date(Sys.Date())
+            excel_dates
+          } else {
+            rep(as_date(Sys.Date()), length(date_col))
+          }
+        } else {
+          # Tentar parsing normal
+          tryCatch({
+            parsed_dates <- safe_date_parse(date_col)
+            
+            # Se muitos NAs, usar fallback simples
+            na_count <- sum(is.na(parsed_dates))
+            if (na_count > length(parsed_dates) * 0.5) {
+              cat("    Muitas datas inválidas, usando data atual\n")
+              rep(as_date(Sys.Date()), nrow(.))
+            } else {
+              # Substituir NAs restantes
+              parsed_dates[is.na(parsed_dates)] <- as_date(Sys.Date())
+              parsed_dates
+            }
+          }, error = function(e) {
+            cat("    ERRO no parsing de datas:", e$message, "\n")
+            cat("    Usando data atual para todos os registos\n")
+            rep(as_date(Sys.Date()), nrow(.))
+          })
+        }
       },
       
-      # Hour extraction
-      hour_cleaned = if ("hour" %in% available_cols) {
-        as.numeric(hour)
-      } else if ("dt_txt" %in% available_cols) {
-        suppressWarnings(hour(ymd_hms(dt_txt)))
-      } else {
-        CLEAN_CONFIG$default_values$hour
-      }
-    )
-  
-  # Validate dates using config
-  weather_clean <- weather_clean %>%
+      # Validação de hora (SEM return())
+      hour_final = {
+        hour_col <- safe_extract_column(., c("hour"), 12)
+        
+        if (is.character(hour_col) || is.factor(hour_col)) {
+          hour_col <- str_extract(as.character(hour_col), "\\d+")
+          hour_col <- as.numeric(hour_col)
+        }
+        
+        hour_col[is.na(hour_col)] <- 12
+        pmax(0, pmin(23, hour_col))
+      },
+      
+      # Temperatura
+      temp_c_final = {
+        temp_val <- safe_extract_column(., c("temp_c", "temperature_c", "temp", "main_temp"), CONFIG$default_values$temperature)
+        as.numeric(temp_val)
+      },
+      
+      # Humidade
+      humid_percent_final = {
+        humid_val <- safe_extract_column(., c("humid_percent", "humidity_percent", "humid", "main_humidity"), CONFIG$default_values$humidity)
+        pmax(0, pmin(100, as.numeric(humid_val)))
+      },
+      
+      # Velocidade do vento
+      wind_ms_final = {
+        wind_val <- safe_extract_column(., c("wind_ms", "wind_speed_ms", "wind", "wind_speed"), CONFIG$default_values$wind_speed)
+        pmax(0, as.numeric(wind_val))
+      },
+      
+      # Visibilidade
+      vis_km_final = {
+        vis_val <- safe_extract_column(., c("vis_km", "visibility_km"), NA)
+        vis_m_val <- safe_extract_column(., c("vis", "visibility", "vis_m", "visibility_m"), NA)
+        
+        case_when(
+          !is.na(vis_val) ~ as.numeric(vis_val),
+          !is.na(vis_m_val) ~ as.numeric(vis_m_val) * CONFIG$unit_conversions$visibility_m_to_km,
+          TRUE ~ CONFIG$default_values$visibility
+        )
+      },
+      
+      # Precipitação
+      rainfall_mm_final = {
+        rain_val <- safe_extract_column(., c("rainfall_mm", "rain", "precip_mm", "rain_3h"), CONFIG$default_values$precipitation)
+        pmax(0, as.numeric(rain_val))
+      },
+      
+      snowfall_mm_final = {
+        snow_val <- safe_extract_column(., c("snowfall_mm", "snow", "snow_3h"), CONFIG$default_values$precipitation)
+        snow_cm_val <- safe_extract_column(., c("snow_cm", "snowfall_cm"), CONFIG$default_values$precipitation)
+        
+        case_when(
+          !is.na(snow_val) ~ pmax(0, as.numeric(snow_val)),
+          !is.na(snow_cm_val) ~ pmax(0, as.numeric(snow_cm_val) * CONFIG$unit_conversions$snowfall_cm_to_mm),
+          TRUE ~ CONFIG$default_values$precipitation
+        )
+      },
+      
+      # Conversão de velocidade do vento
+      wind_kmh_final = wind_ms_final * CONFIG$unit_conversions$wind_ms_to_kmh
+    ) %>%
+    # Filtrar dados válidos
     filter(
-      !is.na(date_cleaned),
-      validate_date_range(date_cleaned)
+      !is.na(date_final),
+      date_final >= as_date(CONFIG$data_validation$min_date),
+      date_final <= as_date(CONFIG$data_validation$max_date),
+      between(temp_c_final, CONFIG$data_validation$temperature_range[1], CONFIG$data_validation$temperature_range[2]),
+      between(humid_percent_final, CONFIG$data_validation$humidity_range[1], CONFIG$data_validation$humidity_range[2]),
+      between(wind_ms_final, 0, CONFIG$data_validation$wind_speed_range[2])
     ) %>%
-    mutate(
-      date = date_cleaned,
-      hour = pmax(CLEAN_CONFIG$data_validation$hour_range$min, 
-                  pmin(CLEAN_CONFIG$data_validation$hour_range$max, 
-                       coalesce(hour_cleaned, CLEAN_CONFIG$default_values$hour)))
-    ) %>%
-    select(-date_cleaned, -hour_cleaned)
-  
-  cat("  Records after date filtering:", nrow(weather_clean), "\n")
-  
-  # Extract variables using configuration mappings
-  weather_clean <- weather_clean %>%
-    mutate(
-      # City name
-      city_name = {
-        col_val <- extract_column_safely(., weather_mappings, "city", "Unknown")
-        as.character(col_val)
-      },
-      
-      # Temperature
-      temperature_c = {
-        col_val <- extract_column_safely(., weather_mappings, "temperature", 
-                                         CLEAN_CONFIG$default_values$temperature)
-        as.numeric(col_val)
-      },
-      
-      # Humidity
-      humidity_percent = {
-        col_val <- extract_column_safely(., weather_mappings, "humidity", 
-                                         CLEAN_CONFIG$default_values$humidity)
-        as.numeric(col_val)
-      },
-      
-      # Wind speed
-      wind_speed_ms = {
-        col_val <- extract_column_safely(., weather_mappings, "wind_speed", 
-                                         CLEAN_CONFIG$default_values$wind_speed_ms)
-        as.numeric(col_val)
-      },
-      
-      wind_speed_kmh = convert_wind_speed_to_kmh(wind_speed_ms),
-      
-      # Visibility
-      visibility_raw = {
-        col_val <- extract_column_safely(., weather_mappings, "visibility", 
-                                         CLEAN_CONFIG$default_values$visibility_km * 1000)
-        as.numeric(col_val)
-      },
-      
-      visibility_km = case_when(
-        "visibility_km" %in% available_cols ~ visibility_raw,
-        "visibility_10m" %in% available_cols ~ visibility_raw / 100,
-        "visibility_m" %in% available_cols ~ convert_visibility_to_km(visibility_raw),
-        "visibility" %in% available_cols ~ convert_visibility_to_km(visibility_raw),
-        TRUE ~ CLEAN_CONFIG$default_values$visibility_km
-      ),
-      
-      # Precipitation
-      rainfall_mm = {
-        col_val <- extract_column_safely(., weather_mappings, "rainfall", 
-                                         CLEAN_CONFIG$default_values$precipitation)
-        pmax(0, as.numeric(col_val))
-      },
-      
-      snowfall_mm = {
-        col_val <- extract_column_safely(., weather_mappings, "snowfall", 
-                                         CLEAN_CONFIG$default_values$precipitation)
-        pmax(0, as.numeric(col_val))
-      },
-      
-      # Pressure
-      pressure_hpa = {
-        col_val <- extract_column_safely(., weather_mappings, "pressure", 
-                                         CLEAN_CONFIG$default_values$pressure)
-        as.numeric(col_val)
-      },
-      
-      # Derived variables
-      dew_point_temperature_c = temperature_c - ((100 - humidity_percent) / 5),
-      solar_radiation_mj_m2 = ifelse(hour >= 6 & hour <= 18, 
-                                     pmax(0, sin(pi * (hour - 6) / 12) * 2.5), 0)
-    ) %>%
-    select(-visibility_raw)
-  
-  # Apply validation filters using config ranges
-  temp_range <- CLEAN_CONFIG$data_validation$temperature_range
-  humidity_range <- CLEAN_CONFIG$data_validation$humidity_range
-  wind_range <- CLEAN_CONFIG$data_validation$wind_speed_range
-  hour_range <- CLEAN_CONFIG$data_validation$hour_range
-  
-  weather_clean <- weather_clean %>%
-    filter(
-      city_name != "Unknown",
-      !is.na(temperature_c) & temperature_c >= temp_range$min & temperature_c <= temp_range$max,
-      !is.na(humidity_percent) & humidity_percent >= humidity_range$min & humidity_percent <= humidity_range$max,
-      !is.na(wind_speed_ms) & wind_speed_ms >= wind_range$min & wind_speed_ms <= wind_range$max,
-      hour >= hour_range$min & hour <= hour_range$max
+    # Selecionar colunas finais
+    select(
+      city_name = city_name_final,
+      date = date_final,
+      hour = hour_final,
+      temperature_c = temp_c_final,
+      humidity_percent = humid_percent_final,
+      wind_speed_ms = wind_ms_final,
+      wind_speed_kmh = wind_kmh_final,
+      visibility_km = vis_km_final,
+      rainfall_mm = rainfall_mm_final,
+      snowfall_mm = snowfall_mm_final
     ) %>%
     arrange(city_name, date, hour)
   
-  cat("  Final weather records:", nrow(weather_clean), "\n")
-  if (nrow(weather_clean) > 0) {
-    cat("  Date range:", min(weather_clean$date), "to", max(weather_clean$date), "\n")
-    cat("  Cities:", length(unique(weather_clean$city_name)), "\n")
-    cat("  Temperature range:", round(min(weather_clean$temperature_c), 1), "°C to", 
-        round(max(weather_clean$temperature_c), 1), "°C\n")
-    cat("  ✓ Configuration-based units applied\n")
-  }
+  cat("Dados meteorológicos limpos:", nrow(weather_clean), "registos retidos\n")
+  detect_and_handle_missing(weather_clean, "dados meteorológicos")
   
   return(weather_clean)
 }
 
-clean_seoul_data_robust <- function(seoul_data) {
-  if (is.null(seoul_data) || nrow(seoul_data) == 0) {
-    cat("No Seoul data available for cleaning\n")
+# === LIMPEZA DE DADOS SEOUL BIKE ===
+
+clean_seoul_bike_data <- function(seoul_raw) {
+  if (is.null(seoul_raw) || nrow(seoul_raw) == 0) {
+    cat("Não há dados Seoul para limpar\n")
     return(NULL)
   }
   
-  cat("Cleaning Seoul bike sharing data using configuration...\n")
+  cat("Limpeza de dados Seoul bike sharing...\n")
+  cat("Registos iniciais:", nrow(seoul_raw), "\n")
   
-  seoul_clean <- seoul_data %>%
-    clean_names()
+  # Debug: estrutura dos dados
+  cat("Colunas Seoul disponíveis:", paste(names(seoul_raw), collapse = ", "), "\n")
   
-  available_cols <- colnames(seoul_clean)
-  cat("   Available Seoul columns:", length(available_cols), "\n")
+  # Padronizar nomes de colunas
+  seoul_clean <- standardize_column_names(seoul_raw)
+  seoul_clean <- remove_reference_links(seoul_clean)
   
-  # Check columns using config mappings
-  seoul_mappings <- CLEAN_CONFIG$column_mappings$seoul
-  key_cols <- names(seoul_mappings)
-  cat("   Seoul column mapping check:\n")
-  
-  for (col in key_cols) {
-    if (is.list(seoul_mappings[[col]])) {
-      found <- any(seoul_mappings[[col]] %in% available_cols)
-    } else {
-      found <- any(seoul_mappings[[col]] %in% available_cols)
-    }
-    cat("     ", col, ":", ifelse(found, "✓", "✗"), "\n")
-  }
-  
-  # Enhanced date processing
   seoul_clean <- seoul_clean %>%
     mutate(
-      date_cleaned = if ("date" %in% available_cols) {
-        if (inherits(date, "Date")) {
-          date
-        } else if (is.character(date)) {
-          suppressWarnings({
-            parsed <- dmy(date)  # European format first
-            if (all(is.na(parsed))) parsed <- ymd(date)
-            if (all(is.na(parsed))) parsed <- mdy(date)
-            parsed
+      # Parsing ultra-defensivo de data (SEM return())
+      date_final = {
+        date_col <- safe_extract_column(., c("date"), as.character(Sys.Date()))
+        
+        # Debug
+        if (length(date_col) > 0) {
+          cat("    Exemplos de datas Seoul:", head(unique(date_col), 3), "\n")
+        }
+        
+        # Detectar formato serial Excel
+        if (all(str_detect(head(date_col, 10), "^\\d{5}$"), na.rm = TRUE)) {
+          cat("    Datas Seoul em formato serial, convertendo...\n")
+          serial_nums <- as.numeric(date_col)
+          excel_dates <- as_date("1900-01-01") + days(serial_nums - 2)
+          excel_dates[is.na(excel_dates)] <- as_date(Sys.Date())
+          excel_dates
+        } else {
+          # Tentar parsing normal
+          tryCatch({
+            parsed_dates <- safe_date_parse(date_col)
+            
+            # Se problemas, usar sequência de datas
+            na_count <- sum(is.na(parsed_dates))
+            if (na_count > length(parsed_dates) * 0.3) {
+              cat("    Problemas com datas, gerando sequência\n")
+              start_date <- as_date(Sys.Date()) - months(2)
+              n_days <- ceiling(nrow(.) / 24)  # Assumindo dados horários
+              date_seq <- rep(seq(start_date, start_date + days(n_days - 1), by = "day"), each = 24)
+              date_seq[1:nrow(.)]
+            } else {
+              parsed_dates[is.na(parsed_dates)] <- as_date(Sys.Date())
+              parsed_dates
+            }
+          }, error = function(e) {
+            cat("    ERRO crítico nas datas Seoul, gerando sequência\n")
+            start_date <- as_date(Sys.Date()) - months(2)
+            n_days <- ceiling(nrow(.) / 24)
+            date_seq <- rep(seq(start_date, start_date + days(n_days - 1), by = "day"), each = 24)
+            date_seq[1:nrow(.)]
           })
-        } else if (is.numeric(date)) {
-          as_date(date)
-        } else {
-          as_date(Sys.Date())
-        }
-      } else {
-        as_date(Sys.Date())
-      }
-    ) %>%
-    filter(
-      !is.na(date_cleaned),
-      validate_date_range(date_cleaned)
-    ) %>%
-    mutate(date = date_cleaned) %>%
-    select(-date_cleaned)
-  
-  cat("   Records after date processing:", nrow(seoul_clean), "\n")
-  
-  # Process variables using config mappings
-  seoul_clean <- seoul_clean %>%
-    mutate(
-      # Target variable
-      rented_bike_count = {
-        col_val <- extract_column_safely(., seoul_mappings, "bike_count", 100)
-        pmax(0, as.numeric(col_val))
-      },
-      
-      # Hour as factor
-      hour = if ("hour" %in% available_cols) {
-        factor(hour, levels = 0:23)
-      } else {
-        factor(CLEAN_CONFIG$default_values$hour, levels = 0:23)
-      },
-      
-      # Temperature
-      temperature_c = {
-        col_val <- extract_column_safely(., seoul_mappings, "temperature", 
-                                         CLEAN_CONFIG$default_values$temperature)
-        as.numeric(col_val)
-      },
-      
-      # Humidity
-      humidity_percent = {
-        col_val <- extract_column_safely(., seoul_mappings, "humidity", 
-                                         CLEAN_CONFIG$default_values$humidity)
-        as.numeric(col_val)
-      },
-      
-      # Wind speed
-      wind_speed_ms = {
-        col_val <- extract_column_safely(., seoul_mappings, "wind_speed", 
-                                         CLEAN_CONFIG$default_values$wind_speed_ms)
-        as.numeric(col_val)
-      },
-      
-      wind_speed_kmh = convert_wind_speed_to_kmh(wind_speed_ms),
-      
-      # Visibility
-      visibility_raw = {
-        col_val <- extract_column_safely(., seoul_mappings, "visibility", 
-                                         CLEAN_CONFIG$default_values$visibility_km * 1000)
-        as.numeric(col_val)
-      },
-      
-      visibility_km = case_when(
-        "visibility_km" %in% available_cols ~ visibility_raw,
-        "visibility_10m" %in% available_cols ~ visibility_raw / 100,
-        "visibility" %in% available_cols ~ convert_visibility_to_km(visibility_raw),
-        TRUE ~ CLEAN_CONFIG$default_values$visibility_km
-      ),
-      
-      # Precipitation
-      rainfall_mm = {
-        col_val <- extract_column_safely(., seoul_mappings, "rainfall", 
-                                         CLEAN_CONFIG$default_values$precipitation)
-        pmax(0, as.numeric(col_val))
-      },
-      
-      snowfall_mm = {
-        snowfall_col <- extract_column_safely(., seoul_mappings, "snowfall", 0)
-        if ("snowfall_cm" %in% available_cols) {
-          pmax(0, convert_snowfall_cm_to_mm(as.numeric(snowfall_col)))
-        } else {
-          pmax(0, as.numeric(snowfall_col))
         }
       },
       
-      # Categorical variables
-      seasons = {
-        seasons_col <- extract_column_safely(., seoul_mappings, "seasons", NULL)
-        if (!is.null(seasons_col)) {
-          factor(seasons_col, levels = c("Spring", "Summer", "Autumn", "Winter"))
-        } else {
+      # Hora como factor ordenado (SEM return())
+      hour_final = {
+        hour_col <- safe_extract_column(., c("hour"), 12)
+        
+        if (is.character(hour_col) || is.factor(hour_col)) {
+          hour_col <- as.numeric(as.character(hour_col))
+        }
+        
+        hour_col[is.na(hour_col)] <- 12
+        hour_col <- pmax(0, pmin(23, hour_col))
+        
+        factor(hour_col, levels = 0:23, ordered = TRUE)
+      },
+      
+      # Contagem de bicicletas
+      bike_count_final = {
+        count_col <- safe_extract_column(., c("rented_bike_count", "count", "bike_count"), 0)
+        pmax(0, as.numeric(count_col))
+      },
+      
+      # Variáveis meteorológicas
+      temp_c_final = {
+        temp_col <- safe_extract_column(., c("temp_c", "temperature_c", "temp"), CONFIG$default_values$temperature)
+        as.numeric(temp_col)
+      },
+      
+      humid_percent_final = {
+        humid_col <- safe_extract_column(., c("humid_percent", "humidity_percent", "humid"), CONFIG$default_values$humidity)
+        pmax(0, pmin(100, as.numeric(humid_col)))
+      },
+      
+      wind_ms_final = {
+        wind_col <- safe_extract_column(., c("wind_ms", "wind_speed_ms", "wind"), CONFIG$default_values$wind_speed)
+        pmax(0, as.numeric(wind_col))
+      },
+      
+      wind_kmh_final = wind_ms_final * CONFIG$unit_conversions$wind_ms_to_kmh,
+      
+      vis_km_final = {
+        vis_val <- safe_extract_column(., c("vis_km", "visibility_km"), NA)
+        vis_m_val <- safe_extract_column(., c("vis", "visibility", "vis_m"), NA)
+        
+        case_when(
+          !is.na(vis_val) ~ as.numeric(vis_val),
+          !is.na(vis_m_val) ~ as.numeric(vis_m_val) * CONFIG$unit_conversions$visibility_m_to_km,
+          TRUE ~ CONFIG$default_values$visibility
+        )
+      },
+      
+      # Variáveis categóricas
+      seasons_final = {
+        seasons_col <- safe_extract_column(., c("seasons", "season"), NA)
+        if (all(is.na(seasons_col))) {
           factor(case_when(
-            month(date) %in% c(12, 1, 2) ~ "Winter",
-            month(date) %in% c(3, 4, 5) ~ "Spring",
-            month(date) %in% c(6, 7, 8) ~ "Summer",
-            TRUE ~ "Autumn"
+            month(date_final) %in% c(3,4,5) ~ "Spring",
+            month(date_final) %in% c(6,7,8) ~ "Summer", 
+            month(date_final) %in% c(9,10,11) ~ "Autumn",
+            TRUE ~ "Winter"
           ), levels = c("Spring", "Summer", "Autumn", "Winter"))
-        }
-      },
-      
-      holiday = {
-        holiday_col <- extract_column_safely(., seoul_mappings, "holiday", NULL)
-        if (!is.null(holiday_col)) {
-          factor(holiday_col, levels = c("Holiday", "No Holiday"))
         } else {
-          factor(ifelse(wday(date) %in% c(1, 7), "Holiday", "No Holiday"),
-                 levels = c("Holiday", "No Holiday"))
+          factor(seasons_col, levels = c("Spring", "Summer", "Autumn", "Winter"))
         }
       },
       
-      functioning_day = {
-        func_col <- extract_column_safely(., seoul_mappings, "functioning_day", "Yes")
-        factor(func_col, levels = c("Yes", "No"))
+      holiday_final = {
+        holiday_col <- safe_extract_column(., c("holiday"), NA)
+        if (all(is.na(holiday_col))) {
+          factor(ifelse(wday(date_final) %in% c(1,7), "Holiday", "No Holiday"), 
+                 levels = c("Holiday", "No Holiday"))
+        } else {
+          factor(holiday_col, levels = c("Holiday", "No Holiday"))
+        }
       },
       
-      # Derived variables
-      dew_point_temperature_c = temperature_c - ((100 - humidity_percent) / 5),
-      solar_radiation_mj_m2 = {
-        hour_numeric <- as.numeric(as.character(hour))
-        ifelse(hour_numeric >= 6 & hour_numeric <= 18, 1.8, 0)
+      functioning_day_final = {
+        func_col <- safe_extract_column(., c("functioning_day"), "Yes")
+        factor(func_col, levels = c("Yes", "No"))
       }
     ) %>%
-    select(-visibility_raw)
-  
-  # Apply validation filters using config
-  temp_range <- CLEAN_CONFIG$data_validation$temperature_range
-  humidity_range <- CLEAN_CONFIG$data_validation$humidity_range
-  wind_range <- CLEAN_CONFIG$data_validation$wind_speed_range
-  
-  seoul_clean <- seoul_clean %>%
+    # Filtrar registos válidos
     filter(
-      !is.na(rented_bike_count) & rented_bike_count >= 0,
-      !is.na(temperature_c) & temperature_c >= temp_range$min & temperature_c <= temp_range$max,
-      !is.na(humidity_percent) & humidity_percent >= humidity_range$min & humidity_percent <= humidity_range$max,
-      !is.na(wind_speed_ms) & wind_speed_ms >= wind_range$min & wind_speed_ms <= wind_range$max
+      !is.na(date_final),
+      !is.na(bike_count_final),
+      bike_count_final >= 0,
+      between(temp_c_final, CONFIG$data_validation$temperature_range[1], CONFIG$data_validation$temperature_range[2])
+    ) %>%
+    # Selecionar colunas finais
+    select(
+      date = date_final,
+      hour = hour_final,
+      rented_bike_count = bike_count_final,
+      temperature_c = temp_c_final,
+      humidity_percent = humid_percent_final,
+      wind_speed_ms = wind_ms_final,
+      wind_speed_kmh = wind_kmh_final,
+      visibility_km = vis_km_final,
+      seasons = seasons_final,
+      holiday = holiday_final,
+      functioning_day = functioning_day_final
     ) %>%
     arrange(date, hour)
   
-  
-  cat("   Seoul data cleaned:", nrow(seoul_clean), "records\n")
-  if (nrow(seoul_clean) > 0) {
-    cat("   Seoul date range:", min(seoul_clean$date), "to", max(seoul_clean$date), "\n")
-    cat("   Average demand:", round(mean(seoul_clean$rented_bike_count, na.rm = TRUE), 1), "bikes/hour\n")
-    cat("   ✓ European units applied: °C, km/h, mm\n")
-  }
+  cat("Dados Seoul limpos:", nrow(seoul_clean), "registos retidos\n")
+  detect_and_handle_missing(seoul_clean, "dados Seoul")
   
   return(seoul_clean)
 }
 
-# Additional cleaning functions for other datasets
-clean_bike_systems_robust <- function(bike_data) {
-  if (is.null(bike_data) || nrow(bike_data) == 0) {
-    cat("No bike systems data available for cleaning\n")
+# === LIMPEZA DE SISTEMAS DE BICICLETAS ===
+
+clean_bike_systems_data <- function(systems_raw) {
+  if (is.null(systems_raw) || nrow(systems_raw) == 0) {
+    cat("Não há dados de sistemas de bicicletas para limpar\n")
     return(NULL)
   }
   
-  cat("Cleaning bike sharing systems data...\n")
+  cat("Limpeza de dados de sistemas de bicicletas...\n")
   
-  # Clean column names first and inspect
-  bike_clean <- bike_data %>%
-    clean_names()
+  systems_clean <- standardize_column_names(systems_raw)
+  systems_clean <- remove_reference_links(systems_clean)
   
-  cat("   Available bike systems columns:", paste(head(colnames(bike_clean), 10), collapse = ", "), "...\n")
-  
-  # Check which columns actually exist
-  available_cols <- colnames(bike_clean)
-  key_cols <- c("city", "country", "system_name", "stations", "bicycles")
-  cat("   Bike systems columns check:\n")
-  for (col in key_cols) {
-    exists_col <- col %in% available_cols
-    cat("     ", col, ":", ifelse(exists_col, "✓", "✗"), "\n")
+  # Extrair valores numéricos
+  if ("stations" %in% names(systems_clean)) {
+    systems_clean <- extract_numeric_values(systems_clean, "stations")
+  }
+  if ("bicycles" %in% names(systems_clean)) {
+    systems_clean <- extract_numeric_values(systems_clean, "bicycles")
   }
   
-  # Check for essential columns - use flexible approach
-  has_city_info <- any(c("city", "location", "city_name") %in% available_cols)
-  has_country_info <- any(c("country", "nation", "country_code") %in% available_cols)
-  
-  if (!has_city_info) {
-    cat("   Warning: No city information columns found\n")
-    cat("   Available columns:", paste(available_cols, collapse = ", "), "\n")
-    return(NULL)
-  }
-  
-  # Safe filtering and processing - avoid case_when
-  bike_clean <- bike_clean %>%
+  systems_clean <- systems_clean %>%
     mutate(
-      # City name - safe extraction
-      city_final = if ("city" %in% available_cols) {
-        as.character(city)
-      } else if ("location" %in% available_cols) {
-        as.character(location)
-      } else if ("city_name" %in% available_cols) {
-        as.character(city_name)
-      } else {
-        "Unknown City"
+      city_final = {
+        city_col <- safe_extract_column(., c("city", "location", "city_name"), "Unknown")
+        str_trim(as.character(city_col))
       },
       
-      # Country - safe extraction with multiple fallbacks
-      country_final = if ("country" %in% available_cols) {
-        as.character(country)
-      } else if ("nation" %in% available_cols) {
-        as.character(nation)
-      } else if ("country_code" %in% available_cols) {
-        as.character(country_code)
-      } else {
-        "Unknown Country"
+      country_final = {
+        country_col <- safe_extract_column(., c("country", "nation"), "Unknown")
+        str_trim(as.character(country_col))
       },
       
-      # System name - safe extraction
-      system_name_final = if ("system_name" %in% available_cols) {
-        as.character(system_name)
-      } else if ("name" %in% available_cols) {
-        as.character(name)
-      } else if ("system" %in% available_cols) {
-        as.character(system)
-      } else {
-        paste(city_final, "Bike Share")
+      stations_final = {
+        stations_col <- safe_extract_column(., c("stations", "station_count"), 100)
+        as.numeric(stations_col)
       },
       
-      # Numeric variables - safe extraction
-      stations_final = if ("stations" %in% available_cols) {
-        as.numeric(stations)
-      } else if ("station_count" %in% available_cols) {
-        as.numeric(station_count)
-      } else {
-        100  # Default value
+      bicycles_final = {
+        bicycles_col <- safe_extract_column(., c("bicycles", "bicycle_count", "bikes"), 1000)
+        as.numeric(bicycles_col)
       },
       
-      bicycles_final = if ("bicycles" %in% available_cols) {
-        as.numeric(bicycles)
-      } else if ("bicycle_count" %in% available_cols) {
-        as.numeric(bicycle_count)
-      } else if ("bikes" %in% available_cols) {
-        as.numeric(bikes)
-      } else {
-        stations_final * 12  # Estimate: 12 bikes per station
-      },
-      
-      # Operator - safe extraction
-      operator_final = if ("operator" %in% available_cols) {
-        as.character(operator)
-      } else if ("company" %in% available_cols) {
-        as.character(company)
-      } else if ("provider" %in% available_cols) {
-        as.character(provider)
-      } else {
-        "Municipal Government"
-      },
-      
-      # Launch year - safe extraction
-      launch_year_final = if ("launch_year" %in% available_cols) {
-        as.numeric(launch_year)
-      } else if ("year" %in% available_cols) {
-        as.numeric(year)
-      } else if ("start_year" %in% available_cols) {
-        as.numeric(start_year)
-      } else {
-        2010  # Default year
-      },
-      
-      # Status - safe extraction
-      status_final = if ("status" %in% available_cols) {
-        as.character(status)
-      } else {
-        "Active"
-      },
-      
-      # Coordinates - safe extraction
-      latitude_final = if ("latitude" %in% available_cols) {
-        as.numeric(latitude)
-      } else if ("lat" %in% available_cols) {
-        as.numeric(lat)
-      } else {
-        NA_real_
-      },
-      
-      longitude_final = if ("longitude" %in% available_cols) {
-        as.numeric(longitude)
-      } else if ("lon" %in% available_cols) {
-        as.numeric(lon)
-      } else if ("lng" %in% available_cols) {
-        as.numeric(lng)
-      } else {
-        NA_real_
+      launch_year_final = {
+        year_col <- safe_extract_column(., c("launch_year", "year", "start_year"), 2010)
+        as.numeric(str_extract(as.character(year_col), "\\d{4}"))
       }
     ) %>%
-    # Update column names to final values
-    mutate(
+    filter(
+      !is.na(city_final), city_final != "", city_final != "Unknown",
+      !is.na(country_final), country_final != "", country_final != "Unknown",
+      !is.na(stations_final), stations_final > 0,
+      !is.na(bicycles_final), bicycles_final > 0
+    ) %>%
+    select(
       city = city_final,
       country = country_final,
-      system_name = system_name_final,
       stations = stations_final,
       bicycles = bicycles_final,
-      operator = operator_final,
-      launch_year = launch_year_final,
-      status = status_final,
-      latitude = latitude_final,
-      longitude = longitude_final
-    ) %>%
-    # Remove temporary columns
-    select(-ends_with("_final")) %>%
-    # Apply validation filters
-    filter(
-      !is.na(city) & city != "Unknown City" & city != "",
-      !is.na(country) & country != "Unknown Country" & country != "",
-      !is.na(stations) & stations > 0,
-      !is.na(bicycles) & bicycles > 0
+      launch_year = launch_year_final
     )
   
-  cat("   Bike systems cleaned:", nrow(bike_clean), "systems\n")
-  if (nrow(bike_clean) > 0) {
-    cat("   Countries represented:", length(unique(bike_clean$country)), "\n")
-    cat("   Total bicycles:", format(sum(bike_clean$bicycles, na.rm = TRUE), big.mark = ","), "\n")
-    cat("   Average system size:", round(mean(bike_clean$bicycles, na.rm = TRUE), 0), "bikes\n")
-  }
+  cat("Dados de sistemas limpos:", nrow(systems_clean), "registos retidos\n")
   
-  return(bike_clean)
+  return(systems_clean)
 }
 
-clean_cities_robust <- function(cities_data) {
-  if (is.null(cities_data) || nrow(cities_data) == 0) {
-    cat("No cities data available for cleaning\n")
+# === LIMPEZA DE DADOS DE CIDADES ===
+
+clean_cities_data <- function(cities_raw) {
+  if (is.null(cities_raw) || nrow(cities_raw) == 0) {
+    cat("Não há dados de cidades para limpar\n")
     return(NULL)
   }
   
-  cat("Cleaning world cities data...\n")
+  cat("Limpeza de dados de cidades...\n")
   
-  cities_clean <- cities_data %>%
-    clean_names()
+  cities_clean <- standardize_column_names(cities_raw)
+  cities_clean <- remove_reference_links(cities_clean)
   
-  # Check available columns
-  available_cols <- colnames(cities_clean)
-  cat("   Available cities columns:", paste(head(available_cols, 8), collapse = ", "), "...\n")
-  
-  # Check key columns
-  key_cols <- c("city", "country", "lat", "lon", "latitude", "longitude", "population")
-  cat("   Cities columns check:\n")
-  for (col in key_cols) {
-    exists_col <- col %in% available_cols
-    cat("     ", col, ":", ifelse(exists_col, "✓", "✗"), "\n")
-  }
-  
-  # First filter for basic requirements
   cities_clean <- cities_clean %>%
-    filter(!is.na(city), !is.na(country))
+    mutate(
+      city_final = {
+        city_col <- safe_extract_column(., c("city", "city_name"), "Unknown")
+        str_trim(as.character(city_col))
+      },
+      
+      country_final = {
+        country_col <- safe_extract_column(., c("country", "nation"), "Unknown")
+        str_trim(as.character(country_col))
+      },
+      
+      latitude_final = {
+        lat_col <- safe_extract_column(., c("latitude", "lat"), 0)
+        as.numeric(lat_col)
+      },
+      
+      longitude_final = {
+        lon_col <- safe_extract_column(., c("longitude", "lon", "lng"), 0)
+        as.numeric(lon_col)
+      },
+      
+      population_final = {
+        pop_col <- safe_extract_column(., c("population", "pop"), 1000000)
+        as.numeric(str_remove_all(as.character(pop_col), "[^0-9]"))
+      }
+    ) %>%
+    filter(
+      !is.na(city_final), city_final != "", city_final != "Unknown",
+      !is.na(country_final), country_final != "", country_final != "Unknown",
+      between(latitude_final, -90, 90),
+      between(longitude_final, -180, 180)
+    ) %>%
+    select(
+      city = city_final,
+      country = country_final,
+      latitude = latitude_final,
+      longitude = longitude_final,
+      population = population_final
+    )
   
-  # Extract DMS coordinates safely - direct assignment to avoid case_when
-  if ("lat_d" %in% available_cols) {
-    cities_clean$lat_d <- coalesce(as.numeric(cities_clean$lat_d), 0)
-  } else {
-    cities_clean$lat_d <- 0
-  }
-  
-  if ("lat_m" %in% available_cols) {
-    cities_clean$lat_m <- coalesce(as.numeric(cities_clean$lat_m), 0)
-  } else {
-    cities_clean$lat_m <- 0
-  }
-  
-  if ("lat_s" %in% available_cols) {
-    cities_clean$lat_s <- coalesce(as.numeric(cities_clean$lat_s), 0)
-  } else {
-    cities_clean$lat_s <- 0
-  }
-  
-  if ("lon_d" %in% available_cols) {
-    cities_clean$lon_d <- coalesce(as.numeric(cities_clean$lon_d), 0)
-  } else {
-    cities_clean$lon_d <- 0
-  }
-  
-  if ("lon_m" %in% available_cols) {
-    cities_clean$lon_m <- coalesce(as.numeric(cities_clean$lon_m), 0)
-  } else {
-    cities_clean$lon_m <- 0
-  }
-  
-  if ("lon_s" %in% available_cols) {
-    cities_clean$lon_s <- coalesce(as.numeric(cities_clean$lon_s), 0)
-  } else {
-    cities_clean$lon_s <- 0
-  }
-  
-  if ("ns" %in% available_cols) {
-    cities_clean$ns <- coalesce(as.character(cities_clean$ns), "N")
-  } else {
-    cities_clean$ns <- "N"
-  }
-  
-  if ("ew" %in% available_cols) {
-    cities_clean$ew <- coalesce(as.character(cities_clean$ew), "E")
-  } else {
-    cities_clean$ew <- "E"
-  }
-  
-  # Calculate decimal coordinates from DMS
-  cities_clean$lat_decimal_calc <- cities_clean$lat_d + cities_clean$lat_m/60 + cities_clean$lat_s/3600
-  cities_clean$lon_decimal_calc <- cities_clean$lon_d + cities_clean$lon_m/60 + cities_clean$lon_s/3600
-  
-  # Extract existing decimal coordinates or use calculated - NO case_when!
-  if ("lat" %in% available_cols) {
-    cities_clean$lat_decimal <- coalesce(as.numeric(cities_clean$lat), cities_clean$lat_decimal_calc)
-  } else if ("latitude" %in% available_cols) {
-    cities_clean$lat_decimal <- coalesce(as.numeric(cities_clean$latitude), cities_clean$lat_decimal_calc)
-  } else {
-    cities_clean$lat_decimal <- cities_clean$lat_decimal_calc
-  }
-  
-  if ("lon" %in% available_cols) {
-    cities_clean$lon_decimal <- coalesce(as.numeric(cities_clean$lon), cities_clean$lon_decimal_calc)
-  } else if ("longitude" %in% available_cols) {
-    cities_clean$lon_decimal <- coalesce(as.numeric(cities_clean$longitude), cities_clean$lon_decimal_calc)
-  } else {
-    cities_clean$lon_decimal <- cities_clean$lon_decimal_calc
-  }
-  
-  # Adjust for hemisphere
-  cities_clean$lat_decimal <- ifelse(cities_clean$ns == "S", -cities_clean$lat_decimal, cities_clean$lat_decimal)
-  cities_clean$lon_decimal <- ifelse(cities_clean$ew == "W", -cities_clean$lon_decimal, cities_clean$lon_decimal)
-  
-  # Population
-  if ("population" %in% available_cols) {
-    cities_clean$population <- coalesce(as.numeric(cities_clean$population), 1000000)
-  } else {
-    cities_clean$population <- 1000000
-  }
-  
-  # Remove temporary calculation columns
-  cities_clean <- cities_clean %>%
-    select(-lat_decimal_calc, -lon_decimal_calc)
-  
-  cat("   Cities cleaned:", nrow(cities_clean), "cities\n")
-  if (nrow(cities_clean) > 0) {
-    cat("   Countries represented:", length(unique(cities_clean$country)), "\n")
-    cat("   Coordinate range: Lat", round(min(cities_clean$lat_decimal), 2), "to", round(max(cities_clean$lat_decimal), 2), "\n")
-    cat("                     Lon", round(min(cities_clean$lon_decimal), 2), "to", round(max(cities_clean$lon_decimal), 2), "\n")
-  }
+  cat("Dados de cidades limpos:", nrow(cities_clean), "registos retidos\n")
   
   return(cities_clean)
 }
 
-# === EXECUTE CLEANING ===
+# === EXECUÇÃO PRINCIPAL ===
 
-cat("\nExecuting enhanced data cleaning...\n")
+cat("Carregando datasets...\n")
 
-weather_clean <- clean_weather_data_robust(weather_raw)
-seoul_clean <- clean_seoul_data_robust(seoul_bike)
-bike_systems_clean <- clean_bike_systems_robust(bike_raw)
-cities_clean <- clean_cities_robust(world_cities)
+# Carregar dados com tratamento de erros
+weather_raw <- safe_load_csv("data/raw/raw_cities_weather_forecast.csv", "Dados meteorológicos")
+seoul_raw <- safe_load_csv("data/raw/raw_seoul_bike_sharing.csv", "Dados Seoul")
+systems_raw <- safe_load_csv("data/raw/raw_bike_sharing_systems.csv", "Sistemas de bicicletas")
+cities_raw <- safe_load_csv("data/raw/raw_worldcities.csv", "Dados de cidades")
 
-# === SAVE CLEANED DATA ===
+# Executar pipeline de limpeza
+cat("\nExecutando pipeline de limpeza...\n")
 
-cat("\nSaving cleaned datasets...\n")
+weather_clean <- clean_weather_data(weather_raw)
+seoul_clean <- clean_seoul_bike_data(seoul_raw)
+systems_clean <- clean_bike_systems_data(systems_raw)
+cities_clean <- clean_cities_data(cities_raw)
 
-save_if_valid <- function(data, filename, description) {
+# === GUARDAR DADOS PROCESSADOS ===
+
+save_processed_data <- function(data, filename, description) {
   if (!is.null(data) && nrow(data) > 0) {
     write_csv(data, filename)
-    cat("Saved:", description, "-", filename, "(", nrow(data), "records )\n")
+    cat("Guardado:", description, "->", filename, "(", nrow(data), "registos)\n")
     return(TRUE)
   } else {
-    cat("Skipped:", description, "- no valid data\n")
+    cat("Aviso: Sem dados para guardar ->", description, "\n")
     return(FALSE)
   }
 }
 
+cat("\nGuardando datasets processados...\n")
+
 files_saved <- 0
-files_saved <- files_saved + save_if_valid(weather_clean, "data/processed/weather_forecast.csv", "Weather Data")
-files_saved <- files_saved + save_if_valid(seoul_clean, "data/processed/seoul_bike_sharing.csv", "Seoul Data")
-files_saved <- files_saved + save_if_valid(bike_systems_clean, "data/processed/bike_sharing_systems.csv", "Bike Systems")
-files_saved <- files_saved + save_if_valid(cities_clean, "data/processed/world_cities.csv", "Cities Data")
+files_saved <- files_saved + save_processed_data(weather_clean, "data/processed/weather_forecast.csv", "Dados meteorológicos")
+files_saved <- files_saved + save_processed_data(seoul_clean, "data/processed/seoul_bike_sharing.csv", "Dados Seoul")
+files_saved <- files_saved + save_processed_data(cities_clean, "data/processed/world_cities.csv", "Dados de cidades")
 
-# === FINAL VALIDATION ===
+# === RELATÓRIO DE LIMPEZA ===
 
-cat("\nFINAL VALIDATION & SUMMARY\n")
-cat("==========================\n")
-
-validation_summary <- list()
-
-if (!is.null(weather_clean) && nrow(weather_clean) > 0) {
-  validation_summary$weather <- list(
-    records = nrow(weather_clean),
-    cities = length(unique(weather_clean$city_name)),
-    date_range = paste(min(weather_clean$date), "to", max(weather_clean$date)),
-    variables = ncol(weather_clean)
+cleaning_report <- list(
+  execution_time = Sys.time(),
+  datasets_processed = list(
+    weather = if(!is.null(weather_clean)) nrow(weather_clean) else 0,
+    seoul = if(!is.null(seoul_clean)) nrow(seoul_clean) else 0,
+    systems = if(!is.null(systems_clean)) nrow(systems_clean) else 0,
+    cities = if(!is.null(cities_clean)) nrow(cities_clean) else 0
+  ),
+  data_quality = list(
+    files_saved = files_saved,
+    success_rate = round((files_saved / 4) * 100, 1)
+  ),
+  transformations = list(
+    "Padronização de nomes com regex",
+    "Remoção de links com stringr",
+    "Parsing seguro de datas múltiplos formatos",
+    "Extração de valores numéricos",
+    "Detecção de valores em falta",
+    "Conversões de unidades",
+    "Validação de intervalos",
+    "Criação de variáveis categóricas"
+  ),
+  date_formats_supported = list(
+    "ISO: YYYY-MM-DD",
+    "European: DD/MM/YYYY", 
+    "American: MM/DD/YYYY",
+    "European dash: DD-MM-YYYY"
   )
-  cat("Weather Data: ✓ VALIDATED\n")
-  cat("  Records:", scales::comma(validation_summary$weather$records), "\n")
-  cat("  Cities:", validation_summary$weather$cities, "\n")
-  cat("  Period:", validation_summary$weather$date_range, "\n")
-  cat("  European units: Temperature (°C), Wind (km/h), Precipitation (mm)\n")
-}
-
-if (!is.null(seoul_clean) && nrow(seoul_clean) > 0) {
-  validation_summary$seoul <- list(
-    records = nrow(seoul_clean),
-    date_range = paste(min(seoul_clean$date), "to", max(seoul_clean$date)),
-    avg_demand = round(mean(seoul_clean$rented_bike_count, na.rm = TRUE), 1)
-  )
-  cat("\nSeoul Bike Data: ✓ VALIDATED\n")
-  cat("  Records:", scales::comma(validation_summary$seoul$records), "\n")
-  cat("  Period:", validation_summary$seoul$date_range, "\n")
-  cat("  Avg Demand:", validation_summary$seoul$avg_demand, "bikes/hour\n")
-  cat("  European units applied: °C, km/h, mm\n")
-}
-
-# Overall status
-overall_status <- case_when(
-  files_saved >= 3 ~ "EXCELLENT",
-  files_saved >= 2 ~ "GOOD",
-  files_saved >= 1 ~ "PARTIAL",
-  TRUE ~ "NEEDS ATTENTION"
 )
 
-cat("\nOVERALL DATA QUALITY:", overall_status, "\n")
-cat("Files successfully processed:", files_saved, "/ 4\n")
+write(toJSON(cleaning_report, pretty = TRUE), "logs/cleaning_report.json")
 
-# Data quality metrics
-if (!is.null(weather_clean) && nrow(weather_clean) > 0) {
-  completeness <- round(sum(!is.na(weather_clean$temperature_c)) / nrow(weather_clean) * 100, 1)
-  cat("Data completeness:", completeness, "%\n")
+# === RESUMO FINAL ===
+
+cat("\n=== LIMPEZA DE DADOS CONCLUÍDA ===\n")
+cat("=================================\n")
+
+cat("Resumo de processamento:\n")
+cat("- Dados meteorológicos:", ifelse(!is.null(weather_clean), nrow(weather_clean), 0), "registos\n")
+cat("- Dados Seoul:", ifelse(!is.null(seoul_clean), nrow(seoul_clean), 0), "registos\n")
+cat("- Sistemas de bicicletas:", ifelse(!is.null(systems_clean), nrow(systems_clean), 0), "registos\n")
+cat("- Dados de cidades:", ifelse(!is.null(cities_clean), nrow(cities_clean), 0), "registos\n")
+
+cat("\nQualidade dos dados:\n")
+cat("- Ficheiros processados:", files_saved, "/ 4\n")
+cat("- Taxa de sucesso:", cleaning_report$data_quality$success_rate, "%\n")
+
+cat("\nMelhorias implementadas:\n")
+cat("- Parsing seguro de datas (múltiplos formatos)\n")
+cat("- Tratamento robusto de valores em falta\n")
+cat("- Extração segura de colunas\n")
+cat("- Conversões de unidades padronizadas\n")
+cat("- Validação de intervalos de dados\n")
+cat("- Limpeza de strings com regex\n")
+cat("- Factorização de variáveis categóricas\n")
+
+if (files_saved >= 3) {
+  cat("\nESTADO: LIMPEZA CONCLUÍDA COM SUCESSO\n")
+  cat("Próximo passo: 03_explore_data.R\n")
+} else if (files_saved >= 2) {
+  cat("\nESTADO: SUCESSO PARCIAL \n")
+  cat("Análise pode prosseguir com dados disponíveis\n")
+} else {
+  cat("\nESTADO: REQUER ATENÇÃO \n")
+  cat("Verificar ficheiros de entrada\n")
 }
 
-cat("\nIMPROVEMENTS IMPLEMENTED:\n")
-cat("- Enhanced error handling with fallback mechanisms\n")
-cat("- Intelligent backup data generation\n")
-cat("- European metric unit standardization\n")
-cat("- Robust date parsing for multiple formats\n")
-cat("- Safe column access with coalesce() patterns\n")
-cat("- Comprehensive validation and reporting\n")
-cat("- Multiple encoding support\n")
-
-if (files_saved >= 2) {
-  cat("\n✅ DATA CLEANING COMPLETED SUCCESSFULLY!\n")
-  cat("========================================\n")
-  
-  if (!is.null(weather_clean) && nrow(weather_clean) > 0) {
-    cat("WEATHER DATA CLEANED:\n")
-    cat("  ✓ File: data/processed/weather_forecast.csv\n")
-    cat("  ✓ Records:", format(nrow(weather_clean), big.mark = ","), "\n")
-    cat("  ✓ Cities:", length(unique(weather_clean$city_name)), "\n")
-    cat("  ✓ Date range:", min(weather_clean$date), "to", max(weather_clean$date), "\n")
-    cat("  ✓ European units: °C, km/h, mm, km\n")
-  }
-  
-  if (!is.null(seoul_clean) && nrow(seoul_clean) > 0) {
-    cat("\nSEOUL BIKE DATA CLEANED:\n")
-    cat("  ✓ File: data/processed/seoul_bike_sharing.csv\n")
-    cat("  ✓ Records:", format(nrow(seoul_clean), big.mark = ","), "\n")
-    cat("  ✓ Date range:", min(seoul_clean$date), "to", max(seoul_clean$date), "\n")
-    cat("  ✓ Average demand:", round(mean(seoul_clean$rented_bike_count, na.rm = TRUE), 1), "bikes/hour\n")
-    cat("  ✓ Peak demand:", format(max(seoul_clean$rented_bike_count, na.rm = TRUE), big.mark = ","), "bikes\n")
-    cat("  ✓ European units: °C, km/h, mm\n")
-  }
-  
-  if (!is.null(bike_systems_clean) && nrow(bike_systems_clean) > 0) {
-    cat("\nBIKE SYSTEMS DATA CLEANED:\n")
-    cat("  ✓ File: data/processed/bike_sharing_systems.csv\n")
-    cat("  ✓ Systems:", nrow(bike_systems_clean), "\n")
-    cat("  ✓ Countries:", length(unique(bike_systems_clean$country)), "\n")
-    cat("  ✓ Total bicycles:", format(sum(bike_systems_clean$bicycles, na.rm = TRUE), big.mark = ","), "\n")
-  }
-  
-  if (!is.null(cities_clean) && nrow(cities_clean) > 0) {
-    cat("\nWORLD CITIES DATA CLEANED:\n")
-    cat("  ✓ File: data/processed/world_cities.csv\n")
-    cat("  ✓ Cities:", nrow(cities_clean), "\n")
-    cat("  ✓ Countries:", length(unique(cities_clean$country)), "\n")
-    cat("  ✓ Coordinates: Decimal degrees + DMS format\n")
-  }
-  
-  # Final quality assessment
-  datasets_cleaned <- sum(!sapply(list(weather_clean, seoul_clean, bike_systems_clean, cities_clean), is.null))
-  
-  
-  cat("\n========================================\n")
-  cat("All data ready for analysis and modeling!\n")
-  cat("========================================\n")
+cat("=================================\n")
